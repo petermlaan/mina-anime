@@ -5,3 +5,18 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.jikan.moe',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.myanimelist.net',
+      },
+    ],
+  },
+}
