@@ -1,22 +1,21 @@
 import Form from "next/form";
 import styles from "./page.module.css";
-import { fetchJSON } from "../util";
 import { Cards } from "@/components/cards";
+import { searchAnimes } from "@/anime";
 
 type Props = {
   params: {};
-  searchParams: { [key: string]: string | string[] | undefined };
+  //searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { q: string | undefined };
 };
 
 export default async function PageSearch(props: Props) {
   const searchParams = await props.searchParams;
   console.log(searchParams);
-  const query = searchParams.q;
+  const query: string = searchParams.q ?? "";
   //const url = "https://api.jikan.moe/v4/anime?sfw&q=" + query;
-  const url = "https://api.jikan.moe/v4/anime?q=" + query;
-  const data = await fetchJSON(url);
-  console.log(data);
-  
+  const res = await searchAnimes(query);
+
   return (
     <main>
       <Form id="frmSearch" action={"/search"}>
@@ -39,7 +38,7 @@ export default async function PageSearch(props: Props) {
         </label>
       </Form>
       <section id="main">
-        <Cards animes={data.data} />
+        <Cards animes={res.data} />
       </section>
     </main>
   );

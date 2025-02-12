@@ -1,19 +1,15 @@
-interface Anime {
-    mal_id: number;
-    title: string;
-    title_en: string;
-}
+import { Anime } from "@/anime";
 
 export function Cards({ animes }: { animes: Anime[] }) {
     return (<>
-        {animes.map((a, i) => (
-        <Card key={i} anime={a} />
+        {animes.map(a => (
+        <Card key={a.mal_id} anime={a} />
             ))}
     </>);
 }
 
 export function Card({ anime }: { anime: Anime }) {
     return (<>
-        <h2>{anime.mal_id}</h2>
+        <h2>{anime.mal_id + " " + anime.title_english}</h2>
     </>);
 }
