@@ -13,7 +13,6 @@ export default async function PageSearch(props: Props) {
   const searchParams = await props.searchParams;
   console.log(searchParams);
   const query: string = searchParams.q ?? "";
-  //const url = "https://api.jikan.moe/v4/anime?sfw&q=" + query;
   const res = await searchAnimes(query);
 
   return (

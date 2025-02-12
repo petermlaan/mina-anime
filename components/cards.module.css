@@ -1,0 +1,26 @@
+
+.animeCard {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+    gap: 0.4rem;
+    background-color: var(--clr-main1);
+    border: 1px solid var(--clr-main3);
+    padding: 9px;
+
+    .cardToprow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .poster {
+        width: 240px;
+        height: 360px;
+        object-fit: cover;
+
+        &:hover {
+            outline: 3px solid var(--clr-main3);
+        }
+    }
+}

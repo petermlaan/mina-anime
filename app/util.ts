@@ -4,6 +4,5 @@ export async function fetchJSON(url: string) {
     if (!response.ok)
         throw new Error(response.status.toString());
     const data = await response.json();
-    console.log(data);
     return data;
 }

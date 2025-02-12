@@ -1,19 +1,11 @@
-'use client';
-
 import Image from "next/image";
 import styles from "./page.module.css";
 import React from "react";
 
 export default function Page() {
-
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    console.log("Submitted!");
-  }
-
   return (
     <main>
-      <form id="frmSearch" onSubmit={onSubmit}>
+      <form id="frmSearch">
         <button id="btnTest">Test</button>
         <label id="lblFilterWatched" htmlFor="chkFilterWatched">Dölj sedda
           <input type="checkbox" id="chkFilterWatched" />
