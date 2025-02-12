@@ -5,14 +5,13 @@ import { searchAnimes } from "@/anime";
 
 type Props = {
   params: {};
-  //searchParams: { [key: string]: string | string[] | undefined };
   searchParams: { q: string | undefined };
 };
 
 export default async function PageSearch(props: Props) {
   const searchParams = await props.searchParams;
   console.log(searchParams);
-  const query: string = searchParams.q ?? "";
+  const query = searchParams.q ?? "";
   const res = await searchAnimes(query);
 
   return (
