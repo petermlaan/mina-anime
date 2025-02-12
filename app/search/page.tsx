@@ -1,39 +1,46 @@
-"use client";
-
+import Form from "next/form";
 import styles from "./page.module.css";
-import { useSearchParams } from 'next/navigation'
- 
-export default async function PageSearch() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get('q')
-  const url = "https://api.jikan.moe/v4/anime?sfw&q=" + query;
-  const response = await fetch(url);
-  if (!response.ok)
-      throw new Error(response.status.toString());
-  const data = await response.json();
-return (
+import { fetchJSON } from "../util";
+import { Cards } from "@/components/cards";
+
+type Props = {
+  params: {};
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function PageSearch(props: Props) {
+  const searchParams = await props.searchParams;
+  console.log(searchParams);
+  const query = searchParams.q;
+  //const url = "https://api.jikan.moe/v4/anime?sfw&q=" + query;
+  const url = "https://api.jikan.moe/v4/anime?q=" + query;
+  const data = await fetchJSON(url);
+  console.log(data);
+  
+  return (
     <main>
-      {JSON.stringify(data)}
-      <form id="frmSearch">
-        <label id="lblTopSearch" htmlFor="chkTopSearch" hidden>Toppsök
-          <input type="checkbox" id="chkTopSearch" hidden />
+      <Form id="frmSearch" action={"/search"}>
+        <label id="lblTopSearch" htmlFor="chkTopSearch">Toppsök
+          <input type="checkbox" id="chkTopSearch" />
         </label>
-        <label id="lblType" htmlFor="selType" hidden>Typ
-          <select id="selType" hidden>
+        <label id="lblType" htmlFor="selType">Typ
+          <select id="selType">
             <option value=""></option>
             <option value="tv">TV</option>
             <option value="movie">Film</option>
           </select>
         </label>
-        <input id="txtQuery" type="search" hidden />
-        <button id="btnSearch" type="submit" hidden>Sök</button>
-        <button id="btnPrevPage" className="disabled" disabled hidden>&lt; Föreg</button>
-        <button id="btnNextPage" className="disabled" disabled hidden>Nästa &gt;</button>
+        <input id="txtQuery" type="search" name="q" />
+        <button id="btnSearch" type="submit">Sök</button>
+        <button id="btnPrevPage" className="disabled" disabled>&lt; Föreg</button>
+        <button id="btnNextPage" className="disabled" disabled>Nästa &gt;</button>
         <label id="lblShowList" htmlFor="chkShowList">Visa lista
           <input type="checkbox" id="chkShowList" />
         </label>
-      </form>
-      <section id="cMain"></section>
+      </Form>
+      <section id="main">
+        <Cards animes={data.data} />
+      </section>
     </main>
   );
 }
