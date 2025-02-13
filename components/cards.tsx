@@ -4,8 +4,6 @@ import styles from "./cards.module.css";
 import { Anime } from '@tutkli/jikan-ts';
 
 export function Cards({ animes }: { animes: Anime[] }) {
-    console.log(animes);
-    
     return (<div className={styles.cards}>
         {animes.map((a, i) => (
             <Card key={i} anime={a} />
