@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Style_Script, Kode_Mono } from "next/font/google";
+import { Geist, Style_Script } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
@@ -8,19 +8,8 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const styleScript = Style_Script({
   variable: "--font-style-script",
-  weight: "400",
-  subsets: ["latin"],
-});
-
-const kodeMono = Kode_Mono({
-  variable: "--font-kode-mono",
   weight: "400",
   subsets: ["latin"],
 });
@@ -37,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${kodeMono.variable} ${styleScript.variable} ${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${styleScript.variable} ${geistSans.variable}`}>
         <header>
           <Link href="/">
             <h1>Mina Anime</h1>
