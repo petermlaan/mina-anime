@@ -1,18 +1,43 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Form from "next/form";
 import styles from "./page.module.css";
+import { Anime, AnimeClient, AnimeSearchParams } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
-import { searchAnimes } from "@/anime";
 
 type Props = {
   params: {};
-  searchParams: { q: string | undefined };
+  searchParams: Promise<{ q: string | undefined }>;
 };
 
-export default async function PageSearch(props: Props) {
-  const searchParams = await props.searchParams;
-  console.log(searchParams);
-  const query = searchParams.q ?? "";
-  const res = await searchAnimes(query);
+export default function PageSearch({searchParams}: Props) {
+  // State
+  const query = React.use(searchParams).q;
+  const [animes, setAnimes] = useState<Anime[] | null>(null);
+  const [errormsg, setErrormsg] = useState<string>("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jikanAPI = new AnimeClient({ enableLogging: true });
+        const animeData = (await jikanAPI.getAnimeSearch({q: query})).data;
+        setAnimes(animeData);
+        if (!animeData) {
+          setErrormsg("Ingen animedata!");
+        }
+      } catch (err) {
+        setErrormsg("Fel! Ingen animedata!");
+      }
+    };
+    loadData();
+  }, [query]);
+
+  if (!animes) {
+    if (errormsg)
+      return <div>{errormsg}</div>;
+    return <div>Söker...</div>;
+  }
 
   return (
     <main>
@@ -36,9 +61,10 @@ export default async function PageSearch(props: Props) {
         </label>
       </Form>
       <section id="main">
-        <Cards animes={res.data} />
+        <Cards animes={animes} />
       </section>
     </main>
   );
 }
+
 

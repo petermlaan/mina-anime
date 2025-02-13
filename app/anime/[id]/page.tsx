@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 import { Anime, AnimeClient } from '@tutkli/jikan-ts';
 
 export default function PageAnime({ params }: { params: Promise<{ id: string }> }) {
+  // State
   const id = React.use(params).id;
   const [anime, setAnime] = useState<Anime | null>(null);
   const [errormsg, setErrormsg] = useState<string>("");
@@ -15,14 +16,11 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
       try {
         const jikanAPI = new AnimeClient({ enableLogging: true });
         const animeData = (await jikanAPI.getAnimeById(+id)).data;
-        console.log(animeData);
         setAnime(animeData);
         if (!animeData) {
-          console.log("ingen anime");
           setErrormsg("Ingen animedata!");
         }
       } catch (err) {
-        console.error("Error fetching anime data: ", err);
         setErrormsg("Fel! Ingen animedata!");
       }
     };
@@ -30,7 +28,6 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
   }, [id]);
 
   if (!anime) {
-    console.log("Errormsg: " + errormsg);
     if (errormsg)
       return <div>{errormsg}</div>;
     return <div>Laddar anime...</div>;
