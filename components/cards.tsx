@@ -22,7 +22,7 @@ export function Card({ anime }: { anime: Anime }) {
             <Link href={"anime"}>
                 <h2>{anime.getTitleEn()}</h2>
             </Link>
-            <Link href={"anime"}>
+            <Link href={"anime/" + anime.mal_id}>
                 <Image src={anime.images.jpg.large_image_url} width={240} height={360} className={styles.poster} alt={"Poster för " + anime.title_english} />
             </Link>
             <div>
