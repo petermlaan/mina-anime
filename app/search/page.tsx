@@ -18,13 +18,14 @@ export default function PageSearch() {
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
   const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
+  const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
   const loadData = async () => {
     try {
       console.log("loadData");
       const jikanAPI = new AnimeClient({ enableLogging: true });
       const animeData = await jikanAPI.getAnimeSearch({ 
-        q, type, page, sfw: true 
+        q, type, page, sfw: true, min_score, order_by: "score", sort: "desc"
       });
       setResponse(animeData);
       if (!animeData) {
@@ -37,14 +38,12 @@ export default function PageSearch() {
 
   useEffect(() => {
     loadData();
-  }, [q, type, page]);
-//}, [q, type, page]);
-//}, [loadData]);
+  }, [q, type, page, min_score]);
 
   const onNextPage = () => {
     if (response?.pagination?.has_next_page) {
-      const nextPage = page + 1;
       const params = new URLSearchParams(searchParams);
+      const nextPage = page + 1;
       params.set('page', nextPage.toString());
       router.push(`/search?${params.toString()}`);
     }
@@ -61,6 +60,20 @@ export default function PageSearch() {
       <Form id="frmSearch" action={"/search"}>
         <label id="lblTopSearch" htmlFor="chkTopSearch">Toppsök
           <input type="checkbox" id="chkTopSearch" />
+        </label>
+        <label id="lblMinScore" htmlFor="selMinScore">Typ
+          <select id="selMinScore" name="min_score" defaultValue={min_score}>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+          </select>
         </label>
         <label id="lblType" htmlFor="selType">Typ
           <select id="selType" name="type" defaultValue={type}>
