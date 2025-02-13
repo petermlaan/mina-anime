@@ -1,10 +1,9 @@
-import { fetchJSON } from "./app/util";
 
 export async function searchAnimes(query: string) {
     const url = "https://api.jikan.moe/v4/anime?sfw&q=" + query;
-    const data = await fetchJSON(url);
-    const animeList = new AnimeList(data.pagination, data.data);
-    return animeList;
+//    const data = await fetchJSON(url);
+//    const animeList = new AnimeList(data.pagination, data.data);
+    return null;
 }
 
 export class AnimeList {

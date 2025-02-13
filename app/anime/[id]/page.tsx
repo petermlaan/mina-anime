@@ -1,26 +1,56 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { AnimeClient } from '@tutkli/jikan-ts';
+import { Anime, AnimeClient } from '@tutkli/jikan-ts';
 
-export default async function PageAnime({ params }: { params: { id: string } }) {
-  try {
-    const { id } = await params;
-    console.log("PageAnime - params.id = " + id);
-    const jikanAPI = new AnimeClient({ enableLogging: true });
-    const anime = (await jikanAPI.getAnimeById(+id)).data;
-    return (
-      <div className={styles.page}>
-        <main className={styles.main}>
-          <h1>{anime.title_english ?? anime.title}</h1>
-          <h2>{anime.title}</h2>
-          {anime.mal_id}
-          <Image width={240} height={360} src={anime.images.jpg.large_image_url ?? anime.images.jpg.image_url} alt={"Bild av anime " + anime.title} />
-          <p>{anime.synopsis}</p>
-        </main>
-      </div>
-    );
+export default function PageAnime({ params }: { params: Promise<{ id: string }> }) {
+  const id = React.use(params).id;
+  const [anime, setAnime] = useState<Anime | null>(null);
+  const [errormsg, setErrormsg] = useState<string>("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const jikanAPI = new AnimeClient({ enableLogging: true });
+        const animeData = (await jikanAPI.getAnimeById(+id)).data;
+        console.log(animeData);
+        setAnime(animeData);
+        if (!animeData) {
+          console.log("ingen anime");
+          setErrormsg("Ingen animedata!");
+        }
+      } catch (err) {
+        console.error("Error fetching anime data: ", err);
+        setErrormsg("Fel! Ingen animedata!");
+      }
+    };
+    loadData();
+  }, [id]);
+
+  if (!anime) {
+    console.log("Errormsg: " + errormsg);
+    if (errormsg)
+      return <div>{errormsg}</div>;
+    return <div>Laddar anime...</div>;
   }
-  catch (err) {
-    console.log(err);
-  }
+
+  return (
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <h1>{anime.title_english ?? anime.title}</h1>
+        <h2>{anime.title}</h2>
+        <p>MAL ID: {anime.mal_id}</p>
+        <Image 
+          width={240} 
+          height={360} 
+          src={(anime.images.jpg.large_image_url ?? anime.images.jpg.image_url) ?? ""} 
+          alt={`Bild på ${anime.title}`} 
+          priority
+        />
+        <p>{anime.synopsis}</p>
+      </main>
+    </div>
+  );
 }
