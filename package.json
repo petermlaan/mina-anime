@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
     "@tutkli/jikan-ts": "^2.2.0",
     "axios": "^1.7.9",
     "axios-cache-interceptor": "^1.6.2",
