@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import { Cards } from "@/components/cards";
 import SearchForm from "./searchform";
 import AnimeResults from "./animeresults";
 
