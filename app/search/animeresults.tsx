@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
@@ -17,7 +17,7 @@ export default function AnimeResults() {
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         try {
             const jikanAPI = new AnimeClient({ enableLogging: false });
             const sp: AnimeSearchParams = {
@@ -35,11 +35,35 @@ export default function AnimeResults() {
         } catch (err) {
             setErrormsg("Fel! Ingen animedata!" + err);
         }
-    };
+    }, [q, type, page, min_score]); // Dependencies moved here
 
     useEffect(() => {
         loadData();
-    }, [q, type, page, min_score]);
+    }, [loadData]); // loadData is now the only dependency
+
+    /*    const loadData = async () => {
+            try {
+                const jikanAPI = new AnimeClient({ enableLogging: false });
+                const sp: AnimeSearchParams = {
+                    q, type, page, sfw: true, min_score
+                };
+                if (!q) {
+                    sp.order_by = "score";
+                    sp.sort = "desc";
+                }
+                const animeData = await jikanAPI.getAnimeSearch(sp);
+                setResponse(animeData);
+                if (!animeData) {
+                    setErrormsg("Ingen animedata!");
+                }
+            } catch (err) {
+                setErrormsg("Fel! Ingen animedata!" + err);
+            }
+        };
+    
+        useEffect(() => {
+            loadData();
+        }, [q, type, page, min_score]);*/
 
     const onPrevPage = () => {
         if (page > 1) {
