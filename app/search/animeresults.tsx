@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
+    const router = useRouter();
 
     const [response, setResponse] = useState<JikanResponse<Anime[]> | null>(null);
     const [errormsg, setErrormsg] = useState<string>("");
@@ -40,11 +41,44 @@ export default function AnimeResults() {
         loadData();
     }, [q, type, page, min_score]);
 
+    const onPrevPage = () => {
+        if (page > 1) {
+            const params = new URLSearchParams(searchParams);
+            const nextPage = page - 1;
+            params.set('page', nextPage.toString());
+            router.push(`/search?${params.toString()}`);
+        }
+    };
+
+    const onNextPage = () => {
+        const params = new URLSearchParams(searchParams);
+        const nextPage = page + 1;
+        params.set('page', nextPage.toString());
+        router.push(`/search?${params.toString()}`);
+    };
+
     if (!response?.data) {
         if (errormsg)
             return <div>{errormsg}</div>;
         return <div>Söker...</div>;
     }
 
-    return <Cards animes={response.data} />;
+    return (<>
+        <button id="btnPrevPage" type="button"
+            className={page < 2 ? "disabled" : ""}
+            disabled={page < 2}
+            onClick={onPrevPage} >
+            &lt; Föreg
+        </button>
+        <button id="btnNextPage" type="button"
+            className={response.pagination?.has_next_page ? "" : "disabled"}
+            disabled={!response.pagination?.has_next_page}
+            onClick={onNextPage} >
+            Nästa &gt;
+        </button>
+        <label id="lblShowList" htmlFor="chkShowList">Visa lista
+            <input type="checkbox" id="chkShowList" />
+        </label>
+        <Cards animes={response.data} />
+    </>);
 }

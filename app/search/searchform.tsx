@@ -2,33 +2,16 @@
 
 import React from "react";
 import Form from "next/form";
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { AnimeType } from '@tutkli/jikan-ts';
 
 export default function SearchForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
   const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
-
-  const onPrevPage = () => {
-    if (page > 1) {
-      const params = new URLSearchParams(searchParams);
-      const nextPage = page - 1;
-      params.set('page', nextPage.toString());
-      router.push(`/search?${params.toString()}`);
-    }
-  };
-
-  const onNextPage = () => {
-    const params = new URLSearchParams(searchParams);
-    const nextPage = page + 1;
-    params.set('page', nextPage.toString());
-    router.push(`/search?${params.toString()}`);
-  };
 
   return (
     <Form id="frmSearch" action={"/search"}>
@@ -52,19 +35,6 @@ export default function SearchForm() {
       </label>
       <input id="txtQuery" type="search" name="q" defaultValue={q} />
       <button id="btnSearch" type="submit">Sök</button>
-      <button id="btnPrevPage" type="button"
-        className={page < 2 ? "disabled" : ""}
-        disabled={page < 2}
-        onClick={onPrevPage} >
-        &lt; Föreg
-      </button>
-      <button id="btnNextPage" type="button"
-        onClick={onNextPage} >
-        Nästa &gt;
-      </button>
-      <label id="lblShowList" htmlFor="chkShowList">Visa lista
-        <input type="checkbox" id="chkShowList" />
-      </label>
     </Form>
   );
 }
