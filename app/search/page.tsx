@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Form from "next/form";
-import styles from "./page.module.css";
+//import styles from "./page.module.css";
 import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 
@@ -22,7 +22,7 @@ export default function PageSearch() {
   const loadData = async () => {
     try {
       const jikanAPI = new AnimeClient({ enableLogging: false });
-      let sp: AnimeSearchParams = {
+      const sp: AnimeSearchParams = {
         q, type, page, sfw: true, min_score
       };
       if (!q) {
@@ -35,7 +35,7 @@ export default function PageSearch() {
         setErrormsg("Ingen animedata!");
       }
     } catch (err) {
-      setErrormsg("Fel! Ingen animedata!");
+      setErrormsg("Fel! Ingen animedata!" + err);
     }
   };
 

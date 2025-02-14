@@ -21,7 +21,7 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
           setErrormsg("Ingen animedata!");
         }
       } catch (err) {
-        setErrormsg("Fel! Ingen animedata!");
+        setErrormsg("Fel! Ingen animedata!" + err);
       }
     };
     loadData();
