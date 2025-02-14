@@ -17,7 +17,7 @@ export function Card({ anime }: { anime: Anime }) {
             <div className={styles.cardToprow}>
                 Poäng: {anime.score}
             </div>
-            <Link href={"anime"}>
+            <Link href={"anime" + anime.mal_id}>
                 <h2>{anime.title_english ?? anime.title}</h2>
             </Link>
             <Link href={"anime/" + anime.mal_id}>
