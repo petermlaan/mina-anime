@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import Form from "next/form";
 import styles from "./page.module.css";
-import { Anime, AnimeClient, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
+import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 
 export default function PageSearch() {
@@ -22,11 +22,16 @@ export default function PageSearch() {
 
   const loadData = async () => {
     try {
-      console.log("loadData");
+      console.log("loadData window", window);
       const jikanAPI = new AnimeClient({ enableLogging: true });
-      const animeData = await jikanAPI.getAnimeSearch({ 
-        q, type, page, sfw: true, min_score, order_by: "score", sort: "desc"
-      });
+      let sp: AnimeSearchParams = {
+        q, type, page, sfw: true, min_score
+      };
+      if (!q) {
+        sp.order_by = "score";
+        sp.sort = "desc";
+      }
+      const animeData = await jikanAPI.getAnimeSearch(sp);
       setResponse(animeData);
       if (!animeData) {
         setErrormsg("Ingen animedata!");
@@ -39,6 +44,15 @@ export default function PageSearch() {
   useEffect(() => {
     loadData();
   }, [q, type, page, min_score]);
+
+  const onPrevPage = () => {
+    if (page > 1) {
+      const params = new URLSearchParams(searchParams);
+      const nextPage = page - 1;
+      params.set('page', nextPage.toString());
+      router.push(`/search?${params.toString()}`);
+    }
+  };
 
   const onNextPage = () => {
     if (response?.pagination?.has_next_page) {
@@ -58,9 +72,6 @@ export default function PageSearch() {
   return (
     <main>
       <Form id="frmSearch" action={"/search"}>
-        <label id="lblTopSearch" htmlFor="chkTopSearch">Toppsök
-          <input type="checkbox" id="chkTopSearch" />
-        </label>
         <label id="lblMinScore" htmlFor="selMinScore">Typ
           <select id="selMinScore" name="min_score" defaultValue={min_score}>
             <option value="0">0</option>
@@ -88,14 +99,16 @@ export default function PageSearch() {
         </label>
         <input id="txtQuery" type="search" name="q" defaultValue={q} />
         <button id="btnSearch" type="submit">Sök</button>
-        <button id="btnPrevPage" className="disabled" disabled>&lt; Föreg</button>
-        <button 
-          id="btnNextPage"
-          type="button"
+        <button id="btnPrevPage" type="button"
+          className={page<2 ? "disabled" : ""}
+          disabled={page<2}
+          onClick={onPrevPage} >
+          &lt; Föreg
+        </button>
+        <button id="btnNextPage" type="button"
           className={response.pagination?.has_next_page ? "" : "disabled"}
           disabled={!response.pagination?.has_next_page}
-          onClick={onNextPage}
-        >
+          onClick={onNextPage} >
           Nästa &gt;
         </button>
         <label id="lblShowList" htmlFor="chkShowList">Visa lista
@@ -108,4 +121,3 @@ export default function PageSearch() {
     </main>
   );
 }
-
