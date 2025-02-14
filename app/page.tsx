@@ -2,8 +2,9 @@ import React from "react";
 import { createClient } from '@supabase/supabase-js'
 
 export default async function Page() {
-
-  const supabase = createClient("https://xhffsmexnbsqdkybtppv.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoZmZzbWV4bmJzcWRreWJ0cHB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk1NDc5ODcsImV4cCI6MjA1NTEyMzk4N30.oAYrdTFTSW3gAMjjoD8HeMzioC-uE4cdHr7-zYDLgqY");
+  const supabase = createClient(
+    process.env.SUPABASE_URL ?? "",
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? "");
 
   const { data, error } = await supabase
     .from("user_anime_selections")
