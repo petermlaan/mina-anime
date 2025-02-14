@@ -10,7 +10,6 @@ import { Cards } from "@/components/cards";
 export default function PageSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  console.log(searchParams);
 
   const [response, setResponse] = useState<JikanResponse<Anime[]> | null>(null);
   const [errormsg, setErrormsg] = useState<string>("");
@@ -22,8 +21,7 @@ export default function PageSearch() {
 
   const loadData = async () => {
     try {
-      console.log("loadData window", window);
-      const jikanAPI = new AnimeClient({ enableLogging: true });
+      const jikanAPI = new AnimeClient({ enableLogging: false });
       let sp: AnimeSearchParams = {
         q, type, page, sfw: true, min_score
       };
