@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
