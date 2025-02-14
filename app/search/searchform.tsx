@@ -10,7 +10,6 @@ export default function SearchForm() {
 
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
-  const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
   return (
