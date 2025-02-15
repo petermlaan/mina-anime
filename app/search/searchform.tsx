@@ -8,7 +8,6 @@ import styles from "./page.module.css";
 
 export default function SearchForm() {
   const searchParams = useSearchParams();
-
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;

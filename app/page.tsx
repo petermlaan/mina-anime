@@ -17,6 +17,8 @@ export default async function Page() {
   const { data, error } = await supabase
     .from("user_anime_selections")
     .select("anime_data");
+  if (error)
+    console.error(error);
   let animes: Anime[] = [];
   if (data)
     animes = data[0].anime_data;
