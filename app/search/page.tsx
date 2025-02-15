@@ -1,6 +1,11 @@
 import React, { Suspense } from "react";
 import SearchForm from "./searchform";
 import AnimeResults from "./animeresults";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Mina Anime - Sök"
+};
 
 export default function PageSearch() {
   return (

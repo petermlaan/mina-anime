@@ -28,9 +28,10 @@ export default function AnimeResults() {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
-                const animeData = await jikanAPI.getAnimeSearch(sp);
-                setResponse(animeData);
-                if (!animeData) {
+                const response = await jikanAPI.getAnimeSearch(sp);
+                console.log(response.data[0]);
+                setResponse(response);
+                if (!response) {
                     setErrormsg("Ingen animedata!");
                 }
             } catch (err) {

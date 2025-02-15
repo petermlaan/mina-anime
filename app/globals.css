@@ -44,8 +44,8 @@ header {
 
   h1 {
     color: var(--clr-main4);
-    font-family: "Style Script", serif;
-    font-weight: normal;
+    font-family: var(--font-style-script);
+    font-weight: 400;
     position: absolute;
     margin: 0 0 0 20px;
     line-height: 60px;

@@ -17,6 +17,7 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
         const jikanAPI = new AnimeClient({ enableLogging: true });
         const animeData = (await jikanAPI.getAnimeById(+id)).data;
         setAnime(animeData);
+        document.title = "Mina Anime - " + (animeData.title_english ?? animeData.title);
         if (!animeData) {
           setErrormsg("Ingen animedata!");
         }
