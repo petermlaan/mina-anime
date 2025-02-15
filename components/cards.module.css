@@ -4,7 +4,6 @@
     grid-template-columns: repeat(auto-fit, 260px);
     justify-content: center;
     gap: 1rem;
-    margin-top: 1rem;
 }
 
 .cardSmall {

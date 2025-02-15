@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
+import styles from "./page.module.css";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -64,21 +65,23 @@ export default function AnimeResults() {
     }
 
     return (<>
-        <button id="btnPrevPage" type="button"
-            className={page < 2 ? "disabled" : ""}
-            disabled={page < 2}
-            onClick={onPrevPage} >
-            &lt; Föreg
-        </button>
-        <button id="btnNextPage" type="button"
-            className={response.pagination?.has_next_page ? "" : "disabled"}
-            disabled={!response.pagination?.has_next_page}
-            onClick={onNextPage} >
-            Nästa &gt;
-        </button>
-        <label id="lblShowList" htmlFor="chkShowList">Visa lista
-            <input type="checkbox" id="chkShowList" />
-        </label>
+        <div className={styles.searchresults}>
+            <button type="button"
+                className={page < 2 ? "disabled" : ""}
+                disabled={page < 2}
+                onClick={onPrevPage} >
+                &lt; Föreg
+            </button>
+            <label id="lblShowList" htmlFor="chkShowList">Visa lista
+                <input type="checkbox" id="chkShowList" />
+            </label>
+            <button type="button"
+                className={response.pagination?.has_next_page ? "" : "disabled"}
+                disabled={!response.pagination?.has_next_page}
+                onClick={onNextPage} >
+                Nästa &gt;
+            </button>
+        </div>
         <Cards animes={response.data} />
     </>);
 }

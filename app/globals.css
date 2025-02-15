@@ -13,15 +13,46 @@
   margin: 0;
 }
 
+input,
+select,
+button {
+  background-color: var(--clr-main1);
+  color: var(--clr-main3);
+  border-radius: 1rem / 1rem;
+  padding: 0 0.6rem;
+  font-size: large;
+}
+
+button {
+  height: 1.6rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--clr-main2);
+  }
+
+  &.disabled:hover {
+    cursor: default;
+    background-color: var(--clr-disabled);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
 
   @media (hover: hover) and (pointer: fine) {
-    &:hover, h1:hover {
+
+    &:hover,
+    h1:hover {
       text-decoration: underline;
     }
   }
+}
+
+.disabled {
+  background-color: var(--clr-disabled);
+  border: none;
 }
 
 html,
@@ -34,6 +65,7 @@ body {
   color: var(--clr-main4);
   background: var(--clr-main0);
   font-family: var(--font-geist-sans);
+  font-size: large;
 }
 
 header {
@@ -57,7 +89,7 @@ header {
     }
   }
 
-  #topmenu {
+  nav {
     display: grid;
     justify-content: center;
     height: 60px;

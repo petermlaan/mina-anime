@@ -39,7 +39,7 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
       <main className={styles.main}>
         <h1>{anime.title_english ?? anime.title}</h1>
         <h2>{anime.title}</h2>
-        <p>MAL ID: {anime.mal_id}</p>
+        <p>Id: {anime.mal_id}</p>
         <Image 
           width={240} 
           height={360} 

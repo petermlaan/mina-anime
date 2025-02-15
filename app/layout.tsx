@@ -15,7 +15,7 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Mina Anime"
+  title: "Mina Anime" // Default title
 };
 
 export default function RootLayout({
@@ -30,10 +30,10 @@ export default function RootLayout({
           <Link href="/">
             <h1>Mina Anime</h1>
           </Link>
-          <nav id="topmenu">
+          <nav>
             <ul>
-              <li><Link href="/search" id="mnuSearch">SÖK</Link></li>
-              <li><Link href="/" id="mnuCards">SPARADE</Link></li>
+              <li><Link href="/search">SÖK</Link></li>
+              <li><Link href="/">SPARADE</Link></li>
             </ul>
           </nav>
         </header>

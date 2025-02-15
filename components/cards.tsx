@@ -7,11 +7,11 @@ import { Anime } from '@tutkli/jikan-ts';
 import React from "react";
 
 export function Cards({ animes }: { animes: Anime[] }) {
-    return (<div className={styles.cards}>
+    return (<section className={styles.cards}>
         {animes.map((a, i) => (
             <Card key={i} anime={a} />
         ))}
-    </div>);
+    </section>);
 }
 
 export function Card({ anime }: { anime: Anime }) {
