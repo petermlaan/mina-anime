@@ -1,0 +1,16 @@
+.genres {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 0.4rem;
+
+    .genre {
+        background-color: var(--clr-main3);
+        color: var(--clr-main0);
+        height: min-content;
+        padding: 0 0.6rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+        border-radius: 1rem / 1rem;
+    }
+}

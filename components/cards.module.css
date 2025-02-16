@@ -15,19 +15,21 @@
     border: 1px solid var(--clr-main3);
     padding: 9px;
 
-    .cardToprow {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+}
 
-    .poster {
-        width: 240px;
-        height: 360px;
-        object-fit: cover;
+.poster {
+    width: 240px;
+    height: 360px;
+    object-fit: cover;
 
-        &:hover {
-            outline: 3px solid var(--clr-main3);
-        }
+    &:hover {
+        outline: 3px solid var(--clr-main3);
     }
 }
+
+.cardToprow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+

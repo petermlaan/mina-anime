@@ -5,12 +5,13 @@ import Image from "next/image";
 import styles from "./cards.module.css";
 import { Anime } from '@tutkli/jikan-ts';
 import React from "react";
+import { Genres } from "./genres";
 
 export function Cards({ animes }: { animes: Anime[] }) {
     return (<section className={styles.cards}>
-        {animes.map((a, i) => (
+        {animes.map((a, i) => 
             <Card key={i} anime={a} />
-        ))}
+        )}
     </section>);
 }
 
@@ -18,7 +19,7 @@ export function Card({ anime }: { anime: Anime }) {
     return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
-                <button onClick={onSave}>Spara</button>
+                <button onClick={() => onSave(anime)}>Spara</button>
                 Poäng: {anime.score}
             </div>
             <Link href={"anime/" + anime.mal_id}>
@@ -31,9 +32,7 @@ export function Card({ anime }: { anime: Anime }) {
                     className={styles.poster}
                     alt={"Poster för " + anime.title_english} />
             </Link>
-            <div>
-                {anime.genres.map(g => g.name + " ")}
-            </div>
+            <Genres genres={anime.genres} />
         </article>
     );
 }
@@ -54,6 +53,6 @@ const fetchSelections = async (passkey: string) => {
     return response.json();
 };*/
 
-function onSave(e: React.MouseEvent) {
-    console.log("saving card", e);
+function onSave(anime: Anime) {
+    console.log("saving card", anime); 
 }
