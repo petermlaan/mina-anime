@@ -24,10 +24,10 @@ export function Card({ anime }: { anime: Anime }) {
                 <button onClick={() => onSave(anime)}>Spara</button>
                 Poäng: {anime.score}
             </div>
-            <Link href={"anime/" + anime.mal_id}>
+            <Link href={"anime/" + anime.mal_id} prefetch={false}>
                 <h2>{anime.title_english ?? anime.title}</h2>
             </Link>
-            <Link href={"anime/" + anime.mal_id}>
+            <Link href={"anime/" + anime.mal_id} prefetch={false}>
                 <Image
                     src={anime.images.jpg.large_image_url ?? ""}
                     width={240} height={360}
