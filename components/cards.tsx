@@ -8,11 +8,13 @@ import React from "react";
 import { Genres } from "./genres";
 
 export function Cards({ animes }: { animes: Anime[] }) {
-    return (<section className={styles.cards}>
-        {animes.map((a, i) => 
-            <Card key={i} anime={a} />
-        )}
-    </section>);
+    return (
+        <section className={styles.cards}>
+            {animes.map((a, i) =>
+                <Card key={i} anime={a} />
+            )}
+        </section>
+    );
 }
 
 export function Card({ anime }: { anime: Anime }) {
@@ -37,22 +39,19 @@ export function Card({ anime }: { anime: Anime }) {
     );
 }
 /*
-const saveSelection = async (passkey: string, animeData: any) => {
-    const response = await fetch('/api/anime-selections', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passkey, animeData }),
-    });
-    if (!response.ok) throw new Error('Failed to save selection');
-    return response.json();
-};
-
 const fetchSelections = async (passkey: string) => {
     const response = await fetch(`/api/anime-selections?passkey=${passkey}`);
     if (!response.ok) throw new Error('Failed to fetch selections');
     return response.json();
 };*/
 
-function onSave(anime: Anime) {
-    console.log("saving card", anime); 
+async function onSave(anime: Anime) {
+    console.log("saving card", anime);
+    const response = await fetch('/api/anime', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passkey: "minatesta", animeData: [anime] }),
+    });
+    if (!response.ok) 
+        throw new Error('Failed to save selection');
 }
