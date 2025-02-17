@@ -10,16 +10,13 @@ const supabase = createClient(
 
 export async function loginAction(formData: FormData) {
     const passkey = formData.get("passkey") as string;
-    console.log("server action loginAction: " + passkey);
     (await cookies()).set("passkey", passkey);
 }
 
 export async function saveList(animeList: Anime[]): Promise<boolean> {
     const passkey = (await cookies()).get("passkey")?.value;
-    console.log("saveList passkey: " + passkey);
     if (!passkey)
         return false;
-    console.log("saveList animelist: ", animeList);
     const { error } = await supabase
         .from('user_anime_selections')
         .upsert({ user_passkey: passkey, anime_data: animeList });
@@ -32,7 +29,6 @@ export async function saveList(animeList: Anime[]): Promise<boolean> {
 
 export async function getList(): Promise<Anime[] | null> {
     const passkey = (await cookies()).get("passkey")?.value;
-    console.log("getList passkey: " + passkey);
     if (!passkey)
         return null;
     const { data, error } = await supabase
@@ -40,7 +36,7 @@ export async function getList(): Promise<Anime[] | null> {
         .select('anime_data')
         .eq('user_passkey', passkey);
     if (error || data.length === 0) {
-        console.log(error, data);
+        console.error(error, data);
         return null;
     };
     return data[0].anime_data;

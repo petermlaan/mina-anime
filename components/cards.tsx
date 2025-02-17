@@ -41,9 +41,7 @@ export function Card({ anime }: { anime: Anime }) {
 }
 
 async function onSave(anime: Anime) {
-    console.log("saving card", anime);
     let animes = await getList();
-    console.log("fetched animes: ", animes);
     if (!animes)
         animes = [];
     animes.push(anime);

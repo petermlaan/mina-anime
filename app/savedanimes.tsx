@@ -4,7 +4,6 @@ import { supabase } from "@/lib/db";
 import { Cards } from '../components/cards';
 import { unstable_noStore as noStore } from 'next/cache';
 import { cookies } from "next/headers";
-import { flightRouterStateSchema } from "next/dist/server/app-render/types";
 
 export async function SavedAnimes({ showList }: {showList: boolean}) {
     noStore();
