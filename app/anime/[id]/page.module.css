@@ -29,10 +29,6 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.5rem;
-
-  :nth-child(3) {
-      text-align: flex-end;
-  }
 }
 
 .singleRightToprow {
