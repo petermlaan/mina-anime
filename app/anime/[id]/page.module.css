@@ -1,15 +1,43 @@
-.page {
-  display: grid;
-  align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 10px;
-  gap: 24px;
-}
-
 .main {
   display: flex;
-  flex-direction: column;
-  gap: 32px;
+  gap: 1rem;
+  background-color: var(--clr-main1);
+  border: 1px solid var(--clr-main3);
+  margin: 1rem;
+  padding: 0.4rem;
+
+  @media (width < 40rem) {
+      flex-flow: column;
+  }
 }
 
+.poster {
+  width: 240px;
+  height: 360px;
+  object-fit: cover;
+}
+
+.singleLeft {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+  width: min-content;
+}
+
+.singleLeftToprow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+
+  :nth-child(3) {
+      text-align: flex-end;
+  }
+}
+
+.singleRightToprow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}

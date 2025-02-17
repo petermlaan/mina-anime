@@ -37,18 +37,32 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
   }
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h2>{anime.title_english ?? anime.title}</h2>
-        <h3>{anime.title}</h3>
-        <Image 
-          width={240} 
-          height={360} 
-          src={(anime.images.jpg.large_image_url ?? anime.images.jpg.image_url) ?? ""} 
-          alt={`Bild på ${anime.title}`} 
+    <main className={styles.main}>
+      <div className={styles.singleLeft}>
+        <div className={styles.singleLeftToprow}>
+          <button>Ta bort/Spara</button>
+          <div></div>
+          <label>Sedd
+            <input type="checkbox" />
+          </label>
+        </div>
+        <Image
+          className={styles.poster}
+          width={240}
+          height={360}
+          src={(anime.images.jpg.large_image_url ?? anime.images.jpg.image_url) ?? ""}
+          alt={`Bild på ${anime.title}`}
           priority
         />
-        <Genres genres={anime.genres}/>
+        <Genres genres={anime.genres} />
+      </div>
+      <div>
+        <div className={styles.singleRightToprow}>
+          <span>Poäng: {(anime.score ? anime.score.toFixed(1) : "")}</span>
+          <div>Betyg: </div>
+        </div>
+        <h2>{anime.title_english ?? anime.title}</h2>
+        <h3>{anime.title}</h3>
         <p>Typ: {anime.type}</p>
         <p>År: {anime.year}</p>
         <p>Källa: {anime.source}</p>
@@ -57,7 +71,7 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
         <p>Themes: {anime.themes.map(t => t.name).join(", ")}</p>
         <p>{anime.synopsis}</p>
         <p>{anime.background}</p>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
