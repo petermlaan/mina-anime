@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import { Anime, AnimeClient } from '@tutkli/jikan-ts';
+import Link from "next/link";
+import { Genres } from "@/components/genres";
 
 export default function PageAnime({ params }: { params: Promise<{ id: string }> }) {
   // State
@@ -37,9 +39,8 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <h1>{anime.title_english ?? anime.title}</h1>
-        <h2>{anime.title}</h2>
-        <p>Id: {anime.mal_id}</p>
+        <h2>{anime.title_english ?? anime.title}</h2>
+        <h3>{anime.title}</h3>
         <Image 
           width={240} 
           height={360} 
@@ -47,7 +48,15 @@ export default function PageAnime({ params }: { params: Promise<{ id: string }> 
           alt={`Bild på ${anime.title}`} 
           priority
         />
+        <Genres genres={anime.genres}/>
+        <p>Typ: {anime.type}</p>
+        <p>År: {anime.year}</p>
+        <p>Källa: {anime.source}</p>
+        <p>Status: {anime.status}</p>
+        <p><Link href={anime.trailer.url}>Trailer</Link></p>
+        <p>Themes: {anime.themes.map(t => t.name).join(", ")}</p>
         <p>{anime.synopsis}</p>
+        <p>{anime.background}</p>
       </main>
     </div>
   );
