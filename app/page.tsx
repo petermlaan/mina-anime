@@ -2,7 +2,6 @@ import React from "react";
 import { Metadata } from "next";
 import styles from "./page.module.css";
 import { SavedAnimes } from "@/app/savedanimes";
-import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Mina Anime"
