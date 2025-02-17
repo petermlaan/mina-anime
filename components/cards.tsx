@@ -6,6 +6,7 @@ import styles from "./cards.module.css";
 import { Anime } from '@tutkli/jikan-ts';
 import React from "react";
 import { Genres } from "./genres";
+import { saveList, getList } from "@/lib/actions";
 
 export function Cards({ animes }: { animes: Anime[] }) {
     return (
@@ -38,20 +39,13 @@ export function Card({ anime }: { anime: Anime }) {
         </article>
     );
 }
-/*
-const fetchSelections = async (passkey: string) => {
-    const response = await fetch(`/api/anime-selections?passkey=${passkey}`);
-    if (!response.ok) throw new Error('Failed to fetch selections');
-    return response.json();
-};*/
 
 async function onSave(anime: Anime) {
     console.log("saving card", anime);
-    const response = await fetch('/api/anime', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ passkey: "minatesta", animeData: [anime] }),
-    });
-    if (!response.ok) 
-        throw new Error('Failed to save selection');
+    let animes = await getList();
+    console.log("fetched animes: ", animes);
+    if (!animes)
+        animes = [];
+    animes.push(anime);
+    await saveList(animes ?? []);
 }

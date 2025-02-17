@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import SearchForm from "./searchform";
-import AnimeResults from "./animeresults";
+import AnimeResults from "./searchresults";
 import { Metadata } from "next";
 import styles from "./page.module.css";
 

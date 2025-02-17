@@ -32,8 +32,8 @@ export default function SearchForm() {
           <option value="Music">Musik</option>
         </select>
       </label>
-      <input id="txtQuery" type="search" name="q" defaultValue={q} placeholder="sökkriterie" />
-      <button id="btnSearch" type="submit">Sök</button>
+      <input type="search" name="q" defaultValue={q} placeholder="sökord" />
+      <button type="submit">Sök</button>
     </Form>
   );
 }

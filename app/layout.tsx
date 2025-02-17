@@ -32,8 +32,9 @@ export default function RootLayout({
           </Link>
           <nav>
             <ul>
-              <li><Link href="/search">SÖK</Link></li>
-              <li><Link href="/">SPARADE</Link></li>
+              <li><Link href="/search" prefetch={false}>SÖK</Link></li>
+              <li><Link href="/" prefetch={false}>SPARADE</Link></li>
+              <li><Link href="/login" prefetch={false}>LOGIN</Link></li>
             </ul>
           </nav>
         </header>
