@@ -10,7 +10,7 @@ export async function SavedAnimes({ showList }: {showList: boolean}) {
     console.log("SavedAnimes: reading from db", passkey, showList);
     if (!passkey)
         return (<>Logga in!</>);
-    let animes = await loadAnimes(passkey);
+    const animes = await loadAnimes(passkey);
     return (
       <Cards animes={animes ?? []} />
     );
