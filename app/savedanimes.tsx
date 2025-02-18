@@ -7,9 +7,9 @@ import { cookies } from "next/headers";
 export async function SavedAnimes({ showList }: {showList: boolean}) {
     noStore();
     const passkey = (await cookies()).get("passkey")?.value;
-    console.log("SavedAnimes: reading from db", passkey, showList);
     if (!passkey)
         return (<>Logga in!</>);
+    console.log("SavedAnimes: reading from db", passkey, showList);
     const animes = await dbLoadAnimes(passkey);
     return (
       <Cards animes={animes ?? []} />

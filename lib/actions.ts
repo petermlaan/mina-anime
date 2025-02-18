@@ -1,9 +1,9 @@
 "use server";
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
-import { redirect } from 'next/navigation';
 
 export async function loginSA(formData: FormData) {
     const passkey = formData.get("passkey") as string;

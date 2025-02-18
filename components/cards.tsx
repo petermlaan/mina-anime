@@ -8,6 +8,18 @@ import { Genres } from "./genres";
 import { saveListSA, getListSA } from "@/lib/actions";
 import { MyAnime } from "@/lib/interfaces";
 
+
+async function onSave(anime: MyAnime) {
+    let animes = await getListSA();
+    if (!animes)
+        animes = [];
+    anime.watched = false;
+    anime.myRating = 0;
+    anime.saved = true;
+    animes.push(anime);
+    await saveListSA(animes ?? []);
+}
+
 export function Cards({ animes }: { animes: MyAnime[] }) {
     return (
         <section className={styles.cards}>
@@ -38,15 +50,4 @@ export function Card({ anime }: { anime: MyAnime }) {
             <Genres genres={anime.genres} />
         </article>
     );
-}
-
-async function onSave(anime: MyAnime) {
-    let animes = await getListSA();
-    if (!animes)
-        animes = [];
-    anime.watched = false;
-    anime.myRating = 0;
-    anime.saved = true;
-    animes.push(anime);
-    await saveListSA(animes ?? []);
 }
