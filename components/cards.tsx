@@ -5,7 +5,7 @@ import Image from "next/image";
 import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
-import { saveList, getList } from "@/lib/actions";
+import { saveListSA, getListSA } from "@/lib/actions";
 import { MyAnime } from "@/lib/interfaces";
 
 export function Cards({ animes }: { animes: MyAnime[] }) {
@@ -41,12 +41,12 @@ export function Card({ anime }: { anime: MyAnime }) {
 }
 
 async function onSave(anime: MyAnime) {
-    let animes = await getList();
+    let animes = await getListSA();
     if (!animes)
         animes = [];
     anime.watched = false;
     anime.myRating = 0;
     anime.saved = true;
     animes.push(anime);
-    await saveList(animes ?? []);
+    await saveListSA(animes ?? []);
 }

@@ -1,5 +1,5 @@
 import Form from "next/form";
-import { loginAction } from "@/lib/actions";
+import { loginSA } from "@/lib/actions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
     return (<>
-        <Form action={loginAction}>
+        <Form action={loginSA}>
             <input type="text" name="passkey" placeholder="passkey" />
             <button type="submit">Logga in</button>
         </Form>

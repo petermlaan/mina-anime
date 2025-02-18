@@ -1,5 +1,5 @@
 import React from "react";
-import { loadAnimes } from "@/lib/db";
+import { dbLoadAnimes } from "@/lib/db";
 import { Cards } from '../components/cards';
 import { unstable_noStore as noStore } from 'next/cache';
 import { cookies } from "next/headers";
@@ -10,7 +10,7 @@ export async function SavedAnimes({ showList }: {showList: boolean}) {
     console.log("SavedAnimes: reading from db", passkey, showList);
     if (!passkey)
         return (<>Logga in!</>);
-    const animes = await loadAnimes(passkey);
+    const animes = await dbLoadAnimes(passkey);
     return (
       <Cards animes={animes ?? []} />
     );

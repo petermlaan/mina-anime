@@ -1,27 +1,27 @@
 "use server";
 
 import { cookies } from 'next/headers';
-import { loadAnimes, saveAnimes } from './db';
+import { dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
 import { redirect } from 'next/navigation';
 
-export async function loginAction(formData: FormData) {
+export async function loginSA(formData: FormData) {
     const passkey = formData.get("passkey") as string;
     (await cookies()).set("passkey", passkey);
     redirect("/");
 }
 
-export async function saveList(animeList: MyAnime[]): Promise<boolean> {
+export async function saveListSA(animeList: MyAnime[]): Promise<boolean> {
     const passkey = (await cookies()).get("passkey")?.value;
     if (!passkey)
         return false;
-    await saveAnimes(passkey, animeList);
+    await dbSaveAnimes(passkey, animeList);
     return true;
 }
 
-export async function getList(): Promise<MyAnime[] | null> {
+export async function getListSA(): Promise<MyAnime[] | null> {
     const passkey = (await cookies()).get("passkey")?.value;
     if (!passkey)
         return null;
-    return await loadAnimes(passkey);
+    return await dbLoadAnimes(passkey);
 }

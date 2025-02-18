@@ -5,7 +5,7 @@ const supabase = createClient(
     process.env.SUPABASE_URL ?? "",
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? "");
 
-export async function loadAnimes(passkey: string): Promise<MyAnime[] | null> {
+export async function dbLoadAnimes(passkey: string): Promise<MyAnime[] | null> {
     const { data, error } = await supabase
         .from("user_anime_selections")
         .select("anime_data")
@@ -19,7 +19,7 @@ export async function loadAnimes(passkey: string): Promise<MyAnime[] | null> {
     return data[0].anime_data;
 }
 
-export async function saveAnimes(passkey: string, animes: MyAnime[]) {
+export async function dbSaveAnimes(passkey: string, animes: MyAnime[]) {
     const { error } = await supabase
         .from('user_anime_selections')
         .upsert({ user_passkey: passkey, anime_data: animes });
