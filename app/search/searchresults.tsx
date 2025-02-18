@@ -2,15 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Anime, AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
+import { AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 import styles from "./page.module.css";
+import { MyAnime } from "@/lib/interfaces";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const [response, setResponse] = useState<JikanResponse<Anime[]> | null>(null);
+    const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
     const [errormsg, setErrormsg] = useState<string>("");
 
     const q = searchParams.get('q') || undefined;

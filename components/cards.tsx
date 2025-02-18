@@ -3,12 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./cards.module.css";
-import { Anime } from '@tutkli/jikan-ts';
 import React from "react";
 import { Genres } from "./genres";
 import { saveList, getList } from "@/lib/actions";
+import { MyAnime } from "@/lib/interfaces";
 
-export function Cards({ animes }: { animes: Anime[] }) {
+export function Cards({ animes }: { animes: MyAnime[] }) {
     return (
         <section className={styles.cards}>
             {animes.map((a, i) =>
@@ -18,7 +18,7 @@ export function Cards({ animes }: { animes: Anime[] }) {
     );
 }
 
-export function Card({ anime }: { anime: Anime }) {
+export function Card({ anime }: { anime: MyAnime }) {
     return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
@@ -40,10 +40,13 @@ export function Card({ anime }: { anime: Anime }) {
     );
 }
 
-async function onSave(anime: Anime) {
+async function onSave(anime: MyAnime) {
     let animes = await getList();
     if (!animes)
         animes = [];
+    anime.watched = false;
+    anime.myRating = 0;
+    anime.saved = true;
     animes.push(anime);
     await saveList(animes ?? []);
 }

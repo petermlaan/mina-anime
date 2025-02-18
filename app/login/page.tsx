@@ -1,6 +1,10 @@
-"use client";
 import Form from "next/form";
 import { loginAction } from "@/lib/actions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Mina Anime - Logga in"
+};
 
 export default function LoginPage() {
     return (<>

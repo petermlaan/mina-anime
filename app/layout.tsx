@@ -15,7 +15,10 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Mina Anime" // Default title
+  title: "Mina Anime",
+  icons: {
+    icon: "/favicon.jpg",
+  },
 };
 
 export default function RootLayout({

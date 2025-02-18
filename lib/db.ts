@@ -1,5 +1,30 @@
 import { createClient } from '@supabase/supabase-js'
+import { MyAnime } from './interfaces';
 
-export const supabase = createClient(
+const supabase = createClient(
     process.env.SUPABASE_URL ?? "",
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? "");
+
+export async function loadAnimes(passkey: string): Promise<MyAnime[] | null> {
+    const { data, error } = await supabase
+        .from("user_anime_selections")
+        .select("anime_data")
+        .eq("user_passkey", passkey);
+    if (error) {
+        console.error("loadAnimes", error);
+        throw new Error(error.message);
+    };
+    if (!data || data.length === 0)
+        return null;
+    return data[0].anime_data;
+}
+
+export async function saveAnimes(passkey: string, animes: MyAnime[]) {
+    const { error } = await supabase
+        .from('user_anime_selections')
+        .upsert({ user_passkey: passkey, anime_data: animes });
+    if (error) {
+        console.error("saveAnimes", error);
+        throw new Error(error.message);
+    };
+}

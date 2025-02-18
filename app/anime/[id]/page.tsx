@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Anime, AnimeClient } from '@tutkli/jikan-ts';
+import { AnimeClient } from '@tutkli/jikan-ts';
 import Link from "next/link";
 import { Genres } from "@/components/genres";
+import { MyAnime } from "@/lib/interfaces";
 
-export default function PageAnime({ params }: { params: Promise<{ id: string }> }) {
-  // State
+export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
   const id = React.use(params).id;
-  const [anime, setAnime] = useState<Anime | null>(null);
+  const [anime, setAnime] = useState<MyAnime | null>(null);
   const [errormsg, setErrormsg] = useState<string>("");
 
   useEffect(() => {
