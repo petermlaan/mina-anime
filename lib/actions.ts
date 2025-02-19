@@ -1,7 +1,5 @@
 "use server";
 
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
 import { currentUser } from '@clerk/nextjs/server';
