@@ -6,12 +6,6 @@ import { dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
 import { currentUser } from '@clerk/nextjs/server';
 
-export async function loginSA(formData: FormData) {
-    const passkey = formData.get("passkey") as string;
-    (await cookies()).set("passkey", passkey);
-    redirect("/");
-}
-
 export async function saveListSA(animeList: MyAnime[]): Promise<boolean> {
     const user = await currentUser();
     console.log("saveListSA user: " + user);
