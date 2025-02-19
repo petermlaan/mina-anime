@@ -5,19 +5,17 @@ import Image from "next/image";
 import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
-import { saveListSA, getListSA } from "@/lib/actions";
+import { addAnimeSA, removeAnimeSA } from "@/lib/actions";
 import { MyAnime } from "@/lib/interfaces";
 
-
-async function onSave(anime: MyAnime) {
-    let animes = await getListSA();
-    if (!animes)
-        animes = [];
-    anime.watched = false;
-    anime.myRating = 0;
-    anime.saved = true;
-    animes.push(anime);
-    await saveListSA(animes ?? []);
+async function onSaveRemove(anime: MyAnime) {
+    if (anime.saved) {
+        removeAnimeSA(anime);
+    } else {
+        anime.watched = false;
+        anime.myRating = 0;
+        addAnimeSA(anime);
+    }
 }
 
 export function Cards({ animes }: { animes: MyAnime[] }) {
@@ -34,7 +32,7 @@ export function Card({ anime }: { anime: MyAnime }) {
     return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
-                <button onClick={() => onSave(anime)}>Spara</button>
+                <button onClick={() => onSaveRemove(anime)}>{anime.saved ? "Ta bort" : "Spara"}</button>
                 Poäng: {anime.score}
             </div>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>

@@ -7,6 +7,17 @@ import { AnimeClient } from '@tutkli/jikan-ts';
 import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
+import { addAnimeSA, removeAnimeSA } from "@/lib/actions";
+
+async function onSaveRemove(anime: MyAnime) {
+  if (anime.saved) {
+    removeAnimeSA(anime);
+  } else {
+    anime.watched = false;
+    anime.myRating = 0;
+    addAnimeSA(anime);
+  }
+}
 
 export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
   const id = React.use(params).id;
@@ -40,7 +51,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
     <main className={styles.main}>
       <div className={styles.singleLeft}>
         <div className={styles.singleLeftToprow}>
-          <button>Ta bort/Spara</button>
+          <button onClick={() => onSaveRemove(anime)}>{anime.saved ? "Ta bort" : "Spara"}</button>
           <div></div>
           <label>Sedd
             <input type="checkbox" />

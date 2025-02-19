@@ -1,30 +1,53 @@
 "use server";
 
-import { dbLoadAnimes, dbSaveAnimes } from './db';
+import { auth } from '@clerk/nextjs/server';
+import { DB_TAGS_SAVEDANIMES, dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
-import { currentUser } from '@clerk/nextjs/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
-export async function saveListSA(animeList: MyAnime[]): Promise<boolean> {
-    const user = await currentUser();
-    console.log("saveListSA user: " + user);
-    if (!user) {
+/* export async function saveListSA(animeList: MyAnime[]): Promise<boolean> {
+    const { userId } = await auth();
+    if (!userId)
         return false;
-    }
-    const passkey = user.id;
-    if (!passkey)
-        return false;
-    await dbSaveAnimes(passkey, animeList);
+    dbSaveAnimes(userId, animeList);
     return true;
 }
+ */
 
-export async function getListSA(): Promise<MyAnime[] | null> {
-    const user = await currentUser();
-    console.log("getListSA user: " + user);
-    if (!user) {
+/* export async function getListSA(): Promise<MyAnime[] | null> {
+    const { userId } = await auth();
+    if (!userId)
         return null;
-    }
-    const passkey = user.id;
-    if (!passkey)
+    return await dbLoadAnimes(userId);
+}
+ */
+
+export async function addAnimeSA(anime: MyAnime) {
+    const { userId } = await auth();
+    if (!userId)
         return null;
-    return await dbLoadAnimes(passkey);
+    const animes = await dbLoadAnimes(userId);
+    if (!animes)
+        return;
+    if (animes.find(a => a.mal_id === anime.mal_id))
+        return;
+    anime.saved = true;
+    animes.unshift(anime);
+    dbSaveAnimes(userId, animes);
+    revalidateTag(DB_TAGS_SAVEDANIMES);
+}
+
+export async function removeAnimeSA(anime: MyAnime) {
+    const { userId } = await auth();
+    if (!userId)
+        return null;
+    const animes = await dbLoadAnimes(userId);
+    if (!animes)
+        return;
+    const i = animes.findIndex(a => a.mal_id === anime.mal_id);
+    if (i === -1)
+        return;
+    animes.splice(i, 1);
+    dbSaveAnimes(userId, animes);
+    revalidateTag(DB_TAGS_SAVEDANIMES);
 }

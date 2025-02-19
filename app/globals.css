@@ -7,12 +7,6 @@
   --clr-disabled: #666;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 input,
 select,
 button {
@@ -71,20 +65,18 @@ body {
 header {
   background-color: var(--clr-main0);
   margin-bottom: 10px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
 
   h1 {
     color: var(--clr-main4);
     font-family: var(--font-style-script);
     font-weight: 400;
-    position: absolute;
     margin: 0 0 0 20px;
     line-height: 60px;
-    vertical-align: middle;
+    align-self: center;
 
-    @media (width < 25rem) {
-      position: static;
+    @media (width < 40rem) {
       margin: 0;
     }
   }
@@ -133,5 +125,14 @@ header {
     @media (width < 25rem) {
       justify-content: center;
     }
+  }
+
+  >div {
+    justify-self: flex-end;
+    align-self: center;
+    margin-right: 1rem;
+    height: fit-content;
+    display: flex;
+    gap: 1rem;
   }
 }
