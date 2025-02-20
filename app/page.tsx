@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Metadata } from "next";
 import styles from "./page.module.css";
 import { SavedAnimes } from "@/app/savedanimes";
@@ -18,7 +18,9 @@ export default async function Page() {
           <input type="checkbox" id="chkShowList" />
         </label>
       </div>
-      <SavedAnimes showList={false} />
+      <Suspense fallback="Laddar listan...">
+        <SavedAnimes showList={false} />
+      </Suspense>
     </main>
   );
 }

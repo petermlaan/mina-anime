@@ -31,7 +31,6 @@ export default function AnimeResults() {
                     sp.sort = "desc";
                 }
                 const response = await jikanAPI.getAnimeSearch(sp);
-                console.log(response.data[0]);
                 setResponse(response);
                 if (!response) {
                     setErrormsg("Ingen animedata!");

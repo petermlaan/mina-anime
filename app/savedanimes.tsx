@@ -1,20 +1,38 @@
-import React from "react";
-import { dbLoadAnimes } from "@/lib/db";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Cards } from '../components/cards';
-//import { unstable_noStore as noStore } from 'next/cache';
-import { auth } from "@clerk/nextjs/server";
- 
-export async function SavedAnimes({ showList }: {showList: boolean}) {
-    //noStore();
-    const { userId } = await auth();
-    console.log("SavedAnimes: ",  showList);
-    if (!userId) {
-        return <div>Logga in för att se dina sparade anime.</div>;
-    }
-    if (!userId)
-        return (<>Logga in!</>);
-    const animes = await dbLoadAnimes(userId);
+import { MyAnime } from "@/lib/interfaces";
+import { getAnimesSA } from "@/lib/actions";
+import { getListFromLS, saveListToLS } from "@/lib/clientutil";
+
+export function SavedAnimes({ showList }: { showList: boolean }) {
+    console.log("SavedAnimes: ", showList);
+    const [animes, setAnimes] = useState<MyAnime[]>([]);
+    const [errormsg, setErrormsg] = useState<string>("");
+    useEffect(() => {
+        const loadData = async () => {
+            let res: MyAnime[] | null = [];
+            try {
+                res = await getListFromLS();
+                if (res)
+                    setAnimes(res);
+                else {
+                    const list = await getAnimesSA() ?? [];
+                    setAnimes(list);
+                    saveListToLS(list);
+                }
+            } catch (err) {
+                setErrormsg("Fel! Ingen animedata!" + err);
+            }
+        };
+        loadData();
+    }, []);
+
+    if (errormsg)
+        return { errormsg };
+
     return (
-      <Cards animes={animes ?? []} />
+        <Cards animes={animes} />
     );
 }

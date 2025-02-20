@@ -10,8 +10,10 @@ import { MyAnime } from "@/lib/interfaces";
 
 async function onSaveRemove(anime: MyAnime) {
     if (anime.saved) {
+        console.log("onSaveRemove removing...");
         removeAnimeSA(anime);
     } else {
+        console.log("onSaveRemove saving...");
         anime.watched = false;
         anime.myRating = 0;
         addAnimeSA(anime);
