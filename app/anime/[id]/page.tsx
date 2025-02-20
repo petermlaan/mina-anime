@@ -7,15 +7,15 @@ import { AnimeClient } from '@tutkli/jikan-ts';
 import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnimeSA, removeAnimeSA } from "@/lib/actions";
+import { addAnime, removeAnime } from "@/lib/clientutil";
 
 async function onSaveRemove(anime: MyAnime) {
   if (anime.saved) {
-    removeAnimeSA(anime);
+    removeAnime(anime);
   } else {
     anime.watched = false;
     anime.myRating = 0;
-    addAnimeSA(anime);
+    addAnime(anime);
   }
 }
 
