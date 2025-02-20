@@ -1,0 +1,13 @@
+.fallback {
+    display: grid;
+    justify-content: center;
+    align-content: flex-end;
+    height: 10rem;
+    font-size: x-large;
+}
+
+.searchresults {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}

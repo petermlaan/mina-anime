@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 export default function PageSearch() {
   return (
     <main className={styles.main}>
-      <Suspense fallback={<div>Loading search form...</div>}>
+      <Suspense fallback={<div>Laddar sökformuläret...</div>}>
         <SearchForm />
       </Suspense>
-      <Suspense fallback={<div>Loading anime results...</div>}>
+      <Suspense>
         <AnimeResults />
       </Suspense>
     </main>

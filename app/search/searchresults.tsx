@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
-import styles from "./page.module.css";
+import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
 import { searchAnime } from "@/lib/clientutil";
 
@@ -59,7 +59,7 @@ export default function AnimeResults() {
     if (!response?.data) {
         if (errormsg)
             return <div>{errormsg}</div>;
-        return <div>Söker...</div>;
+        return <div className={styles.fallback}><span>Söker...</span></div>;
     }
 
     return (<>
