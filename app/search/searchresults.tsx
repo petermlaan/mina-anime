@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { AnimeClient, AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
+import { AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 import styles from "./page.module.css";
 import { MyAnime } from "@/lib/interfaces";
+import { searchAnime } from "@/lib/clientutil";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -22,7 +23,6 @@ export default function AnimeResults() {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const jikanAPI = new AnimeClient({ enableLogging: false });
                 const sp: AnimeSearchParams = {
                     q, type, page, sfw: true, min_score
                 };
@@ -30,12 +30,10 @@ export default function AnimeResults() {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
-                const response = await jikanAPI.getAnimeSearch(sp);
+                const response = await searchAnime(sp);
                 setResponse(response);
-                if (!response) {
-                    setErrormsg("Ingen animedata!");
-                }
             } catch (err) {
+                console.error("AnimeResults: ", err);
                 setErrormsg("Fel! Ingen animedata!" + err);
             }
         };
