@@ -1,6 +1,7 @@
 import SuperJSON from "superjson";
 import { getAnimesSA, saveAnimesSA } from "./actions";
 import { MyAnime } from "./interfaces";
+import { AnimeClient } from "@tutkli/jikan-ts";
 
 export async function getList(): Promise<MyAnime[]> {
     console.log("getList start");
@@ -18,6 +19,17 @@ export function saveList() {
     const res = getListFromLS();
     if (res !== null)
         saveAnimesSA(res);
+}
+
+export async function getAnime(id: number): Promise<MyAnime> {
+    let anime: MyAnime | undefined;
+    const list = await getList();
+    anime = list.find(a => a.mal_id === id);
+    if (!anime) {
+        const jikanAPI = new AnimeClient({ enableLogging: true });
+        anime = (await jikanAPI.getAnimeById(id)).data;
+    }
+    return anime;
 }
 
 export async function addAnime(anime: MyAnime) {

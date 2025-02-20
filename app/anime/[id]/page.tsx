@@ -3,11 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { AnimeClient } from '@tutkli/jikan-ts';
 import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnime, removeAnime } from "@/lib/clientutil";
+import { addAnime, getAnime, removeAnime } from "@/lib/clientutil";
 
 async function onSaveRemove(anime: MyAnime) {
   if (anime.saved) {
@@ -20,21 +19,18 @@ async function onSaveRemove(anime: MyAnime) {
 }
 
 export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
-  const id = React.use(params).id;
+  const id = +React.use(params).id;
   const [anime, setAnime] = useState<MyAnime | null>(null);
   const [errormsg, setErrormsg] = useState<string>("");
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const jikanAPI = new AnimeClient({ enableLogging: true });
-        const animeData = (await jikanAPI.getAnimeById(+id)).data;
-        setAnime(animeData);
-        document.title = "Mina Anime - " + (animeData.title_english ?? animeData.title);
-        if (!animeData) {
-          setErrormsg("Ingen animedata!");
-        }
+        const res = await getAnime(id);
+        setAnime(res);
+        document.title = "Mina Anime - " + (res.title_english ?? res.title);
       } catch (err) {
+        console.error("loadData:", err);
         setErrormsg("Fel! Ingen animedata!" + err);
       }
     };
