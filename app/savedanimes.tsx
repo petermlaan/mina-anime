@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Cards } from '../components/cards';
 import { MyAnime } from "@/lib/interfaces";
-import { getAnimesSA } from "@/lib/actions";
-import { getListFromLS, saveListToLS } from "@/lib/clientutil";
+import { getList } from "@/lib/clientutil";
+import styles from "./savedanimes.module.css";
 
 export function SavedAnimes({ showList }: { showList: boolean }) {
     console.log("SavedAnimes: ", showList);
@@ -12,17 +12,12 @@ export function SavedAnimes({ showList }: { showList: boolean }) {
     const [errormsg, setErrormsg] = useState<string>("");
     useEffect(() => {
         const loadData = async () => {
-            let res: MyAnime[] | null = [];
             try {
-                res = await getListFromLS();
-                if (res)
-                    setAnimes(res);
-                else {
-                    const list = await getAnimesSA() ?? [];
-                    setAnimes(list);
-                    saveListToLS(list);
-                }
+                const res = await getList();
+                console.log("loadData res: ", res);
+                setAnimes(res);
             } catch (err) {
+                console.error(err);
                 setErrormsg("Fel! Ingen animedata!" + err);
             }
         };
@@ -30,9 +25,17 @@ export function SavedAnimes({ showList }: { showList: boolean }) {
     }, []);
 
     if (errormsg)
-        return { errormsg };
+        return errormsg;
 
-    return (
+    return (<>
+        <div className={styles.toprow}>
+            <label htmlFor="chkFilterWatched">Dölj sedda
+                <input type="checkbox" id="chkFilterWatched" />
+            </label>
+            <label htmlFor="chkShowList">Visa lista
+                <input type="checkbox" id="chkShowList" />
+            </label>
+        </div>
         <Cards animes={animes} />
-    );
+    </>);
 }

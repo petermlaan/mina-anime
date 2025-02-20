@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+import { SaveListButton } from "@/components/savelist";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,6 +55,7 @@ export default function RootLayout({
                 <SignUpButton />
               </SignedOut>
               <SignedIn>
+                <SaveListButton />
                 <UserButton />
               </SignedIn>
             </div>

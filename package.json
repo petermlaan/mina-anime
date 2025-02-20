@@ -16,7 +16,8 @@
     "axios-cache-interceptor": "^1.6.2",
     "next": "15.1.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "superjson": "^2.2.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

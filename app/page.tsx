@@ -10,14 +10,6 @@ export const metadata: Metadata = {
 export default async function Page() {
   return (
     <main className={styles.main}>
-      <div className={styles.toprow}>
-        <label htmlFor="chkFilterWatched">Dölj sedda
-          <input type="checkbox" id="chkFilterWatched" />
-        </label>
-        <label htmlFor="chkShowList">Visa lista
-          <input type="checkbox" id="chkShowList" />
-        </label>
-      </div>
       <Suspense fallback="Laddar listan...">
         <SavedAnimes showList={false} />
       </Suspense>

@@ -4,6 +4,12 @@ import { auth } from '@clerk/nextjs/server';
 import { dbLoadAnimes, dbSaveAnimes } from './db';
 import { MyAnime } from './interfaces';
 
+export async function saveAnimesSA(animes: MyAnime[]) {
+    const { userId } = await auth();
+    if (userId)
+        dbSaveAnimes(userId, animes);
+}
+
 export async function getAnimesSA(): Promise<MyAnime[] | null> {
     const { userId } = await auth();
     if (!userId)
@@ -16,7 +22,7 @@ export async function getAnimesSA(): Promise<MyAnime[] | null> {
     return animes;
 }
 
-export async function addAnimeSA(anime: MyAnime) {
+/*export async function addAnimeSA(anime: MyAnime) {
     const { userId } = await auth();
     if (!userId)
         return null;
@@ -33,9 +39,9 @@ export async function addAnimeSA(anime: MyAnime) {
     animes.unshift(anime);
     console.log("addAnimeSA saving...");
     dbSaveAnimes(userId, animes);
-}
+}*/
 
-export async function removeAnimeSA(anime: MyAnime) {
+/*export async function removeAnimeSA(anime: MyAnime) {
     const { userId } = await auth();
     if (!userId)
         return null;
@@ -52,4 +58,4 @@ export async function removeAnimeSA(anime: MyAnime) {
     animes.splice(i, 1);
     console.log("removeAnimeSA saving...");
     dbSaveAnimes(userId, animes);
-}
+}*/

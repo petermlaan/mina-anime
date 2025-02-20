@@ -5,18 +5,18 @@ import Image from "next/image";
 import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
-import { addAnimeSA, removeAnimeSA } from "@/lib/actions";
 import { MyAnime } from "@/lib/interfaces";
+import { addAnime, removeAnime } from "@/lib/clientutil";
 
 async function onSaveRemove(anime: MyAnime) {
     if (anime.saved) {
         console.log("onSaveRemove removing...");
-        removeAnimeSA(anime);
+        removeAnime(anime);
     } else {
         console.log("onSaveRemove saving...");
         anime.watched = false;
         anime.myRating = 0;
-        addAnimeSA(anime);
+        addAnime(anime);
     }
 }
 
