@@ -36,7 +36,7 @@ export async function searchAnime(searchparams: AnimeSearchParams): Promise<Jika
     const jikanAPI = new AnimeClient({ enableLogging: false });
     const response = (await jikanAPI.getAnimeSearch(searchparams)) as JikanResponse<MyAnime[]>;
     const list = await getList();
-    const res = response.data.map(a => a.saved = list.some(b => a.mal_id === b.mal_id));
+    response.data.forEach(a => a.saved = list.some(b => a.mal_id === b.mal_id));
     return response;
 }
 
