@@ -4,14 +4,11 @@ import { MyAnime } from "./interfaces";
 import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
 
 export async function getList(): Promise<MyAnime[]> {
-    console.log("getList start");
     let animes = getListFromLS();
     if (animes === null) {
-        console.log("getList calling db...");
         animes = await getAnimesSA() ?? [];
         saveListToLS(animes);
     }
-    console.log("getList animes:", animes);
     return animes;
 }
 
@@ -63,12 +60,10 @@ function getListFromLS(): MyAnime[] | null {
     if (!window || !localStorage)
         console.error("getListFromLS running on server!?");
     const list = localStorage.getItem("AnimeList");
-    console.log("getListFromLS list: ", list);
     let json: MyAnime[] | null = null;
     if (list !== null) {
         json = SuperJSON.parse(list);
     }
-    console.log("getListFromLS json: ", json);
     return json;
 }
 
