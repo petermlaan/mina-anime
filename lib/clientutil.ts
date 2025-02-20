@@ -21,6 +21,7 @@ export function saveList() {
 }
 
 export async function addAnime(anime: MyAnime) {
+    anime.saved = true;
     const animes = await getList();
     animes.unshift(anime);
     saveListToLS(animes);
