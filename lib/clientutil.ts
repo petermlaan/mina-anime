@@ -15,20 +15,20 @@ export async function getList(): Promise<MyAnime[]> {
 }
 
 export function saveList() {
-    let res = getListFromLS();
+    const res = getListFromLS();
     if (res !== null)
         saveAnimesSA(res);
 }
 
 export async function addAnime(anime: MyAnime) {
-    let animes = await getList();
+    const animes = await getList();
     animes.unshift(anime);
     saveListToLS(animes);
     saveAnimesSA(animes);
 }
 
 export async function removeAnime(anime: MyAnime) {
-    let animes = await getList();
+    const animes = await getList();
     const i = animes.findIndex(a => a.mal_id === anime.mal_id);
     if (i > -1) {
         animes.splice(i, 1);
