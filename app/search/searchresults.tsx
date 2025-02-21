@@ -8,7 +8,6 @@ import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
 import { searchAnime } from "@/lib/clientutil";
 import Clock from "@/components/clock";
-import { preconnect } from "react-dom";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
