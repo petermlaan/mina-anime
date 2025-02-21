@@ -8,6 +8,7 @@ import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
 import { searchAnime } from "@/lib/clientutil";
 import Clock from "@/components/clock";
+import { preconnect } from "react-dom";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -20,7 +21,20 @@ export default function AnimeResults() {
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
 
+    const onSaveAnime = (animeId: number) => {
+        // This function will be called by the Card component when an anime is saved
+        setResponse(prevResponse => {
+            let newResponse: JikanResponse<MyAnime[]> | null = null;
+            if (prevResponse)
+                newResponse = {...prevResponse};
+            if (newResponse && newResponse.data)
+                newResponse.data = newResponse.data.filter(anime => anime.mal_id !== animeId);
+            return newResponse;
+        })
+    };
+
     useEffect(() => {
+        console.log("searchResults useEffect");
         setResponse(null);
         const loadData = async () => {
             try {
@@ -31,15 +45,16 @@ export default function AnimeResults() {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
+                console.log("searching for anime...");
                 const response = await searchAnime(sp);
                 setResponse(response);
             } catch (err) {
                 console.error("Fel! Ingen animedata!", err);
             }
         };
-        setTimeout(() => {
+//        setTimeout(() => {
             loadData();
-        }, 3000);
+//        }, 3000);
     }, [q, type, page, min_score]);
 
     const onPrevPage = () => {
@@ -58,7 +73,7 @@ export default function AnimeResults() {
         router.push(`/search?${params.toString()}`);
     };
 
-     if (!response?.data) {
+    if (!response?.data) {
         return <div className={styles.fallback2}><Clock /></div>;
     }
 
@@ -74,12 +89,12 @@ export default function AnimeResults() {
                 <input type="checkbox" id="chkShowList" />
             </label>
             <button type="button"
-                className={response?.pagination?.has_next_page ? "" : "disabled"}
-                disabled={!response?.pagination?.has_next_page}
+                className={response.pagination?.has_next_page ? "" : "disabled"}
+                disabled={!response.pagination?.has_next_page}
                 onClick={onNextPage} >
                 Nästa &gt;
             </button>
         </div>
-        <Cards animes={response?.data ?? []} />
+        <Cards animes={response.data} search={true} onRemoveAnime={onSaveAnime} />
     </>);
 }

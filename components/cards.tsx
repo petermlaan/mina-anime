@@ -20,16 +20,18 @@ async function onSaveRemove(anime: MyAnime) {
 
 interface CardsProps {
     animes: MyAnime[];
+    search: boolean;
     onRemoveAnime?: (animeId: number) => void;
 }
 
-export function Cards({ animes, onRemoveAnime }: CardsProps) {
+export function Cards({ animes, search, onRemoveAnime }: CardsProps) {
     return (
         <section className={styles.cards}>
             {animes.map((a, i) =>
                 <Card 
                     key={i} 
-                    anime={a} 
+                    anime={a}
+                    search={search} 
                     onRemove={() => {
                         onSaveRemove(a);
                         if (onRemoveAnime)
@@ -42,13 +44,14 @@ export function Cards({ animes, onRemoveAnime }: CardsProps) {
 
 interface CardProps {
     anime: MyAnime;
+    search: boolean;
     onRemove: () => void;
 }
 
-export function Card({ anime, onRemove }: CardProps) {    return (
+export function Card({ anime, search, onRemove }: CardProps) {    return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
-                <button onClick={onRemove}>{anime.saved ? "Ta bort" : "Spara"}</button>
+                <button onClick={onRemove} className={(search && anime.saved) ? "disabled" : ""}>{search ? "Spara" : "Ta bort"}</button>
                 Poäng: {anime.score}
             </div>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>

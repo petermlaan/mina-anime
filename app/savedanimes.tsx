@@ -35,6 +35,6 @@ export function SavedAnimes() {
                 <input type="checkbox" id="chkShowList" />
             </label>
         </div>
-        <Cards animes={animes} onRemoveAnime={onRemoveAnime} />
+        <Cards animes={animes} search={false} onRemoveAnime={onRemoveAnime} />
     </>);
 }
