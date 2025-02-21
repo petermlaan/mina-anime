@@ -6,16 +6,16 @@ import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts"
 const jikanAPI = new AnimeClient({enableLogging: true});
 
 export async function getList(): Promise<MyAnime[]> {
-    let animes = getListFromLS();
+    let animes = getListFromStorage();
     if (animes === null) {
         animes = await getAnimesSA() ?? [];
-        saveListToLS(animes);
+        saveListToStorage(animes);
     }
     return animes;
 }
 
 export function saveList() {
-    const res = getListFromLS();
+    const res = getListFromStorage();
     if (res !== null)
         saveAnimesSA(res);
 }
@@ -40,12 +40,11 @@ export async function searchAnime(searchparams: AnimeSearchParams): Promise<Jika
     return response;
 }
 
-
 export async function addAnime(anime: MyAnime) {
     anime.saved = true;
     const animes = await getList();
     animes.unshift(anime);
-    saveListToLS(animes);
+    saveListToStorage(animes);
     saveAnimesSA(animes);
 }
 
@@ -54,15 +53,16 @@ export async function removeAnime(anime: MyAnime) {
     const i = animes.findIndex(a => a.mal_id === anime.mal_id);
     if (i > -1) {
         animes.splice(i, 1);
-        saveListToLS(animes);
+        saveListToStorage(animes);
         saveAnimesSA(animes);
     }
 }
 
-function getListFromLS(): MyAnime[] | null {
-    if (!window || !localStorage)
+function getListFromStorage(): MyAnime[] | null {
+    const storage = getStorage();
+    if (!window || !storage)
         console.error("getListFromLS running on server!?");
-    const list = localStorage.getItem("AnimeList");
+    const list = storage.getItem("AnimeList");
     let json: MyAnime[] | null = null;
     if (list !== null) {
         json = SuperJSON.parse(list);
@@ -70,8 +70,13 @@ function getListFromLS(): MyAnime[] | null {
     return json;
 }
 
-function saveListToLS(animes: MyAnime[]) {
-    if (!window || !localStorage)
+function saveListToStorage(animes: MyAnime[]) {
+    const storage = getStorage();
+    if (!window || !storage)
         throw new Error("saveListToLS should only be called on the client side");
-    localStorage.setItem("AnimeList", SuperJSON.stringify(animes));
+    storage.setItem("AnimeList", SuperJSON.stringify(animes));
+}
+
+function getStorage() : Storage {
+    return sessionStorage;    
 }
