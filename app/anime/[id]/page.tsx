@@ -21,27 +21,21 @@ async function onSaveRemove(anime: MyAnime) {
 export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
   const id = +React.use(params).id;
   const [anime, setAnime] = useState<MyAnime | null>(null);
-  const [errormsg, setErrormsg] = useState<string>("");
 
   useEffect(() => {
-    const controller = new AbortController();
     const loadData = async () => {
       try {
-        const res = await getAnime(id, controller.signal);
+        const res = await getAnime(id);
         setAnime(res);
         document.title = "Mina Anime - " + (res.title_english ?? res.title);
       } catch (err) {
         console.error("loadData:", err);
-        setErrormsg("Fel! Ingen animedata!" + err);
       }
     };
     loadData();
-    return () => controller.abort();
   }, [id]);
 
   if (!anime) {
-    if (errormsg)
-      return <div>{errormsg}</div>;
     return <div>Laddar anime...</div>;
   }
 
