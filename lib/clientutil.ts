@@ -2,7 +2,8 @@ import SuperJSON from "superjson";
 import { getAnimesSA, saveAnimesSA } from "./actions";
 import { MyAnime } from "./interfaces";
 import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
-import axios from "axios";
+
+const jikanAPI = new AnimeClient({enableLogging: true});
 
 export async function getList(): Promise<MyAnime[]> {
     let animes = getListFromLS();
@@ -20,10 +21,6 @@ export function saveList() {
 }
 
 export async function getAnime(id: number, signal: AbortSignal): Promise<MyAnime> {
-    const jikanAPI = new AnimeClient({
-        enableLogging: true,
-        axiosInstance: axios.create({signal: signal}),
-    });
     let anime: MyAnime | undefined;
     const list = await getList();
     anime = list.find(a => a.mal_id === id);
@@ -33,11 +30,7 @@ export async function getAnime(id: number, signal: AbortSignal): Promise<MyAnime
     return anime;
 }
 
-export async function searchAnime(searchparams: AnimeSearchParams, signal: AbortSignal): Promise<JikanResponse<MyAnime[]>> {
-    const jikanAPI = new AnimeClient({
-        enableLogging: true,
-        axiosInstance: axios.create({signal: signal}),
-    });
+export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
     const response = (await jikanAPI.getAnimeSearch(searchparams)) as JikanResponse<MyAnime[]>;
 
     // Switch animes to saved versions

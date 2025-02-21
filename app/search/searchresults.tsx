@@ -7,6 +7,7 @@ import { Cards } from "@/components/cards";
 import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
 import { searchAnime } from "@/lib/clientutil";
+import Clock from "@/components/clock";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ export default function AnimeResults() {
     let errormsg = "";
 
     useEffect(() => {
-        const controller = new AbortController();
+        setResponse(null);
         const loadData = async () => {
             try {
                 const sp: AnimeSearchParams = {
@@ -32,15 +33,15 @@ export default function AnimeResults() {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
-                const response = await searchAnime(sp, controller.signal);
+                const response = await searchAnime(sp);
                 setResponse(response);
             } catch (err) {
-                console.error("AnimeResults: ", err);
                 errormsg = "Fel! Ingen animedata!" + err;
             }
         };
-        loadData();
-        return () => controller.abort();
+        setTimeout(() => {
+            loadData();
+        }, 3000);
     }, [q, type, page, min_score]);
 
     const onPrevPage = () => {
@@ -59,10 +60,10 @@ export default function AnimeResults() {
         router.push(`/search?${params.toString()}`);
     };
 
-    if (!response?.data) {
+     if (!response?.data) {
         if (errormsg)
             return <div>{errormsg}</div>;
-        return <div className={styles.fallback}>Söker...</div>;
+        return <div className={styles.fallback2}><Clock /></div>;
     }
 
     return (<>
@@ -77,12 +78,12 @@ export default function AnimeResults() {
                 <input type="checkbox" id="chkShowList" />
             </label>
             <button type="button"
-                className={response.pagination?.has_next_page ? "" : "disabled"}
-                disabled={!response.pagination?.has_next_page}
+                className={response?.pagination?.has_next_page ? "" : "disabled"}
+                disabled={!response?.pagination?.has_next_page}
                 onClick={onNextPage} >
                 Nästa &gt;
             </button>
         </div>
-        <Cards animes={response.data} />
+        <Cards animes={response?.data ?? []} />
     </>);
 }
