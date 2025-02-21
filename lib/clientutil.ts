@@ -20,7 +20,7 @@ export function saveList() {
         saveAnimesSA(res);
 }
 
-export async function getAnime(id: number, signal: AbortSignal): Promise<MyAnime> {
+export async function getAnime(id: number): Promise<MyAnime> {
     let anime: MyAnime | undefined;
     const list = await getList();
     anime = list.find(a => a.mal_id === id);

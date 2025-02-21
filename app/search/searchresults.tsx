@@ -20,8 +20,6 @@ export default function AnimeResults() {
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
 
-    let errormsg = "";
-
     useEffect(() => {
         setResponse(null);
         const loadData = async () => {
@@ -36,7 +34,7 @@ export default function AnimeResults() {
                 const response = await searchAnime(sp);
                 setResponse(response);
             } catch (err) {
-                errormsg = "Fel! Ingen animedata!" + err;
+                console.error("Fel! Ingen animedata!", err);
             }
         };
         setTimeout(() => {
@@ -61,8 +59,6 @@ export default function AnimeResults() {
     };
 
      if (!response?.data) {
-        if (errormsg)
-            return <div>{errormsg}</div>;
         return <div className={styles.fallback2}><Clock /></div>;
     }
 
