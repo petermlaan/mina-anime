@@ -11,7 +11,7 @@ export default async function Page() {
   return (
     <main className={styles.main}>
       <Suspense fallback="Laddar listan...">
-        <SavedAnimes showList={false} />
+        <SavedAnimes />
       </Suspense>
     </main>
   );

@@ -18,21 +18,37 @@ async function onSaveRemove(anime: MyAnime) {
     }
 }
 
-export function Cards({ animes }: { animes: MyAnime[] }) {
+interface CardsProps {
+    animes: MyAnime[];
+    onRemoveAnime?: (animeId: number) => void;
+}
+
+export function Cards({ animes, onRemoveAnime }: CardsProps) {
     return (
         <section className={styles.cards}>
             {animes.map((a, i) =>
-                <Card key={i} anime={a} />
+                <Card 
+                    key={i} 
+                    anime={a} 
+                    onRemove={() => {
+                        onSaveRemove(a);
+                        if (onRemoveAnime)
+                            onRemoveAnime(a.mal_id);
+                    }} />
             )}
         </section>
     );
 }
 
-export function Card({ anime }: { anime: MyAnime }) {
-    return (
+interface CardProps {
+    anime: MyAnime;
+    onRemove: () => void;
+}
+
+export function Card({ anime, onRemove }: CardProps) {    return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
-                <button onClick={() => onSaveRemove(anime)}>{anime.saved ? "Ta bort" : "Spara"}</button>
+                <button onClick={onRemove}>{anime.saved ? "Ta bort" : "Spara"}</button>
                 Poäng: {anime.score}
             </div>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>

@@ -6,24 +6,25 @@ import { MyAnime } from "@/lib/interfaces";
 import { getList } from "@/lib/clientutil";
 import styles from "./savedanimes.module.css";
 
-export function SavedAnimes({ showList }: { showList: boolean }) {
-    console.log("SavedAnimes: ", showList);
+export function SavedAnimes() {
     const [animes, setAnimes] = useState<MyAnime[]>([]);
-    const [errormsg, setErrormsg] = useState<string>("");
+
+    const onRemoveAnime = (animeId: number) => {
+        // This function will be called by the Card component when an anime is removed
+        setAnimes(prevAnimes => prevAnimes.filter(anime => anime.mal_id !== animeId));
+    };
+
     useEffect(() => {
         const loadData = async () => {
             try {
                 const res = await getList();
                 setAnimes(res);
             } catch (err) {
-                setErrormsg("Fel! Ingen animedata!" + err);
+                console.error("Ingen animedata: " + err);
             }
         };
         loadData();
     }, []);
-
-    if (errormsg)
-        return errormsg;
 
     return (<>
         <div className={styles.toprow}>
@@ -34,6 +35,6 @@ export function SavedAnimes({ showList }: { showList: boolean }) {
                 <input type="checkbox" id="chkShowList" />
             </label>
         </div>
-        <Cards animes={animes} />
+        <Cards animes={animes} onRemoveAnime={onRemoveAnime} />
     </>);
 }
