@@ -10,10 +10,8 @@ import { addAnime, removeAnime } from "@/lib/clientutil";
 
 async function onSaveRemove(anime: MyAnime) {
     if (anime.saved) {
-        console.log("onSaveRemove removing...");
         removeAnime(anime);
     } else {
-        console.log("onSaveRemove saving...");
         anime.watched = false;
         anime.myRating = 0;
         addAnime(anime);

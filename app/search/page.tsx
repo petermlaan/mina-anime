@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
-import SearchForm from "./searchform";
-import AnimeResults from "./searchresults";
 import { Metadata } from "next";
 import styles from "./page.module.css";
+import SearchForm from "./searchform";
+import AnimeResults from "./searchresults";
 
 export const metadata: Metadata = {
   title: "Mina Anime - Sök"
@@ -14,7 +14,7 @@ export default function PageSearch() {
       <Suspense fallback={<div>Laddar sökformuläret...</div>}>
         <SearchForm />
       </Suspense>
-      <Suspense>
+      <Suspense fallback={<div>Laddar sidan...</div>}>
         <AnimeResults />
       </Suspense>
     </main>

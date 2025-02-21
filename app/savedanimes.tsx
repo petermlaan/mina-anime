@@ -14,10 +14,8 @@ export function SavedAnimes({ showList }: { showList: boolean }) {
         const loadData = async () => {
             try {
                 const res = await getList();
-                console.log("loadData res: ", res);
                 setAnimes(res);
             } catch (err) {
-                console.error(err);
                 setErrormsg("Fel! Ingen animedata!" + err);
             }
         };

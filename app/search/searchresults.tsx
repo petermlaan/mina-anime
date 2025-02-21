@@ -10,34 +10,37 @@ import { searchAnime } from "@/lib/clientutil";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
-    const router = useRouter();
-
-    const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
-    const [errormsg, setErrormsg] = useState<string>("");
-
     const q = searchParams.get('q') || undefined;
     const type = searchParams.get('type') as AnimeType | undefined;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
+    const router = useRouter();
+
+    const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
+
+    let errormsg = "";
+
     useEffect(() => {
+        const controller = new AbortController();
         const loadData = async () => {
             try {
                 const sp: AnimeSearchParams = {
-                    q, type, page, sfw: true, min_score
+                    q, type, page, sfw: true, min_score, limit: 24
                 };
                 if (!q) {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
-                const response = await searchAnime(sp);
+                const response = await searchAnime(sp, controller.signal);
                 setResponse(response);
             } catch (err) {
                 console.error("AnimeResults: ", err);
-                setErrormsg("Fel! Ingen animedata!" + err);
+                errormsg = "Fel! Ingen animedata!" + err;
             }
         };
         loadData();
+        return () => controller.abort();
     }, [q, type, page, min_score]);
 
     const onPrevPage = () => {
@@ -59,7 +62,7 @@ export default function AnimeResults() {
     if (!response?.data) {
         if (errormsg)
             return <div>{errormsg}</div>;
-        return <div className={styles.fallback}><span>Söker...</span></div>;
+        return <div className={styles.fallback}>Söker...</div>;
     }
 
     return (<>

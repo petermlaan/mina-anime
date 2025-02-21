@@ -24,9 +24,10 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
   const [errormsg, setErrormsg] = useState<string>("");
 
   useEffect(() => {
+    const controller = new AbortController();
     const loadData = async () => {
       try {
-        const res = await getAnime(id);
+        const res = await getAnime(id, controller.signal);
         setAnime(res);
         document.title = "Mina Anime - " + (res.title_english ?? res.title);
       } catch (err) {
@@ -35,6 +36,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
       }
     };
     loadData();
+    return () => controller.abort();
   }, [id]);
 
   if (!anime) {
