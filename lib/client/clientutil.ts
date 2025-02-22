@@ -39,6 +39,7 @@ export async function addAnime(anime: MyAnime) {
 }
 
 export async function removeAnime(anime: MyAnime) {
+    anime.saved = false;
     const animes = await getList();
     const i = animes.findIndex(a => a.mal_id === anime.mal_id);
     if (i > -1) {
