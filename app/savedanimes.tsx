@@ -8,23 +8,23 @@ import styles from "./savedanimes.module.css";
 
 export function SavedAnimes() {
     const [animes, setAnimes] = useState<MyAnime[]>([]);
+    const [errmsg, setErrmsg] = useState("");
 
     const onRemoveAnime = (animeId: number) => {
-        // This function will be called by the Card component when an anime is removed
+        // Called by Card when an anime is removed or saved
         setAnimes(prevAnimes => prevAnimes.filter(anime => anime.mal_id !== animeId));
     };
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const res = await getList();
-                setAnimes(res);
-            } catch (err) {
-                console.error("Ingen animedata: " + err);
-            }
-        };
-        loadData();
+        getList().then((res) => setAnimes(res))
+            .catch(err => {
+                console.error("Ingen animedata: ", err);
+                setErrmsg("Något gick fel vid inhämtning av din animelista.");
+            });
     }, []);
+
+    if (errmsg)
+        return {errmsg};
 
     return (<>
         <div className={styles.toprow}>
