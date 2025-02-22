@@ -1,5 +1,5 @@
-import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { MyAnime } from "../interfaces";
+import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { getListFromStorage, saveListToStorage } from "./clientstorage";
 
 export async function getList(): Promise<MyAnime[]> {
@@ -11,35 +11,43 @@ export async function getList(): Promise<MyAnime[]> {
     return animes;
 }
 
-export function saveList() {
-//    const delay = 5000; // Debounce delay in ms
+/*export function saveList() {
+        const delay = 5000; // Debounce delay in ms
 
     console.count("saveList");
-/*    useEffect(() => {
-        const handler = setTimeout(() => {
-            console.count("saveList timer");
-            const res = getListFromStorage();
-            if (res !== null)
-                saveAnimesSA(res);
-        }, delay);
+        useEffect(() => {
+            const handler = setTimeout(() => {
+                console.count("saveList timer");
+                const res = getListFromStorage();
+                if (res !== null)
+                    saveAnimesSA(res);
+            }, delay);
+    
+            return () => {
+                console.count("saveList cleanup");
+                clearTimeout(handler);
+            };
+        });
+}*/
 
-        return () => {
-            console.count("saveList cleanup");
-            clearTimeout(handler);
-        };
-    });*/
+export function toggleSaved(anime: MyAnime) {
+    anime.saved = !anime.saved;
+    if (anime.saved) {
+        anime.watched = false;
+        anime.myRating = 0;
+        addAnime(anime);
+    } else
+        removeAnime(anime);
 }
 
-export async function addAnime(anime: MyAnime) {
-    anime.saved = true;
+async function addAnime(anime: MyAnime) {
     const animes = await getList();
     animes.unshift(anime);
     saveListToStorage(animes);
     saveAnimesSA(animes);
 }
 
-export async function removeAnime(anime: MyAnime) {
-    anime.saved = false;
+async function removeAnime(anime: MyAnime) {
     const animes = await getList();
     const i = animes.findIndex(a => a.mal_id === anime.mal_id);
     if (i > -1) {
@@ -48,4 +56,3 @@ export async function removeAnime(anime: MyAnime) {
         saveAnimesSA(animes);
     }
 }
-

@@ -6,17 +6,7 @@ import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnime, removeAnime } from "@/lib/client/clientutil";
-
-async function onSaveRemove(anime: MyAnime) {
-    if (anime.saved) {
-        removeAnime(anime);
-    } else {
-        anime.watched = false;
-        anime.myRating = 0;
-        addAnime(anime);
-    }
-}
+import { toggleSaved } from "@/lib/client/clientutil";
 
 interface CardsProps {
     animes: MyAnime[];
@@ -33,7 +23,7 @@ export function Cards({ animes, search, onRemoveAnime }: CardsProps) {
                     anime={a}
                     search={search} 
                     onRemove={() => {
-                        onSaveRemove(a);
+                        toggleSaved(a);
                         if (onRemoveAnime)
                             onRemoveAnime(a.mal_id);
                     }} />

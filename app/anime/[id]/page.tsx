@@ -6,18 +6,12 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnime, removeAnime } from "@/lib/client/clientutil";
 import { getAnime } from "@/lib/client/jikan";
+import { toggleSaved } from "@/lib/client/clientutil";
 
 export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
   async function onSaveRemove(a: MyAnime) {
-    if (a.saved) {
-      removeAnime(a);
-    } else {
-      a.watched = false;
-      a.myRating = 0;
-      addAnime(a);
-    }
+    toggleSaved(a);
     setAnime({...a});
   }
 
@@ -31,7 +25,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
     }).catch(err => {
       console.error("loadData:", err);
     })
-  }, []);
+  }, [id]);
 
   if (!anime) {
     return <div>Laddar anime...</div>;
@@ -44,7 +38,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
           <button onClick={() => onSaveRemove(anime)}>{anime.saved ? "Ta bort" : "Spara"}</button>
           <div></div>
           <label>Sedd
-            <input type="checkbox" />
+            <input type="checkbox" checked={anime.watched} />
           </label>
         </div>
         <Image
