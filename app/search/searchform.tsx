@@ -32,7 +32,7 @@ export default function SearchForm() {
           <option value="Music">Musik</option>
         </select>
       </label>
-      <input type="search" name="q" defaultValue={q} placeholder="sökord" />
+      <input type="search" name="q" defaultValue={q} placeholder="Sök..." />
       <button type="submit">Sök</button>
     </Form>
   );

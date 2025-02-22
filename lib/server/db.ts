@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createClient } from '@supabase/supabase-js'
-import { MyAnime } from './interfaces';
+import { MyAnime } from '../interfaces';
 
 const supabase = createClient(
     process.env.SUPABASE_URL ?? "",

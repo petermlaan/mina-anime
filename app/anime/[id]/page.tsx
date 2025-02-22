@@ -6,7 +6,8 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnime, getAnime, removeAnime } from "@/lib/clientutil";
+import { addAnime, removeAnime } from "@/lib/client/clientutil";
+import { getAnime } from "@/lib/client/jikan";
 
 async function onSaveRemove(anime: MyAnime) {
   if (anime.saved) {

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Mina Anime - Sök"
 };
 
-export default function PageSearch() {
+export default function SearchPage() {
   return (
     <main className={styles.main}>
       <Suspense fallback={<div>Laddar sökformuläret...</div>}>

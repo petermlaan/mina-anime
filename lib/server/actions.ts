@@ -2,7 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server';
 import { dbLoadAnimes, dbSaveAnimes } from './db';
-import { MyAnime } from './interfaces';
+import { MyAnime } from '../interfaces';
 
 export async function saveAnimesSA(animes: MyAnime[]) {
     const { userId } = await auth();

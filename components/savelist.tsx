@@ -1,6 +1,6 @@
 "use client";
 
-import { saveList } from "@/lib/clientutil";
+import { saveList } from "@/lib/client/clientutil";
 
 export function SaveListButton() {
     return (

@@ -6,7 +6,7 @@ import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
-import { addAnime, removeAnime } from "@/lib/clientutil";
+import { addAnime, removeAnime } from "@/lib/client/clientutil";
 
 async function onSaveRemove(anime: MyAnime) {
     if (anime.saved) {

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Cards } from '../components/cards';
 import { MyAnime } from "@/lib/interfaces";
-import { getList } from "@/lib/clientutil";
+import { getList } from "@/lib/client/clientutil";
 import styles from "./savedanimes.module.css";
 
 export function SavedAnimes() {
@@ -24,7 +24,7 @@ export function SavedAnimes() {
     }, []);
 
     if (errmsg)
-        return {errmsg};
+        return <>{errmsg}</>;
 
     return (<>
         <div className={styles.toprow}>
