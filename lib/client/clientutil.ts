@@ -1,3 +1,4 @@
+import { DEBOUNCE_DELAY } from "../constants";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { getListFromStorage, saveListToStorage } from "./clientstorage";
@@ -37,7 +38,7 @@ async function addAnime(anime: MyAnime) {
     const animes = await getList();
     animes.unshift(anime);
     saveListToStorage(animes);
-    saveAnimesSA(animes);
+    saveAnimesToDB(animes);
 }
 
 async function removeAnime(anime: MyAnime) {
@@ -46,6 +47,34 @@ async function removeAnime(anime: MyAnime) {
     if (i > -1) {
         animes.splice(i, 1);
         saveListToStorage(animes);
-        saveAnimesSA(animes);
+        saveAnimesToDB(animes);
     }
+}
+
+// ----- Debouncing DB write access -----
+export let debounceTimeout = -1;
+
+function saveAnimesToDB(animes: MyAnime[]) {
+    if (!window) {
+        console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.")
+        saveAnimesSA(animes);
+        return;
+    }
+    console.count("saveAnimesToDB");
+    if (debounceTimeout > -1)
+        window.clearTimeout(debounceTimeout);
+    window.onbeforeunload = (e) => {
+        console.log("timeout: " + debounceTimeout);
+        if (debounceTimeout > -1) {
+            e.preventDefault();
+            e.returnValue = "?";
+            return "?";
+        }
+    };
+    debounceTimeout = window.setTimeout(() => {
+        window.onbeforeunload = null;
+        debounceTimeout = -1;
+        saveAnimesSA(animes);
+        console.count("saved to DB");
+    }, DEBOUNCE_DELAY);
 }

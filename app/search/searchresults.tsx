@@ -33,7 +33,6 @@ export default function AnimeResults() {
     };
 
     useEffect(() => {
-        console.log("searchResults useEffect");
         setResponse(null);
         const loadData = async () => {
             try {
@@ -44,7 +43,6 @@ export default function AnimeResults() {
                     sp.order_by = "score";
                     sp.sort = "desc";
                 }
-                console.log("searching for anime...");
                 const response = await searchAnime(sp);
                 setResponse(response);
             } catch (err) {
