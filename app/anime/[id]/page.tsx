@@ -7,12 +7,21 @@ import Link from "next/link";
 import { Genres } from "@/components/genres";
 import { MyAnime } from "@/lib/interfaces";
 import { getAnime } from "@/lib/client/jikan";
-import { toggleSaved } from "@/lib/client/clientutil";
+import { toggleSaved, updateAndSaveList } from "@/lib/client/clientutil";
 
 export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
   async function onSaveRemove(a: MyAnime) {
     toggleSaved(a);
-    setAnime({...a});
+    setAnime({ ...a });
+  }
+  async function onWatchedChanged() {
+    setAnime(p => {
+      if (!p)
+        return null;
+      p.watched = !p.watched;
+      updateAndSaveList(p);
+      return { ...p };
+    });
   }
 
   const id = +use(params).id;
@@ -38,7 +47,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
           <button onClick={() => onSaveRemove(anime)}>{anime.saved ? "Ta bort" : "Spara"}</button>
           <div></div>
           <label>Sedd
-            <input type="checkbox" checked={anime.watched} />
+            <input type="checkbox" checked={anime.watched} onChange={onWatchedChanged} />
           </label>
         </div>
         <Image
@@ -58,12 +67,18 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
         </div>
         <h2>{anime.title_english ?? anime.title}</h2>
         <h3>{anime.title}</h3>
-        <p>Typ: {anime.type}</p>
-        <p>År: {anime.year}</p>
-        <p>Källa: {anime.source}</p>
-        <p>Status: {anime.status}</p>
-        <p><Link href={anime.trailer.url}>Trailer</Link></p>
-        <p>Themes: {anime.themes.map(t => t.name).join(", ")}</p>
+        <div className={styles.rightflex}>
+          <div className={styles.rightgrid}>
+            <div>År:</div><div>{anime.year}</div>
+            <div>Typ:</div><div>{anime.type}</div>
+            <div><Link href={anime.trailer.url}>Trailer</Link></div><div></div>
+          </div>
+          <div className={styles.rightgrid}>
+            <div>Status:</div><div>{anime.status}</div>
+            <div>Källa:</div><div>{anime.source}</div>
+            <div>Themes:</div><div>{anime.themes.map(t => t.name).join(", ")}</div>
+          </div>
+        </div>
         <p>{anime.synopsis}</p>
         <p>{anime.background}</p>
       </div>

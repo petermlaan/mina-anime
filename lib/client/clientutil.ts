@@ -11,24 +11,17 @@ export async function getList(): Promise<MyAnime[]> {
     return animes;
 }
 
-/*export function saveList() {
-        const delay = 5000; // Debounce delay in ms
-
-    console.count("saveList");
-        useEffect(() => {
-            const handler = setTimeout(() => {
-                console.count("saveList timer");
-                const res = getListFromStorage();
-                if (res !== null)
-                    saveAnimesSA(res);
-            }, delay);
-    
-            return () => {
-                console.count("saveList cleanup");
-                clearTimeout(handler);
-            };
-        });
-}*/
+export async function updateAndSaveList(anime: MyAnime) {
+    const res = await getList();
+    if (res) {
+        const i = res.findIndex(a => a.mal_id === anime.mal_id);
+        if (i > -1) {
+            res[i] = anime;
+            saveListToStorage(res);
+            saveAnimesSA(res);
+        }
+    }
+}
 
 export function toggleSaved(anime: MyAnime) {
     anime.saved = !anime.saved;
