@@ -65,7 +65,7 @@ function saveAnimesToDB(animes: MyAnime[]) {
     if (debounceTimeout > -1)
         window.clearTimeout(debounceTimeout);
 
-    window.onbeforeunload = (e) => {
+    window.onbeforeunload = () => {
         navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
 

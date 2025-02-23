@@ -18,10 +18,10 @@ export function Cards({ animes, search, onRemoveAnime }: CardsProps) {
     return (
         <section className={styles.cards}>
             {animes.map((a, i) =>
-                <Card 
-                    key={i} 
+                <Card
+                    key={i}
                     anime={a}
-                    search={search} 
+                    search={search}
                     onRemove={() => {
                         toggleSaved(a);
                         if (onRemoveAnime)
@@ -38,10 +38,15 @@ interface CardProps {
     onRemove: () => void;
 }
 
-export function Card({ anime, search, onRemove }: CardProps) {    return (
+export function Card({ anime, search, onRemove }: CardProps) {
+    return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
-                <button onClick={onRemove} className={(search && anime.saved) ? "disabled" : ""}>{search ? "Spara" : "Ta bort"}</button>
+                <button
+                    onClick={onRemove}
+                    className={(search && anime.saved) ? "disabled" : ""}>
+                    {search ? "Spara" : "Ta bort"}
+                </button>
                 Poäng: {anime.score}
             </div>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>
