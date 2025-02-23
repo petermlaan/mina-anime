@@ -1,3 +1,4 @@
+import SuperJSON from "superjson";
 import { DEBOUNCE_DELAY } from "../constants";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
@@ -60,19 +61,17 @@ function saveAnimesToDB(animes: MyAnime[]) {
         saveAnimesSA(animes);
         return;
     }
-    console.count("saveAnimesToDB");
+
     if (debounceTimeout > -1)
         window.clearTimeout(debounceTimeout);
 
     window.onbeforeunload = (e) => {
-        console.log("timeout: " + debounceTimeout);
-        saveAnimesSA(animes);
+        navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
 
     debounceTimeout = window.setTimeout(() => {
         window.onbeforeunload = null;
         debounceTimeout = -1;
         saveAnimesSA(animes);
-        console.count("saved to DB");
     }, DEBOUNCE_DELAY);
 }
