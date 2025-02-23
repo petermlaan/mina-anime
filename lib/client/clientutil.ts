@@ -63,14 +63,12 @@ function saveAnimesToDB(animes: MyAnime[]) {
     console.count("saveAnimesToDB");
     if (debounceTimeout > -1)
         window.clearTimeout(debounceTimeout);
+
     window.onbeforeunload = (e) => {
         console.log("timeout: " + debounceTimeout);
-        if (debounceTimeout > -1) {
-            e.preventDefault();
-            e.returnValue = "?";
-            return "?";
-        }
+        saveAnimesSA(animes);
     };
+
     debounceTimeout = window.setTimeout(() => {
         window.onbeforeunload = null;
         debounceTimeout = -1;
