@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+import { AnimeProvider } from "@/components/animecontext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,7 +59,9 @@ export default function RootLayout({
               </SignedIn>
             </div>
           </header>
-          {children}
+          <AnimeProvider>
+            {children}
+          </AnimeProvider>
         </body>
       </html>
     </ClerkProvider>

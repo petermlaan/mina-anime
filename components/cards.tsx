@@ -6,27 +6,18 @@ import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
-import { toggleSaved } from "@/lib/client/clientutil";
+import { useAnimeContext } from "./animecontext";
 
 interface CardsProps {
     animes: MyAnime[];
-    search: boolean;
-    onRemoveAnime?: (animeId: number) => void;
+    search?: boolean;
 }
 
-export function Cards({ animes, search, onRemoveAnime }: CardsProps) {
+export function Cards({ animes, search = false }: CardsProps) {
     return (
         <section className={styles.cards}>
             {animes.map((a, i) =>
-                <Card
-                    key={i}
-                    anime={a}
-                    search={search}
-                    onRemove={() => {
-                        toggleSaved(a);
-                        if (onRemoveAnime)
-                            onRemoveAnime(a.mal_id);
-                    }} />
+                <Card key={i} anime={a} search={search} />
             )}
         </section>
     );
@@ -35,15 +26,17 @@ export function Cards({ animes, search, onRemoveAnime }: CardsProps) {
 interface CardProps {
     anime: MyAnime;
     search: boolean;
-    onRemove: () => void;
 }
 
-export function Card({ anime, search, onRemove }: CardProps) {
+export function Card({ anime, search }: CardProps) {
+    const { addAnime, removeAnime } = useAnimeContext();
+
     return (
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
                 <button
-                    onClick={onRemove}
+                    onClick={() => anime.saved ? 
+                        removeAnime(anime.mal_id) : addAnime(anime)}
                     className={(search && anime.saved) ? "disabled" : ""}>
                     {search ? "Spara" : "Ta bort"}
                 </button>

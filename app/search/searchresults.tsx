@@ -20,18 +20,6 @@ export default function AnimeResults() {
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
 
-    const onSaveAnime = (animeId: number) => {
-        // This function will be called by the Card component when an anime is saved
-        setResponse(prevResponse => {
-            let newResponse: JikanResponse<MyAnime[]> | null = null;
-            if (prevResponse)
-                newResponse = {...prevResponse};
-            if (newResponse && newResponse.data)
-                newResponse.data = newResponse.data.filter(anime => anime.mal_id !== animeId);
-            return newResponse;
-        })
-    };
-
     useEffect(() => {
         setResponse(null);
         const loadData = async () => {
@@ -92,6 +80,6 @@ export default function AnimeResults() {
                 Nästa &gt;
             </button>
         </div>
-        <Cards animes={response.data} search={true} onRemoveAnime={onSaveAnime} />
+        <Cards animes={response.data} search={true} />
     </>);
 }

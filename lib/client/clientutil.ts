@@ -13,6 +13,12 @@ export async function getList(): Promise<MyAnime[]> {
     return animes;
 }
 
+export function saveList(animes: MyAnime[]) {
+    console.count("saveList");
+    saveListToStorage(animes);
+    saveAnimesToDB(animes);
+}
+
 export async function updateAndSaveList(anime: MyAnime) {
     const res = await getList();
     if (res) {
@@ -52,7 +58,7 @@ async function removeAnime(anime: MyAnime) {
     }
 }
 
-// ----- Debouncing DB write access -----
+// ----- Debouncing DB writes -----
 export let debounceTimeout = -1;
 
 function saveAnimesToDB(animes: MyAnime[]) {
