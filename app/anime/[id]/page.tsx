@@ -1,39 +1,56 @@
 "use client";
 
-import React, { useEffect, useState, use } from "react";
-import Image from "next/image";
 import styles from "./page.module.css";
-import Link from "next/link";
-import { Genres } from "@/components/genres";
-import { MyAnime } from "@/lib/interfaces";
-import { getAnime } from "@/lib/client/jikan";
-import { useAnimeContext } from "@/components/animecontext";
-import MyRating from "@/components/myrating";
+import React, { useEffect, useState, use } from "react";
 import { notFound, useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useAnimeContext } from "@/components/animecontext";
+import { getAnime } from "@/lib/client/jikan";
+import { MyAnime } from "@/lib/interfaces";
+import { Genres } from "@/components/genres";
+import MyRating from "@/components/myrating";
 
-export default function AnimePage({ params }: { params: Promise<{ id: string }> }) {
+export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
   const router = useRouter();
   const id = +use(params).id;
   const ac = useAnimeContext();
   const [anime, setAnime] = useState<MyAnime | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(0);
 
   if (Number.isNaN(id))
     notFound();
 
+  useEffect(() => {
+    console.count("useEffect");
+    setError(0);
+    let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
+    if (a) {
+      console.log("useEffect saved anime found: ", a);
+      setAnime(a);
+    } else {
+      getAnime(id).then(res => {
+        console.log("useEffect anime fetched: ", res);
+        a = res;
+        setAnime(res);
+      }).catch((err) => setError(1));
+    }
+    setLoading(false);
+    document.title = "Mina Anime - " + (a?.title_english ?? a?.title);
+  }, [id, ac.myAnimes]);
+
   const onToggleWatched = () => {
-    if (anime) {
+    console.log("onToggleWatched: ", anime);
+    if (anime?.saved) {
       const changes: Partial<MyAnime> = { watched: !anime.watched };
-      setAnime({ ...anime, ...changes });
-      ac.updateAnime(id, changes)
+      ac.updateAnime(id, changes);
     }
   }
 
   const onAddRemove = () => {
+    console.log("onAddRemove: ", anime);
     if (anime) {
-      const changes: Partial<MyAnime> = { saved: !anime.saved };
-      setAnime({ ...anime, ...changes });
       if (anime.saved)
         ac.removeAnime(id)
       else
@@ -41,27 +58,16 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
     }
   }
 
-  useEffect(() => {
-    setLoading(true);
-    setError(false);
-    let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
-    if (a)
-      setAnime(a);
-    else
-      getAnime(id).then(res => {
-        a = res;
-        setAnime(res);
-      }).catch(() => setError(true));
-    setLoading(false);
-    document.title = "Mina Anime - " + (a?.title_english ?? a?.title);
-  }, [id, ac.myAnimes]);
-
   if (loading) {
     return <div>Laddar anime...</div>;
   }
 
-  if (error || !anime) {
-    return <div>Något gick fel</div>;
+  if (error > 0 || !anime) {
+    return (
+      <div>Något gick fel.
+        <button onClick={() => router.back()}>Tillbaka</button>
+      </div>
+    );
   }
 
   return (
@@ -70,9 +76,9 @@ export default function AnimePage({ params }: { params: Promise<{ id: string }> 
         <div className={styles.singleLeftToprow}>
           <button onClick={router.back}>Stäng</button>
           <button onClick={onAddRemove}>{anime.saved ? "Ta bort" : "Spara"}</button>
-          <label className="checkbox">Sedd:
+          {anime.saved && <label className="checkbox">Sedd:
             <input type="checkbox" checked={anime.watched} onChange={onToggleWatched} />
-          </label>
+          </label>}
         </div>
         <Image
           className={styles.poster}
