@@ -7,18 +7,28 @@
   --clr-disabled: #666;
 }
 
+h2, h3 {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
 input,
 select,
 button {
   background-color: var(--clr-main1);
   color: var(--clr-main3);
   border-radius: 1rem / 1rem;
-  padding: 0 0.6rem;
-  font-size: large;
+  height: 1.6rem;
+  padding: 0 0.8rem;
 }
 
 button {
-  height: 1.6rem;
+  width: max-content;
 
   &:hover {
     cursor: pointer;
@@ -59,7 +69,6 @@ body {
   color: var(--clr-main4);
   background: var(--clr-main0);
   font-family: var(--font-geist-sans);
-  font-size: large;
 }
 
 header {
@@ -139,4 +148,9 @@ header {
   height: fit-content;
   display: flex;
   gap: 1rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
 }

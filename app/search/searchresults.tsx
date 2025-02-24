@@ -63,14 +63,14 @@ export default function AnimeResults() {
     }
 
     return (<>
-        <div className={styles.searchresults}>
+        <div className={styles.searchresultsctrl}>
             <button type="button"
                 className={page < 2 ? "disabled" : ""}
                 disabled={page < 2}
                 onClick={onPrevPage} >
                 &lt; Föreg
             </button>
-            <label id="lblShowList" htmlFor="chkShowList">Visa lista
+            <label htmlFor="chkShowList" className="checkbox">Visa lista:
                 <input type="checkbox" id="chkShowList" />
             </label>
             <button type="button"

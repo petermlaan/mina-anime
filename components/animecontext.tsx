@@ -38,6 +38,7 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateAnime = (id: number, updates: Partial<MyAnime>) => {
+    console.log("updateAnime: ", id, updates);
     setMyAnimes(prev =>
       prev.map(anime => anime.mal_id === id ? { ...anime, ...updates } : anime)
     );

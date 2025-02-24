@@ -6,9 +6,10 @@
     font-size: x-large;
 }
 
-.searchresults {
+.searchresultsctrl {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 2rem;
 }
 

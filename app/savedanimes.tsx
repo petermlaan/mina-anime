@@ -10,10 +10,10 @@ export function SavedAnimes() {
 
     return (<>
         <div className={styles.toprow}>
-            <label htmlFor="chkFilterWatched">Dölj sedda
+            <label htmlFor="chkFilterWatched" className="checkbox">Dölj sedda
                 <input type="checkbox" id="chkFilterWatched" />
             </label>
-            <label htmlFor="chkShowList">Visa lista
+            <label htmlFor="chkShowList" className="checkbox">Visa lista
                 <input type="checkbox" id="chkShowList" />
             </label>
         </div>
