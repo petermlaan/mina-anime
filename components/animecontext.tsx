@@ -31,10 +31,11 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
   }, [myAnimes]);
 
   const addAnime = (anime: MyAnime) => {
+    console.log("addAnime: ", anime);
     anime.saved = true;
     anime.watched = false;
     anime.myRating = 0;
-    setMyAnimes(prev => [anime, ...prev])
+    setMyAnimes([anime, ...myAnimes])
   };
 
   const updateAnime = (id: number, updates: Partial<MyAnime>) => {
@@ -45,6 +46,7 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
   };
  
   const removeAnime = (id: number) => {
+    console.log("removeAnime: ", id);
     setMyAnimes(prev => prev.filter(anime => anime.mal_id !== id));
   };
 
