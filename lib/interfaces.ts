@@ -4,4 +4,5 @@ export interface MyAnime extends Anime {
     saved?: boolean;
     watched?: boolean;
     myRating?: number;
+    text?: string;
 };

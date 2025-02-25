@@ -27,7 +27,7 @@ button {
   padding: 0 0.8rem;
 }
 
-button {
+button, select {
   width: max-content;
 
   &:hover {

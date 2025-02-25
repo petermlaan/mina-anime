@@ -1,6 +1,6 @@
 import SuperJSON from "superjson";
 import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
-import { DEBOUNCE_DELAY } from "../constants";
+import { DEBOUNCE_DB_DELAY } from "../constants";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 
@@ -13,6 +13,7 @@ export async function getAnime(id: number): Promise<MyAnime> {
     anime.myRating = 0;
     anime.saved = false;
     anime.watched = false;
+    anime.text = "";
 
     return anime;
 }
@@ -32,7 +33,7 @@ export function saveList(animes: MyAnime[]) {
 }
 
 // ----- Debouncing DB writes -----
-export let debounceTimeout = -1;
+let debounceDBTimeout = -1;
 
 function saveAnimesToDB(animes: MyAnime[]) {
     if (!window) {
@@ -41,17 +42,36 @@ function saveAnimesToDB(animes: MyAnime[]) {
         return;
     }
 
-    if (debounceTimeout > -1)
-        window.clearTimeout(debounceTimeout);
+    if (debounceDBTimeout > -1)
+        window.clearTimeout(debounceDBTimeout);
 
     window.onbeforeunload = () => {
         navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
 
-    debounceTimeout = window.setTimeout(() => {
+    debounceDBTimeout = window.setTimeout(() => {
         window.onbeforeunload = null;
-        debounceTimeout = -1;
+        debounceDBTimeout = -1;
         console.count("saveAnimesToDB writing to DB");
         saveAnimesSA(animes);
-    }, DEBOUNCE_DELAY);
+    }, DEBOUNCE_DB_DELAY);
+}
+
+// ----- Generic debounce function -----
+
+let debounceTimeout = -1;
+
+export function debounce(delay: number, fn: () => void) {
+    console.log("debouncing: ", debounceTimeout);
+    if (debounceTimeout > -1)
+        window.clearTimeout(debounceTimeout);
+
+    window.onbeforeunload = () => fn();
+
+    debounceTimeout = window.setTimeout(() => {
+        console.count("debouncing fn");
+        window.onbeforeunload = null;
+        debounceTimeout = -1;
+        fn();
+    }, delay);
 }

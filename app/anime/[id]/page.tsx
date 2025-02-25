@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./page.module.css";
-import React, { useEffect, useState, use } from "react";
+import React, { useEffect, useState, use, ChangeEvent } from "react";
 import { notFound, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,13 +9,15 @@ import { useAnimeContext } from "@/components/animecontext";
 import { MyAnime } from "@/lib/interfaces";
 import { Genres } from "@/components/genres";
 import MyRating from "@/components/myrating";
-import { getAnime } from "@/lib/client/clientutil";
+import { debounce, getAnime } from "@/lib/client/clientutil";
+import { DEBOUNCE_TEXT_DELAY } from "@/lib/constants";
 
 export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
   const router = useRouter();
   const id = +use(params).id;
   const ac = useAnimeContext();
   const [anime, setAnime] = useState<MyAnime | null>(null);
+  const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(0);
 
@@ -27,16 +29,28 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
     setError(0);
     let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
     if (a) {
-      setAnime({...a});
+      setAnime({ ...a });
     } else {
       getAnime(id).then(res => {
         a = res;
-        setAnime({...res});
+        setAnime({ ...res });
       }).catch(() => setError(1));
     }
     setLoading(false);
+    setText(a?.text ?? "");
     document.title = "Mina Anime - " + (a?.title_english ?? a?.title);
   }, [id, ac.myAnimes]);
+
+  const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (!window) {
+      console.error("SHOULD NOT HAPPEN! onTextChange called from server.")
+      return;
+    }
+    setText(e.target.value);
+    debounce(DEBOUNCE_TEXT_DELAY, () =>
+      ac.updateAnime(id, { text: e.target.value })
+    );
+  }
 
   const onToggleWatched = () => {
     if (anime?.saved) {
@@ -67,9 +81,10 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   }
 
   console.log("AnimePage - returning html: ", anime);
-  
+
   return (
     <main className={styles.main}>
+
       <div className={styles.singleLeft}>
         <div className={styles.singleLeftToprow}>
           <button onClick={router.back}>Stäng</button>
@@ -88,6 +103,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         />
         <Genres genres={anime.genres} />
       </div>
+
       <div className={styles.singleRight}>
         <div className={styles.singleRightToprow}>
           <span>Poäng: {(anime.score ? anime.score.toFixed(1) : "")}</span>
@@ -109,7 +125,15 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         </div>
         <p>{anime.synopsis}</p>
         <p>{anime.background}</p>
+        {anime.saved && <>
+          <textarea
+            className="text"
+            onChange={(e) => onTextChange(e)}
+            value={text}
+            placeholder="Skriv en kommentar eller recension..." />
+        </>}
       </div>
+
     </main>
   );
 }
