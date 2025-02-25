@@ -9,10 +9,12 @@ import MyRating from "./myrating";
 
 interface AnimeListProps {
     animes: MyAnime[];
-    search?: boolean;
+    search: boolean;
 }
 
-export function AnimeList({ animes, search = false }: AnimeListProps) {
+export function AnimeList({ animes, search }: AnimeListProps) {
+    const ac = useAnimeContext();
+
     return (
         <section className={styles.list}>
             <table>
@@ -26,7 +28,7 @@ export function AnimeList({ animes, search = false }: AnimeListProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    {animes.map((a, i) =>
+                    {animes.map((a, i) => !(ac.hideWatched && a.watched) &&
                         <AnimeRow key={i} anime={a} search={search} />)}
                 </tbody>
             </table>

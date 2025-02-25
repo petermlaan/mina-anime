@@ -14,9 +14,11 @@ interface CardsProps {
 }
 
 export function Cards({ animes, search = false }: CardsProps) {
+    const ac = useAnimeContext();
+
     return (
         <section className={styles.cards}>
-            {animes.map((a, i) =>
+            {animes.map((a, i) => !(ac.hideWatched && a.watched) &&
                 <Card key={i} anime={a} search={search} />
             )}
         </section>
@@ -35,7 +37,7 @@ export function Card({ anime, search }: CardProps) {
         <article className={styles.cardSmall}>
             <div className={styles.cardToprow}>
                 <button
-                    onClick={() => anime.saved ? 
+                    onClick={() => anime.saved ?
                         ac.removeAnime(anime.mal_id) : ac.addAnime(anime)}
                     className={(search && anime.saved) ? "disabled btn" : "btn"}>
                     {search ? "Spara" : "Ta bort"}
@@ -43,7 +45,11 @@ export function Card({ anime, search }: CardProps) {
                 <div>Poäng: {anime.score.toFixed(1)}</div>
                 <div>
                     {!search && (
-                        <label className="checkbox">Sedd<input type='checkbox' checked={anime.watched} onChange={() => ac.updateAnime(anime.mal_id, {watched: !anime.watched})} /></label>
+                        <label className="checkbox">Sedd
+                            <input type='checkbox' 
+                            checked={anime.watched} 
+                            onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
+                        </label>
                     )}
                 </div>
             </div>

@@ -9,6 +9,7 @@ import { MyAnime } from "@/lib/interfaces";
 import Clock from "@/components/clock";
 import { searchAnime } from "@/lib/client/clientutil";
 import { AnimeList } from "@/components/animelist";
+import { useAnimeContext } from "@/components/animecontext";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -18,9 +19,9 @@ export default function AnimeResults() {
     const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
     const router = useRouter();
+    const ac = useAnimeContext();
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
-    const [showList, setShowList] = useState(false);
 
     useEffect(() => {
         setResponse(null);
@@ -74,8 +75,8 @@ export default function AnimeResults() {
             </button>
             <label htmlFor="chkShowList" className="checkbox">Visa lista:
                 <input type="checkbox" id="chkShowList"
-                    checked={showList}
-                    onChange={() => setShowList(!showList)} />
+                    checked={ac.showSearchList}
+                    onChange={() => ac.setShowSearchList(!ac.showSearchList)} />
             </label>
             <button type="button"
                 className={response.pagination?.has_next_page ? "" : "disabled"}
@@ -84,7 +85,7 @@ export default function AnimeResults() {
                 Nästa &gt;
             </button>
         </div>
-        {showList ?
+        {ac.showSearchList ?
             <AnimeList animes={response.data} search={true} /> :
             <Cards animes={response.data} search={true} />}
     </>);

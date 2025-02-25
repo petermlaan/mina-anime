@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
 import { MyAnime } from '@/lib/interfaces';
 import { getList, saveList } from '@/lib/client/clientutil';
 
@@ -9,12 +9,22 @@ interface AnimeContextType {
   addAnime: (anime: MyAnime) => void;
   updateAnime: (id: number, updates: Partial<MyAnime>) => void;
   removeAnime: (id: number) => void;
+  showSearchList: boolean;
+  setShowSearchList: Dispatch<SetStateAction<boolean>>;
+  showSavedList: boolean;
+  setShowSavedList: Dispatch<SetStateAction<boolean>>;
+  hideWatched: boolean;
+  setHideWatched: Dispatch<SetStateAction<boolean>>;
 }
 
 const AnimeContext = createContext<AnimeContextType | undefined>(undefined);
 
 export function AnimeProvider({ children }: { children: React.ReactNode }) {
   const [myAnimes, setMyAnimes] = useState<MyAnime[]>([]);
+  const [showSearchList, setShowSearchList] = useState(false);
+  const [showSavedList, setShowSavedList] = useState(false);
+  const [hideWatched, setHideWatched] = useState(false);
+
   const loaded = useRef(0);
 
   useEffect(() => {
@@ -55,7 +65,13 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AnimeContext.Provider value={{ myAnimes, addAnime, updateAnime, removeAnime }}>
+    <AnimeContext.Provider value={{
+      myAnimes,
+      addAnime, updateAnime, removeAnime,
+      showSearchList, setShowSearchList,
+      showSavedList, setShowSavedList,
+      hideWatched, setHideWatched
+    }}>
       {children}
     </AnimeContext.Provider>
   );
