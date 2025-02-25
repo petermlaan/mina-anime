@@ -127,7 +127,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         <p>{anime.background}</p>
         {anime.saved && <>
           <textarea
-            className="text"
+            className={styles.text}
             onChange={(e) => onTextChange(e)}
             value={text}
             placeholder="Skriv en kommentar eller recension..." />
