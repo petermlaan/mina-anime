@@ -6,6 +6,6 @@ import SuperJSON from 'superjson';
 export async function POST(request: NextRequest) {
     const body = await request.text();
     const animes = SuperJSON.parse(body) as MyAnime[];
-    await saveAnimesSA(animes);
+    saveAnimesSA(animes);
     return NextResponse.json({ success: true }, { status: 200 });
 }

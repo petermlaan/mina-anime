@@ -8,9 +8,12 @@ const jikanAPI = new AnimeClient({ enableLogging: true });
 
 export async function getAnime(id: number): Promise<MyAnime> {
     const anime = (await jikanAPI.getAnimeById(id)).data as MyAnime;
+
+    // Set the new properties in case the axios cache has been contaminated
     anime.myRating = 0;
     anime.saved = false;
     anime.watched = false;
+
     return anime;
 }
 
