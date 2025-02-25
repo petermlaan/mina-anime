@@ -42,6 +42,8 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
 
   const addAnime = (anime: MyAnime) => {
     console.log("addAnime: ", anime);
+    if (myAnimes.find(a => a.mal_id === anime.mal_id))
+      return;
     anime.saved = true;
     anime.watched = false;
     anime.myRating = 0;

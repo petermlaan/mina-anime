@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Cards } from '../components/cards';
 import styles from "./savedanimes.module.css";
 import { useAnimeContext } from "@/components/animecontext";
