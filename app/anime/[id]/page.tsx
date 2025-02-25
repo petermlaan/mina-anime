@@ -91,7 +91,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
       <div className={styles.singleRight}>
         <div className={styles.singleRightToprow}>
           <span>Poäng: {(anime.score ? anime.score.toFixed(1) : "")}</span>
-          {anime.saved && <MyRating anime={anime}></MyRating>}
+          {anime.saved && <label>Betyg: <MyRating anime={anime}></MyRating></label>}
         </div>
         <h2>{anime.title_english ?? anime.title}</h2>
         <h3>{anime.title}</h3>

@@ -63,7 +63,7 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
 
 export function useAnimeContext() {
   const context = useContext(AnimeContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAnimeContext must be used within an AnimeProvider');
   }
   return context;

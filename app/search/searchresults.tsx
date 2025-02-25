@@ -8,6 +8,7 @@ import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
 import Clock from "@/components/clock";
 import { searchAnime } from "@/lib/client/clientutil";
+import { AnimeList } from "@/components/animelist";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
@@ -19,6 +20,7 @@ export default function AnimeResults() {
     const router = useRouter();
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
+    const [showList, setShowList] = useState(false);
 
     useEffect(() => {
         setResponse(null);
@@ -37,9 +39,9 @@ export default function AnimeResults() {
                 console.error("Fel! Ingen animedata!", err);
             }
         };
-//        setTimeout(() => {
-            loadData();
-//        }, 3000);
+        //        setTimeout(() => {
+        loadData();
+        //        }, 3000);
     }, [q, type, page, min_score]);
 
     const onPrevPage = () => {
@@ -71,7 +73,9 @@ export default function AnimeResults() {
                 &lt; Föreg
             </button>
             <label htmlFor="chkShowList" className="checkbox">Visa lista:
-                <input type="checkbox" id="chkShowList" />
+                <input type="checkbox" id="chkShowList"
+                    checked={showList}
+                    onChange={() => setShowList(!showList)} />
             </label>
             <button type="button"
                 className={response.pagination?.has_next_page ? "" : "disabled"}
@@ -80,6 +84,8 @@ export default function AnimeResults() {
                 Nästa &gt;
             </button>
         </div>
-        <Cards animes={response.data} search={true} />
+        {showList ?
+            <AnimeList animes={response.data} search={true} /> :
+            <Cards animes={response.data} search={true} />}
     </>);
 }
