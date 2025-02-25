@@ -24,6 +24,7 @@ export async function dbLoadAnimes(passkey: string): Promise<MyAnime[] | null> {
 }
 
 export async function dbSaveAnimes(passkey: string, animes: MyAnime[]) {
+    console.count("dbSaveAnimes");
     const { error } = await supabase
         .from('user_anime_selections')
         .upsert({ user_passkey: passkey, anime_data: animes });

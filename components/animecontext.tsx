@@ -35,19 +35,23 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
     anime.saved = true;
     anime.watched = false;
     anime.myRating = 0;
-    setMyAnimes([anime, ...myAnimes])
+    const list = [anime, ...myAnimes];
+    setMyAnimes(list)
+    saveList(list);
   };
 
   const updateAnime = (id: number, updates: Partial<MyAnime>) => {
     console.log("updateAnime: ", id, updates);
-    setMyAnimes(prev =>
-      prev.map(anime => anime.mal_id === id ? { ...anime, ...updates } : anime)
-    );
+    const list = myAnimes.map(anime => anime.mal_id === id ? { ...anime, ...updates } : anime);
+    setMyAnimes(list);
+    saveList(list);
   };
- 
+
   const removeAnime = (id: number) => {
     console.log("removeAnime: ", id);
-    setMyAnimes(prev => prev.filter(anime => anime.mal_id !== id));
+    const list = myAnimes.filter(anime => anime.mal_id !== id);
+    setMyAnimes(list);
+    saveList(list);
   };
 
   return (

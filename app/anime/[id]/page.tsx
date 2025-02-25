@@ -6,10 +6,10 @@ import { notFound, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useAnimeContext } from "@/components/animecontext";
-import { getAnime } from "@/lib/client/jikan";
 import { MyAnime } from "@/lib/interfaces";
 import { Genres } from "@/components/genres";
 import MyRating from "@/components/myrating";
+import { getAnime } from "@/lib/client/clientutil";
 
 export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
   const router = useRouter();
@@ -23,25 +23,22 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
     notFound();
 
   useEffect(() => {
-    console.count("useEffect");
+    console.count("AnimePage useEffect");
     setError(0);
     let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
     if (a) {
-      console.log("useEffect saved anime found: ", a);
-      setAnime(a);
+      setAnime({...a});
     } else {
       getAnime(id).then(res => {
-        console.log("useEffect anime fetched: ", res);
         a = res;
-        setAnime(res);
-      }).catch((err) => setError(1));
+        setAnime({...res});
+      }).catch(() => setError(1));
     }
     setLoading(false);
     document.title = "Mina Anime - " + (a?.title_english ?? a?.title);
   }, [id, ac.myAnimes]);
 
   const onToggleWatched = () => {
-    console.log("onToggleWatched: ", anime);
     if (anime?.saved) {
       const changes: Partial<MyAnime> = { watched: !anime.watched };
       ac.updateAnime(id, changes);
@@ -49,7 +46,6 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   }
 
   const onAddRemove = () => {
-    console.log("onAddRemove: ", anime);
     if (anime) {
       if (anime.saved)
         ac.removeAnime(id)
@@ -70,6 +66,8 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
     );
   }
 
+  console.log("AnimePage - returning html: ", anime);
+  
   return (
     <main className={styles.main}>
       <div className={styles.singleLeft}>

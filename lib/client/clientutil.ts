@@ -1,61 +1,31 @@
 import SuperJSON from "superjson";
+import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
 import { DEBOUNCE_DELAY } from "../constants";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
-import { getListFromStorage, saveListToStorage } from "./clientstorage";
+
+const jikanAPI = new AnimeClient({ enableLogging: true });
+
+export async function getAnime(id: number): Promise<MyAnime> {
+    const anime = (await jikanAPI.getAnimeById(id)).data as MyAnime;
+    anime.myRating = 0;
+    anime.saved = false;
+    anime.watched = false;
+    return anime;
+}
+
+export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
+    return (await jikanAPI.getAnimeSearch(searchparams)) as JikanResponse<MyAnime[]>;
+}
 
 export async function getList(): Promise<MyAnime[]> {
-    let animes = getListFromStorage();
-    if (animes === null) {
-        animes = await getAnimesSA() ?? [];
-        saveListToStorage(animes);
-    }
-    return animes;
+    console.count("getList");
+    return await getAnimesSA() ?? [];
 }
 
 export function saveList(animes: MyAnime[]) {
     console.count("saveList");
-    saveListToStorage(animes);
     saveAnimesToDB(animes);
-}
-
-export async function updateAndSaveList(anime: MyAnime) {
-    const res = await getList();
-    if (res) {
-        const i = res.findIndex(a => a.mal_id === anime.mal_id);
-        if (i > -1) {
-            res[i] = anime;
-            saveListToStorage(res);
-            saveAnimesSA(res);
-        }
-    }
-}
-
-export function toggleSaved(anime: MyAnime) {
-    anime.saved = !anime.saved;
-    if (anime.saved) {
-        anime.watched = false;
-        anime.myRating = 0;
-        addAnime(anime);
-    } else
-        removeAnime(anime);
-}
-
-async function addAnime(anime: MyAnime) {
-    const animes = await getList();
-    animes.unshift(anime);
-    saveListToStorage(animes);
-    saveAnimesToDB(animes);
-}
-
-async function removeAnime(anime: MyAnime) {
-    const animes = await getList();
-    const i = animes.findIndex(a => a.mal_id === anime.mal_id);
-    if (i > -1) {
-        animes.splice(i, 1);
-        saveListToStorage(animes);
-        saveAnimesToDB(animes);
-    }
 }
 
 // ----- Debouncing DB writes -----
@@ -78,6 +48,7 @@ function saveAnimesToDB(animes: MyAnime[]) {
     debounceTimeout = window.setTimeout(() => {
         window.onbeforeunload = null;
         debounceTimeout = -1;
+        console.count("saveAnimesToDB writing to DB");
         saveAnimesSA(animes);
     }, DEBOUNCE_DELAY);
 }

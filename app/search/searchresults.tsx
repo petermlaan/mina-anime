@@ -6,8 +6,8 @@ import { AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
-import { searchAnime } from "@/lib/client/jikan";
 import Clock from "@/components/clock";
+import { searchAnime } from "@/lib/client/clientutil";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();

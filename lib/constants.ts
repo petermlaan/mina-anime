@@ -1,1 +1,1 @@
-export const DEBOUNCE_DELAY = 1000; // ms
+export const DEBOUNCE_DELAY = 10000; // ms
