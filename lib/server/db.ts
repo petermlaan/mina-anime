@@ -7,8 +7,6 @@ const supabase = createClient(
     process.env.SUPABASE_URL ?? "",
     process.env.SUPABASE_SERVICE_ROLE_KEY ?? "");
 
-export const DB_TAGS_SAVEDANIMES = "savedanimes";
-
 export async function dbLoadAnimes(passkey: string): Promise<MyAnime[] | null> {
     const { data, error } = await supabase
         .from("user_anime_selections")

@@ -1,10 +1,10 @@
 import SuperJSON from "superjson";
 import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
-import { DEBOUNCE_DB_DELAY } from "../constants";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
+import { DEBOUNCE_DB_DELAY } from "../constants";
 
-const jikanAPI = new AnimeClient({ enableLogging: true });
+const jikanAPI = new AnimeClient();
 
 export async function getAnime(id: number): Promise<MyAnime> {
     const anime = (await jikanAPI.getAnimeById(id)).data as MyAnime;
@@ -32,6 +32,7 @@ export function getAnimePoster(anime: MyAnime) {
     return anime.images.jpg.maximum_image_url ||
         anime.images.jpg.large_image_url ||
         anime.images.jpg.image_url ||
+        process.env.ANIME_POSTER_FALLBACK ||
         "/favicon.jpg";
 }
 
