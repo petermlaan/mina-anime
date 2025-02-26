@@ -9,7 +9,7 @@ import { useAnimeContext } from "@/components/animecontext";
 import { MyAnime } from "@/lib/interfaces";
 import { Genres } from "@/components/genres";
 import MyRating from "@/components/myrating";
-import { debounce, getAnime, getPoster } from "@/lib/client/clientutil";
+import { debounce, getAnime, getAnimePoster } from "@/lib/client/clientutil";
 import { DEBOUNCE_TEXT_DELAY } from "@/lib/constants";
 
 export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
@@ -99,7 +99,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
           className={styles.poster}
           width={240}
           height={360}
-          src={getPoster(anime)}
+          src={getAnimePoster(anime)}
           alt={`Bild på ${anime.title}`}
           priority
         />

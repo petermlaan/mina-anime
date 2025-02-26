@@ -7,7 +7,7 @@ import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
 import { useAnimeContext } from "./animecontext";
-import { getPoster } from "@/lib/client/clientutil";
+import { getAnimePoster } from "@/lib/client/clientutil";
 
 interface CardsProps {
     animes: MyAnime[];
@@ -59,7 +59,7 @@ export function Card({ anime, search }: CardProps) {
             </Link>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>
                 <Image
-                    src={getPoster(anime)}
+                    src={getAnimePoster(anime)}
                     width={240} height={360}
                     className={styles.poster}
                     alt={"Poster för " + anime.title_english} />

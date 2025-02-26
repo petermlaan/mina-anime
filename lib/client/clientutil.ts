@@ -28,7 +28,7 @@ export function saveList(animes: MyAnime[]) {
     saveAnimesToDB(animes);
 }
 
-export function getPoster(anime: MyAnime) {
+export function getAnimePoster(anime: MyAnime) {
     return anime.images.jpg.maximum_image_url ||
         anime.images.jpg.large_image_url ||
         anime.images.jpg.image_url ||
@@ -48,12 +48,14 @@ function saveAnimesToDB(animes: MyAnime[]) {
     if (debounceDBTimeout > -1)
         window.clearTimeout(debounceDBTimeout);
 
-    window.onbeforeunload = () => {
+    const onBeforeUnload = () => {
         navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
 
+    window.addEventListener("beforeunload", onBeforeUnload)
+
     debounceDBTimeout = window.setTimeout(() => {
-        window.onbeforeunload = null;
+        window.removeEventListener("beforeunload", onBeforeUnload);
         debounceDBTimeout = -1;
         console.count("saveAnimesToDB writing to DB");
         saveAnimesSA(animes);
@@ -61,7 +63,6 @@ function saveAnimesToDB(animes: MyAnime[]) {
 }
 
 // ----- Generic debounce function -----
-
 let debounceTimeout = -1;
 
 export function debounce(delay: number, fn: () => void) {
@@ -69,11 +70,11 @@ export function debounce(delay: number, fn: () => void) {
     if (debounceTimeout > -1)
         window.clearTimeout(debounceTimeout);
 
-    window.onbeforeunload = () => fn();
+    window.addEventListener("beforeunload", fn);
 
     debounceTimeout = window.setTimeout(() => {
         console.count("debouncing fn");
-        window.onbeforeunload = null;
+        window.removeEventListener("beforeunload", fn);
         debounceTimeout = -1;
         fn();
     }, delay);
