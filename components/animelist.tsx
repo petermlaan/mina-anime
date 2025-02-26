@@ -9,16 +9,16 @@ import MyRating from "./myrating";
 
 interface AnimeListProps {
     animes: MyAnime[];
-    search: boolean;
+    search: boolean; // true for searchPage, false for Page.
 }
 
-type Column = "" | "title" | "score" | "myRating" | "watched";
+type TableColumn = "" | "title" | "score" | "myRating" | "watched";
 
 export function AnimeList({ animes, search }: AnimeListProps) {
     const ac = useAnimeContext();
-    const [lastSort, setLastSort] = useState<Column>("");
+    const [lastSort, setLastSort] = useState<TableColumn>("");
 
-    const onSort = (column: Column) => {
+    const onSort = (column: TableColumn) => {
         switch (column) {
             case "title":
                 if (lastSort === "title") {
