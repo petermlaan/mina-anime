@@ -51,10 +51,10 @@ export function AnimeList({ animes, search }: AnimeListProps) {
                         break;
                         case "watched":
                             if (lastSort === "watched") {
-                                animes.sort((a, b) => +(a.watched ?? -1));
+                                animes.sort(a => +(a.watched ?? false));
                                 setLastSort("");
                             } else {
-                                animes.sort((a, b) => +(b.watched ?? -1));
+                                animes.sort(a => +!(a.watched ?? false));
                                 setLastSort("watched");
                             }
                             break;
