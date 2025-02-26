@@ -2,7 +2,7 @@
 
 import styles from "./animelist.module.css";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { MyAnime } from "@/lib/interfaces";
 import { useAnimeContext } from "./animecontext";
 import MyRating from "./myrating";
@@ -12,19 +12,65 @@ interface AnimeListProps {
     search: boolean;
 }
 
+type Column = "" | "title" | "score" | "myRating" | "watched";
+
 export function AnimeList({ animes, search }: AnimeListProps) {
     const ac = useAnimeContext();
+    const [lastSort, setLastSort] = useState<Column>("");
+
+    const onSort = (column: Column) => {
+        switch (column) {
+            case "title":
+                if (lastSort === "title") {
+                    animes.sort((b, a) =>
+                        (a.title_english ?? a.title).localeCompare(b.title_english ?? b.title));
+                    setLastSort("");
+                } else {
+                    animes.sort((b, a) =>
+                        (b.title_english ?? b.title).localeCompare(a.title_english ?? a.title));
+                    setLastSort("title");
+                }
+                break;
+                case "score":
+                    if (lastSort === "score") {
+                        animes.sort((a, b) => a.score - b.score);
+                        setLastSort("");
+                    } else {
+                        animes.sort((a, b) => b.score - a.score);
+                        setLastSort("score");
+                    }
+                    break;
+                    case "myRating":
+                        if (lastSort === "myRating") {
+                            animes.sort((a, b) => (a.myRating ?? 0) - (b.myRating ?? 0));
+                            setLastSort("");
+                        } else {
+                            animes.sort((a, b) => (b.myRating ?? 0) - (a.myRating ?? 0));
+                            setLastSort("myRating");
+                        }
+                        break;
+                        case "watched":
+                            if (lastSort === "watched") {
+                                animes.sort((a, b) => +(a.watched ?? -1));
+                                setLastSort("");
+                            } else {
+                                animes.sort((a, b) => +(b.watched ?? -1));
+                                setLastSort("watched");
+                            }
+                            break;
+                    }
+    };
 
     return (
         <section className={styles.list}>
             <table>
                 <thead>
                     <tr>
-                        <th>Knapp</th>
-                        {!search && <th>Sedd</th>}
-                        <th>Poäng</th>
-                        {!search && <th>Betyg</th>}
-                        <th>Titel</th>
+                        <th></th>
+                        {!search && <th><Link href={"#"} onClick={() => onSort("myRating")}>Sedd</Link></th>}
+                        <th><Link href={"#"} onClick={() => onSort("score")}>Poäng</Link></th>
+                        {!search && <th><Link href={"#"} onClick={() => onSort("myRating")}>Betyg</Link></th>}
+                        <th><Link href={"#"} onClick={() => onSort("title")}>Titel</Link></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,7 +99,7 @@ export function AnimeRow({ anime, search }: AnimeRowProps) {
                 {search ? "Spara" : "Ta bort"}
             </button></td>
             {!search && <td><div>
-                 <input
+                <input
                     type='checkbox'
                     checked={anime.watched}
                     onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
