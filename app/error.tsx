@@ -1,7 +1,7 @@
 "use client"
 
+import { useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Error({
     error,
@@ -11,16 +11,16 @@ export default function Error({
     reset: () => void;
 }) {
     const router = useRouter();
+    const clerk = useClerk();
 
-    useEffect(() => {
-        console.error(error);
-    }, [error]);
+    console.error(error);
 
     return (
         <main>
-            <h2>Something went wrong!</h2>
+            <h1>{error.message}</h1>
+            {(!clerk.loaded || !clerk.user) && <button onClick={() => clerk.openSignIn()}>Logga in</button>}
             <button onClick={() => reset()}>Försök igen</button>
-            <button onClick={() => router.back()}>Tillbaka</button>
+            <button onClick={() => router.push("/")}>Hem</button>
         </main>
     );
 }
