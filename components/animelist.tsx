@@ -23,11 +23,11 @@ export function AnimeList({ animes, search }: AnimeListProps) {
             case "title":
                 if (lastSort === "title") {
                     animes.sort((b, a) =>
-                        (a.title_english ?? a.title).localeCompare(b.title_english ?? b.title));
+                        a.title_english.localeCompare(b.title_english));
                     setLastSort("");
                 } else {
                     animes.sort((b, a) =>
-                        (b.title_english ?? b.title).localeCompare(a.title_english ?? a.title));
+                        b.title_english.localeCompare(a.title_english));
                     setLastSort("title");
                 }
                 break;
@@ -42,19 +42,19 @@ export function AnimeList({ animes, search }: AnimeListProps) {
                     break;
                     case "myRating":
                         if (lastSort === "myRating") {
-                            animes.sort((a, b) => (a.myRating ?? 0) - (b.myRating ?? 0));
+                            animes.sort((a, b) => a.myRating - b.myRating);
                             setLastSort("");
                         } else {
-                            animes.sort((a, b) => (b.myRating ?? 0) - (a.myRating ?? 0));
+                            animes.sort((a, b) => b.myRating - a.myRating);
                             setLastSort("myRating");
                         }
                         break;
                         case "watched":
                             if (lastSort === "watched") {
-                                animes.sort(a => +(a.watched ?? false));
+                                animes.sort(a => +a.watched);
                                 setLastSort("");
                             } else {
-                                animes.sort(a => +!(a.watched ?? false));
+                                animes.sort(a => +!a.watched);
                                 setLastSort("watched");
                             }
                             break;
@@ -107,7 +107,7 @@ export function AnimeRow({ anime, search }: AnimeRowProps) {
             <td><div>{anime.score.toFixed(1)}</div></td>
             {!search && <td>{anime.saved && <MyRating anime={anime}></MyRating>}</td>}
             <td><div><Link href={"anime/" + anime.mal_id} prefetch={false}>
-                {anime.title_english ?? anime.title}
+                {anime.title_english}
             </Link></div></td>
         </tr>
     );

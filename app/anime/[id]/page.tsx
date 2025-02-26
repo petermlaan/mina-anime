@@ -9,7 +9,7 @@ import { useAnimeContext } from "@/components/animecontext";
 import { MyAnime } from "@/lib/interfaces";
 import { Genres } from "@/components/genres";
 import MyRating from "@/components/myrating";
-import { debounce, getAnime } from "@/lib/client/clientutil";
+import { debounce, getAnime, getPoster } from "@/lib/client/clientutil";
 import { DEBOUNCE_TEXT_DELAY } from "@/lib/constants";
 
 export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
@@ -37,8 +37,10 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
       }).catch(() => setError(1));
     }
     setLoading(false);
-    setText(a?.text ?? "");
-    document.title = "Mina Anime - " + (a?.title_english ?? a?.title);
+    if (a) {
+      setText(a.text);
+      document.title = "Mina Anime - " + (a.title_english);
+    }
   }, [id, ac.myAnimes]);
 
   const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -97,7 +99,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
           className={styles.poster}
           width={240}
           height={360}
-          src={(anime.images.jpg.large_image_url ?? anime.images.jpg.image_url) ?? "/favicon.jpg"}
+          src={getPoster(anime)}
           alt={`Bild på ${anime.title}`}
           priority
         />
@@ -106,10 +108,10 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
 
       <div className={styles.singleRight}>
         <div className={styles.singleRightToprow}>
-          <span>Poäng: {(anime.score ? anime.score.toFixed(1) : "")}</span>
+          <span>Poäng: {anime.score.toFixed(1)}</span>
           {anime.saved && <label>Betyg: <MyRating anime={anime}></MyRating></label>}
         </div>
-        <h2>{anime.title_english ?? anime.title}</h2>
+        <h2>{anime.title_english}</h2>
         <h3>{anime.title}</h3>
         <div className={styles.rightflex}>
           <div className={styles.rightgrid}>

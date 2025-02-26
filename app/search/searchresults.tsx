@@ -35,7 +35,7 @@ export default function AnimeResults() {
                     sp.sort = "desc";
                 }
                 const response = await searchAnime(sp);
-                response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved);
+                response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
                 setResponse(response);
             } catch (err) {
                 console.error("Fel! Ingen animedata!", err);
