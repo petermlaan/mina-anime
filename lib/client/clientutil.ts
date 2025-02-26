@@ -28,14 +28,6 @@ export function saveList(animes: MyAnime[]) {
     saveAnimesToDB(animes);
 }
 
-export function getAnimePoster(anime: MyAnime) {
-    return anime.images.jpg.maximum_image_url ||
-        anime.images.jpg.large_image_url ||
-        anime.images.jpg.image_url ||
-        process.env.ANIME_POSTER_FALLBACK ||
-        "/favicon.jpg";
-}
-
 // ----- Debouncing DB writes -----
 let debounceDBTimeout = -1;
 
@@ -87,6 +79,15 @@ function setDefaultValues(anime: MyAnime) {
     anime.saved = false;
     anime.watched = false;
     anime.text = "";
-    anime.title_english = anime.title_english ? anime.title_english : anime.title;
-    anime.title = anime.title ? anime.title : anime.title_english;
+    anime.title_english = anime.title_english || anime.title;
+    anime.title = anime.title || anime.title_english;
+    anime.poster =
+        anime.images.jpg.maximum_image_url ||
+        anime.images.webp?.maximum_image_url ||
+        anime.images.jpg.large_image_url ||
+        anime.images.webp?.large_image_url ||
+        anime.images.jpg.image_url ||
+        anime.images.webp?.image_url ||
+        process.env.ANIME_POSTER_FALLBACK ||
+        "/favicon.jpg";
 }

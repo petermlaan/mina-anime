@@ -6,4 +6,5 @@ export interface MyAnime extends Anime {
     myRating: number;
     text: string;
     title_english: string;
+    poster: string;
 };
