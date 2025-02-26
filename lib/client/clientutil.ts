@@ -30,6 +30,7 @@ export function saveList(animes: MyAnime[]) {
 
 // ----- Debouncing DB writes -----
 let debounceDBTimeout = -1;
+const abortctrl = new AbortController();
 
 function saveAnimesToDB(animes: MyAnime[]) {
     if (!window) {
@@ -38,17 +39,18 @@ function saveAnimesToDB(animes: MyAnime[]) {
         return;
     }
 
-    if (debounceDBTimeout > -1)
+    if (debounceDBTimeout > -1) {
         window.clearTimeout(debounceDBTimeout);
+        abortctrl.abort();
+    }
 
     const onBeforeUnload = () => {
         navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
-
-    window.addEventListener("beforeunload", onBeforeUnload)
+    window.addEventListener("beforeunload", onBeforeUnload, { signal: abortctrl.signal})
 
     debounceDBTimeout = window.setTimeout(() => {
-        window.removeEventListener("beforeunload", onBeforeUnload);
+        abortctrl.abort();
         debounceDBTimeout = -1;
         console.count("saveAnimesToDB writing to DB");
         saveAnimesSA(animes);
@@ -59,14 +61,13 @@ function saveAnimesToDB(animes: MyAnime[]) {
 let debounceTimeout = -1;
 
 export function debounce(delay: number, fn: () => void) {
-    console.log("debouncing: ", debounceTimeout);
-    if (debounceTimeout > -1)
+    if (debounceTimeout > -1) {
         window.clearTimeout(debounceTimeout);
+        window.removeEventListener("beforeunload", fn);
+    }
 
     window.addEventListener("beforeunload", fn);
-
     debounceTimeout = window.setTimeout(() => {
-        console.count("debouncing fn");
         window.removeEventListener("beforeunload", fn);
         debounceTimeout = -1;
         fn();
