@@ -19,12 +19,10 @@ export async function searchAnime(searchparams: AnimeSearchParams): Promise<Jika
 }
 
 export async function getList(): Promise<MyAnime[]> {
-    console.count("getList");
     return await getAnimesSA() ?? [];
 }
 
 export function saveList(animes: MyAnime[]) {
-    console.count("saveList");
     saveAnimesToDB(animes);
 }
 

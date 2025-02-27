@@ -22,9 +22,11 @@ export default function AnimeResults() {
     const ac = useAnimeContext();
 
     const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
+    const [error, setError] = useState<unknown>(null);
 
     useEffect(() => {
         setResponse(null);
+        setError(null);
         const loadData = async () => {
             try {
                 const sp: AnimeSearchParams = {
@@ -37,8 +39,10 @@ export default function AnimeResults() {
                 const response = await searchAnime(sp);
                 response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
                 setResponse(response);
+                throw new Error("Testfel");
             } catch (err) {
                 console.error("Fel! Ingen animedata!", err);
+                setError(err);
             }
         };
         //        setTimeout(() => {
@@ -61,6 +65,9 @@ export default function AnimeResults() {
         params.set('page', nextPage.toString());
         router.push(`/search?${params.toString()}`);
     };
+
+    if (error)
+        throw error;
 
     if (!response?.data) {
         return <div className={styles.fallback2}><Clock /></div>;

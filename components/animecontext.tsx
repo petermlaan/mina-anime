@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { MyAnime } from '@/lib/interfaces';
 import { getList, saveList } from '@/lib/client/clientutil';
 
@@ -18,27 +18,21 @@ interface AnimeContextType {
 }
 
 const AnimeContext = createContext<AnimeContextType | undefined>(undefined);
+console.log("AnimeContext: ", AnimeContext);
 
 export function AnimeProvider({ children }: { children: React.ReactNode }) {
+  console.log("AnimeProvider");
+  
   const [myAnimes, setMyAnimes] = useState<MyAnime[]>([]);
   const [showSearchList, setShowSearchList] = useState(false);
   const [showSavedList, setShowSavedList] = useState(false);
   const [hideWatched, setHideWatched] = useState(false);
-
-  const loaded = useRef(0);
 
   useEffect(() => {
     getList().then((saved) =>
       setMyAnimes(saved)
     )
   }, []);
-
-  useEffect(() => {
-    if (loaded.current > 1)
-      saveList(myAnimes);
-    else
-      loaded.current++;
-  }, [myAnimes]);
 
   const addAnime = (anime: MyAnime) => {
     console.log("addAnime: ", anime);
@@ -80,6 +74,7 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAnimeContext() {
+  console.log("useAnimeContext");
   const context = useContext(AnimeContext);
   if (!context) {
     throw new Error('useAnimeContext must be used within an AnimeProvider');

@@ -4,3 +4,10 @@ export class AuthRequiredError extends Error {
         this.name = "AuthRequiredError";
     }
 }
+
+/* export class NotFoundError extends Error {
+    constructor(message: string = "Sidan kunde inte hittas") {
+        super(message);
+        this.name = "NotFoundError";
+    }
+} */

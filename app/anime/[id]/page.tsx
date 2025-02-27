@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import React, { useEffect, useState, use, ChangeEvent } from "react";
-import { notFound, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useAnimeContext } from "@/components/animecontext";
@@ -13,34 +13,40 @@ import { debounce, getAnime } from "@/lib/client/clientutil";
 import { DEBOUNCE_TEXT_DELAY } from "@/lib/constants";
 
 export default function AnimePage({ params }: { params: Promise<{ id: number }> }) {
+  console.log("AnimePage");
   const router = useRouter();
   const id = +use(params).id;
   const ac = useAnimeContext();
   const [anime, setAnime] = useState<MyAnime | null>(null);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(0);
-
-  if (Number.isNaN(id))
-    notFound();
+  const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
-    console.count("AnimePage useEffect");
-    setError(0);
+    let mounted = true;
     let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
     if (a) {
       setAnime({ ...a });
     } else {
       getAnime(id).then(res => {
-        a = res;
-        setAnime({ ...res });
-      }).catch(() => setError(1));
+        if (mounted) {
+          a = res;
+          setAnime({ ...res });
+        }
+      }).catch((err) => {
+        if (mounted) {
+          setError(err);
+          setLoading(false);
+        }
+      });
     }
-    setLoading(false);
-    if (a) {
+    if (a && mounted) {
       setText(a.text);
-      document.title = "Mina Anime - " + (a.title_english);
+      setLoading(false);
+      document.title = "Mina Anime - " + a.title_english;
     }
+
+    return () => { mounted = false };
   }, [id, ac.myAnimes]);
 
   const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -70,19 +76,12 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
     }
   }
 
-  if (loading) {
+  if (error)
+    throw error;
+
+  if (loading || !anime) {
     return <div>Laddar anime...</div>;
   }
-
-  if (error > 0 || !anime) {
-    return (
-      <div>Något gick fel.
-        <button onClick={() => router.back()}>Tillbaka</button>
-      </div>
-    );
-  }
-
-  console.log("AnimePage - returning html: ", anime);
 
   return (
     <main className={styles.main}>

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default function SearchPage() {
+  console.log("SearchPage");
+
   return (
     <main className={styles.main}>
       <Suspense fallback={<div>Laddar sökformuläret...</div>}>

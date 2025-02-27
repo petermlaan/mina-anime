@@ -35,35 +35,43 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("RootLayout");
+
   return (
     <ClerkProvider>
       <html lang="en" className={`${styleScript.variable} ${geistSans.variable}`}>
         <body>
-          <header><div className="logo">
-            <Link href="/">
-              <h1>Mina Anime</h1>
-            </Link></div>
-            <nav>
-              <ul>
-                <li><Link href="/search" prefetch={false}>SÖK</Link></li>
-                <li><Link href="/" prefetch={false}>SPARADE</Link></li>
-              </ul>
-            </nav>
-            <div className="user">
-              <SignedOut>
-                <SignInButton />
-                <SignUpButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </header>
-          <AnimeProvider>
-            {children}
-          </AnimeProvider>
+          <Layout>{children}</Layout>
         </body>
       </html>
     </ClerkProvider>
+  );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <AnimeProvider>
+      <header><div className="logo">
+        <Link href="/">
+          <h1>Mina Anime</h1>
+        </Link></div>
+        <nav>
+          <ul>
+            <li><Link href="/search" prefetch={false}>SÖK</Link></li>
+            <li><Link href="/" prefetch={false}>SPARADE</Link></li>
+          </ul>
+        </nav>
+        <div className="user">
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </header>
+      {children}
+    </AnimeProvider>
   );
 }
