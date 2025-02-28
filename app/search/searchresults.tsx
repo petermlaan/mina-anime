@@ -39,7 +39,6 @@ export default function AnimeResults() {
                 const response = await searchAnime(sp);
                 response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
                 setResponse(response);
-                throw new Error("Testfel");
             } catch (err) {
                 console.error("Fel! Ingen animedata!", err);
                 setError(err);

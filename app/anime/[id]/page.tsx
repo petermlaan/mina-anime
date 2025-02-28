@@ -54,6 +54,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
       console.error("SHOULD NOT HAPPEN! onTextChange called from server.")
       return;
     }
+    console.log("onTextChange");
     setText(e.target.value);
     debounce(DEBOUNCE_TEXT_DELAY, () =>
       ac.updateAnime(id, { text: e.target.value })

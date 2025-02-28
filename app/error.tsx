@@ -1,8 +1,8 @@
 "use client"
 
 import { useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Error({
     error,
@@ -12,22 +12,9 @@ export default function Error({
     reset: () => void;
 }) {
     const router = useRouter();
-    const clerk = useClerk();
 
     console.log("Error page: ", error?.name, error?.message);
 
-    const [isNavigating, setIsNavigating] = useState(false);
-
-    useEffect(() => {
-        if (isNavigating) {
-            router.push('/');
-        }
-    }, [isNavigating, router]);
-    
-    const handleHomeClick = () => {
-        setIsNavigating(true);
-    };
-    
     let errormsg = error?.message ?? "Någonting gick fel.";
     if (error?.name === "AxiosError")
         errormsg = "Sidan kunde inte hittas.";
@@ -35,10 +22,10 @@ export default function Error({
     return (
         <main>
             <h1>{errormsg}</h1>
-            {(!clerk.loaded || !clerk.user) &&
-                <button onClick={() => clerk.openSignIn()}>Logga in</button>}
             <button onClick={() => reset()}>Försök igen</button>
-            <button onClick={() => handleHomeClick()}>Hem</button>
+            <button onClick={() => router.push('/')}>Hem</button>
+            <Link href="/">Hemlänk</Link>
+            <Link href="https://www.svt.se">SVT</Link>
         </main>
     );
 }

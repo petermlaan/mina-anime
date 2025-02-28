@@ -14,7 +14,7 @@ export async function dbLoadAnimes(passkey: string): Promise<MyAnime[] | null> {
         .eq("user_passkey", passkey);
     if (error) {
         console.error("loadAnimes", error);
-        throw new Error(error.message);
+        throw error;
     };
     if (!data || data.length === 0)
         return null;
@@ -28,7 +28,7 @@ export async function dbSaveAnimes(passkey: string, animes: MyAnime[]) {
         .upsert({ user_passkey: passkey, anime_data: animes });
     if (error) {
         console.error("saveAnimes", error);
-        throw new Error(error.message);
+        throw error;
     };
 }
 
