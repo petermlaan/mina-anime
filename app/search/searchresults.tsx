@@ -33,8 +33,8 @@ export default function AnimeResults() {
                     q, type, page, sfw: true, min_score, limit: 24
                 };
                 if (!q) {
-                    sp.order_by = "score";
-                    sp.sort = "desc";
+                    sp.order_by = "popularity"; //"score";
+                    sp.sort = "asc";
                 }
                 const response = await searchAnime(sp);
                 response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);

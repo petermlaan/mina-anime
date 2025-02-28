@@ -19,34 +19,22 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   const ac = useAnimeContext();
   const [anime, setAnime] = useState<MyAnime | null>(null);
   const [text, setText] = useState("");
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
-    let mounted = true;
-    let a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
+    setError(null);
+    const a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
     if (a) {
       setAnime({ ...a });
+      setText(a.text);
+      document.title = a.title_english + " - Mina Anime";
     } else {
       getAnime(id).then(res => {
-        if (mounted) {
-          a = res;
-          setAnime({ ...res });
-        }
-      }).catch((err) => {
-        if (mounted) {
-          setError(err);
-          setLoading(false);
-        }
-      });
+        setAnime({ ...res });
+        setText(res.text);
+        document.title = res.title_english + " - Mina Anime";
+      }).catch((err) => setError(err));
     }
-    if (a && mounted) {
-      setText(a.text);
-      setLoading(false);
-      document.title = "Mina Anime - " + a.title_english;
-    }
-
-    return () => { mounted = false };
   }, [id, ac.myAnimes]);
 
   const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -80,7 +68,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   if (error)
     throw error;
 
-  if (loading || !anime) {
+  if (!anime) {
     return <div>Laddar anime...</div>;
   }
 
@@ -115,14 +103,20 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         <h3>{anime.title}</h3>
         <div className={styles.rightflex}>
           <div className={styles.rightgrid}>
-            <div>År:</div><div>{anime.year}</div>
+            <div>År:</div><div>{anime.year > 0 && anime.year}</div>
             <div>Typ:</div><div>{anime.type}</div>
-            <div>Trailer:{anime.trailer.url && <Link href={anime.trailer.url}>youtube</Link>}</div>
+            <div>Trailer:</div><div>{anime.yturl && <Link href={anime.yturl}>youtube</Link>}</div>
+            <div>Score:</div><div>{anime.score}</div>
+            <div>Scored by:</div><div>{anime.scored_by}</div>
+            <div>Favorites:</div><div>{anime.favorites}</div>
           </div>
           <div className={styles.rightgrid}>
             <div>Status:</div><div>{anime.status}</div>
             <div>Källa:</div><div>{anime.source}</div>
-            <div>Themes:</div><div>{anime.themes.map(t => t.name).join(", ")}</div>
+            <div>Themes:</div><div>{anime.themes.join(", ")}</div>
+            <div>Episodes:</div><div>{anime.episodes}</div>
+            <div>Rank:</div><div>{anime.rank}</div>
+            <div>Popularity:</div><div>{anime.popularity}</div>
           </div>
         </div>
         <p>{anime.synopsis}</p>

@@ -103,7 +103,8 @@ export function AnimeRow({ anime, search }: AnimeRowProps) {
             <td><button
                 onClick={() => anime.saved ?
                     ac.removeAnime(anime.mal_id) : ac.addAnime(anime)}
-                className={(search && anime.saved) ? "disabled btn" : "btn"}>
+                className={(search && anime.saved) ? "disabled btn" : "btn"}
+                disabled={search && anime.saved}>
                 {search ? "Spara" : "Ta bort"}
             </button></td>
             {!search && <td><div>

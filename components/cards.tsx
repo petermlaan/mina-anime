@@ -39,7 +39,8 @@ export function Card({ anime, search }: CardProps) {
                 <button
                     onClick={() => anime.saved ?
                         ac.removeAnime(anime.mal_id) : ac.addAnime(anime)}
-                    className={(search && anime.saved) ? "disabled btn" : "btn"}>
+                    className={(search && anime.saved) ? "disabled btn" : "btn"}
+                    disabled={search && anime.saved}>
                     {search ? "Spara" : "Ta bort"}
                 </button>
                 <div>Poäng: {anime.score.toFixed(1)}</div>

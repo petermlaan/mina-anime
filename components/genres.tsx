@@ -1,11 +1,10 @@
 import styles from "./genres.module.css";
-import { JikanResource } from '@tutkli/jikan-ts';
 
-export function Genres({ genres }: { genres: JikanResource[] }) {
+export function Genres({ genres }: { genres: string[] }) {
     return (
         <div className={styles.genres}>
             {genres.map((g, i) => (
-                <div key={i} className={styles.genre}>{g.name}</div>
+                <div key={i} className={styles.genre}>{g}</div>
             ))}
         </div>
     );

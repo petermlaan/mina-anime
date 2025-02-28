@@ -1,5 +1,5 @@
 import SuperJSON from "superjson";
-import { AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
+import { Anime, AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
 import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { DEBOUNCE_DB_DELAY } from "../constants";
@@ -7,15 +7,17 @@ import { DEBOUNCE_DB_DELAY } from "../constants";
 const jikanAPI = new AnimeClient();
 
 export async function getAnime(id: number): Promise<MyAnime> {
-    const anime = (await jikanAPI.getAnimeById(id)).data as MyAnime;
-    setDefaultValues(anime);
-    return anime;
+    const anime = (await jikanAPI.getAnimeById(id)).data;
+    return MyAnimeFromAnime(anime);
 }
 
 export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
-    const res = (await jikanAPI.getAnimeSearch(searchparams)) as JikanResponse<MyAnime[]>;
-    res.data.forEach(a => setDefaultValues(a));
-    return res;
+    const res = (await jikanAPI.getAnimeSearch(searchparams));
+    const myres: JikanResponse<MyAnime[]> = {
+        pagination: res.pagination, 
+        data: res.data.map(a => MyAnimeFromAnime(a))
+    };
+    return myres;
 }
 
 export async function getList(): Promise<MyAnime[]> {
@@ -23,6 +25,7 @@ export async function getList(): Promise<MyAnime[]> {
 }
 
 export function saveList(animes: MyAnime[]) {
+    animes.forEach(a => {a.text = a.text.slice(0, 1000).trim();});
     saveAnimesToDB(animes);
 }
 
@@ -45,7 +48,7 @@ function saveAnimesToDB(animes: MyAnime[]) {
     const onBeforeUnload = () => {
         navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
     };
-    window.addEventListener("beforeunload", onBeforeUnload, { signal: abortctrl.signal})
+    window.addEventListener("beforeunload", onBeforeUnload, { signal: abortctrl.signal })
 
     debounceDBTimeout = window.setTimeout(() => {
         abortctrl.abort();
@@ -72,24 +75,44 @@ export function debounce(delay: number, fn: () => void) {
     }, delay);
 }
 
-function setDefaultValues(anime: MyAnime) {
-    // Set the new properties in case the axios cache has been contaminated
-    anime.myRating = 0;
-    anime.saved = false;
-    anime.watched = false;
-    anime.text = "";
- 
-    // Fix some properties coming from the API
-    anime.title_english = anime.title_english || anime.title;
-    anime.title = anime.title || anime.title_english;
-    anime.score = anime.score || 0;
-    anime.poster =
-        anime.images.jpg.maximum_image_url ||
-        anime.images.webp?.maximum_image_url ||
-        anime.images.jpg.large_image_url ||
-        anime.images.webp?.large_image_url ||
-        anime.images.jpg.image_url ||
-        anime.images.webp?.image_url ||
-        process.env.ANIME_POSTER_FALLBACK ||
-        "/favicon.jpg";
+function MyAnimeFromAnime(anime: Anime): MyAnime {
+    const myAnime: MyAnime = {
+        // New properties
+        myRating: 0,
+        saved: false,
+        watched: false,
+        text: "",
+
+        source: anime.source || "",
+        episodes: anime.episodes || 0,
+        status: anime.status || "",
+        scored_by: anime.scored_by || 0,
+        rank: anime.rank || 0,
+        popularity: anime.popularity || 0,
+        favorites: anime.favorites || 0,
+        synopsis: anime.synopsis || "",
+        background: anime.background || "",
+        themes: anime.themes.map(t => t.name),
+        mal_id: anime.mal_id,
+        year: anime.year || 0,
+        type: anime.type || "",
+        genres: anime.genres?.map(g => g.name) || [],
+        score: anime.score || 0,
+
+        // Changed properties
+        yturl: anime.trailer.url,
+        title_english: anime.title_english || anime.title || "<missing>",
+        title: anime.title || anime.title_english || "<missing>",
+        poster:
+            anime.images.jpg.maximum_image_url ||
+            anime.images.webp?.maximum_image_url ||
+            anime.images.jpg.large_image_url ||
+            anime.images.webp?.large_image_url ||
+            anime.images.jpg.image_url ||
+            anime.images.webp?.image_url ||
+            process.env.ANIME_POSTER_FALLBACK ||
+            "/favicon.jpg",
+
+    };
+    return myAnime;
 }
