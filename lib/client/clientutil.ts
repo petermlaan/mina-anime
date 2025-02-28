@@ -78,8 +78,11 @@ function setDefaultValues(anime: MyAnime) {
     anime.saved = false;
     anime.watched = false;
     anime.text = "";
+ 
+    // Fix some properties coming from the API
     anime.title_english = anime.title_english || anime.title;
     anime.title = anime.title || anime.title_english;
+    anime.score = anime.score || 0;
     anime.poster =
         anime.images.jpg.maximum_image_url ||
         anime.images.webp?.maximum_image_url ||
