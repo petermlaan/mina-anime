@@ -1,6 +1,5 @@
 "use client"
 
-import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
