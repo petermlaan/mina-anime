@@ -43,7 +43,7 @@ export default function AnimeResults() {
             }
         };
         loadData();
-    }, [q, type, page, min_score, , order_by, sort, ac.myAnimes]);
+    }, [q, type, page, min_score, order_by, sort, ac.myAnimes]);
 
     const onPrevPage = () => {
         if (page > 1) {
