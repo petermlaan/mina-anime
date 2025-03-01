@@ -23,18 +23,11 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
 
   useEffect(() => {
     setError(null);
-    const a = ac.myAnimes.find(a => a.mal_id === id) ?? null;
-    if (a) {
-      setAnime({ ...a });
-      setText(a.text);
-      document.title = a.title_english + " - Mina Anime";
-    } else {
-      getAnime(id).then(res => {
-        setAnime({ ...res });
-        setText(res.text);
-        document.title = res.title_english + " - Mina Anime";
-      }).catch((err) => setError(err));
-    }
+    getAnime(id, ac.myAnimes).then(res => {
+      setAnime({ ...res });
+      setText(res.text);
+      document.title = res.title_english + " - Mina Anime";
+    }).catch((err) => setError(err));
   }, [id, ac.myAnimes]);
 
   const onTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {

@@ -6,16 +6,18 @@ import { DEBOUNCE_DB_DELAY } from "../constants";
 
 const jikanAPI = new AnimeClient();
 
-export async function getAnime(id: number): Promise<MyAnime> {
-    const anime = (await jikanAPI.getAnimeById(id)).data;
-    return MyAnimeFromAnime(anime);
+export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime> {
+    let a = myAnimes.find(a => a.mal_id === id) ?? null;
+    if (!a)
+        a = convertToMyAnime((await jikanAPI.getAnimeById(id)).data);
+    return a;
 }
 
 export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
     const res = (await jikanAPI.getAnimeSearch(searchparams));
     const myres: JikanResponse<MyAnime[]> = {
         pagination: res.pagination, 
-        data: res.data.map(a => MyAnimeFromAnime(a))
+        data: res.data.map(a => convertToMyAnime(a))
     };
     return myres;
 }
@@ -75,7 +77,7 @@ export function debounce(delay: number, fn: () => void) {
     }, delay);
 }
 
-function MyAnimeFromAnime(anime: Anime): MyAnime {
+function convertToMyAnime(anime: Anime): MyAnime {
     const myAnime: MyAnime = {
         // New properties
         myRating: 0,
