@@ -10,18 +10,33 @@ export default function SearchForm() {
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
+  const order_by = searchParams.get('order_by') || "";
+  const sort = searchParams.get('sort') || "";
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
   return (
     <Form action={"/search"} className={styles.searchform}>
-      <label id="lblMinScore" htmlFor="selMinScore">Minsta poäng: 
+      <label htmlFor="selMinScore">Minsta poäng:
         <select id="selMinScore" name="min_score" defaultValue={min_score}>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(score => (
             <option key={score} value={score}>{score}</option>
           ))}
         </select>
       </label>
-      <label id="lblType" htmlFor="selType">Typ: 
+      <label htmlFor="selOrderBy">Sortering:
+        <select id="selOrderBy" name="order_by" defaultValue={order_by}>
+          {["mal_id", "title", "start_date", "end_date", "episodes",
+            "score", "scored_by", "rank", "popularity", "favorites"]
+            .map((o, i) => <option value={o} key={i}>{o}</option>)}
+        </select>
+      </label>
+      <label htmlFor="selAscDesc">Ordning:
+        <select id="selAscDesc" name="sort" defaultValue={sort}>
+          <option value="Asc">Asc</option>
+          <option value="Desc">Desc</option>
+        </select>
+      </label>
+      <label id="lblType" htmlFor="selType">Typ:
         <select id="selType" name="type" defaultValue={type}>
           <option value=""></option>
           <option value="TV">TV</option>

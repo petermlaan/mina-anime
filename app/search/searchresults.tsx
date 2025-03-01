@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { AnimeSearchParams, AnimeType, JikanResponse } from '@tutkli/jikan-ts';
+import { AnimeSearchOrder, AnimeSearchParams, AnimeType, JikanResponse, SortOptions } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
 import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
@@ -17,6 +17,8 @@ export default function AnimeResults() {
     const type = searchParams.get('type') as AnimeType | undefined;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
     const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
+    const order_by = searchParams.get('order_by') as AnimeSearchOrder | undefined;
+    const sort = searchParams.get('sort') as SortOptions | undefined;
 
     const router = useRouter();
     const ac = useAnimeContext();
@@ -30,12 +32,8 @@ export default function AnimeResults() {
         const loadData = async () => {
             try {
                 const sp: AnimeSearchParams = {
-                    q, type, page, sfw: true, min_score, limit: 24
+                    q, type, page, sfw: true, min_score, limit: 24, order_by, sort
                 };
-                if (!q) {
-                    sp.order_by = "popularity"; //"score";
-                    sp.sort = "asc";
-                }
                 const response = await searchAnime(sp);
                 response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
                 setResponse(response);
@@ -44,10 +42,8 @@ export default function AnimeResults() {
                 setError(err);
             }
         };
-        //        setTimeout(() => {
         loadData();
-        //        }, 3000);
-    }, [q, type, page, min_score, ac.myAnimes]);
+    }, [q, type, page, min_score, , order_by, sort, ac.myAnimes]);
 
     const onPrevPage = () => {
         if (page > 1) {

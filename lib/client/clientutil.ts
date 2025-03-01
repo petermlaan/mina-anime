@@ -4,7 +4,7 @@ import { MyAnime } from "../interfaces";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { DEBOUNCE_DB_DELAY } from "../constants";
 
-const jikanAPI = new AnimeClient();
+const jikanAPI = new AnimeClient({ enableLogging: true });
 
 export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime> {
     let a = myAnimes.find(a => a.mal_id === id) ?? null;
@@ -14,6 +14,7 @@ export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime
 }
 
 export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
+    console.log("searchAnime", searchparams);
     const res = (await jikanAPI.getAnimeSearch(searchparams));
     const myres: JikanResponse<MyAnime[]> = {
         pagination: res.pagination, 
