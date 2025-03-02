@@ -38,7 +38,7 @@ export default function AnimeResults() {
                 response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
                 setResponse(response);
             } catch (err) {
-                console.error("Fel! Ingen animedata!", err);
+                console.error("Ingen animedata!", err);
                 setError(err);
             }
         };

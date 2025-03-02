@@ -5,7 +5,7 @@ import Form from "next/form";
 import { useSearchParams } from 'next/navigation';
 import { AnimeType } from '@tutkli/jikan-ts';
 import styles from "./page.module.css";
-import { toPascalCase } from "@/lib/client/clientutil";
+import { toPascalCase } from "@/lib/util";
 
 export default function SearchForm() {
   const searchParams = useSearchParams();
@@ -27,7 +27,7 @@ export default function SearchForm() {
       <label htmlFor="selOrderBy">Sortering:
         <select id="selOrderBy" name="order_by" defaultValue={order_by}>
           {["mal_id", "title", "start_date", "end_date", "episodes",
-            "score", "scored_by", "rank", "popularity", "favorites"]
+            "score", "scored_by", "popularity", "favorites"]
             .map((o, i) => <option value={o} key={i}>{toPascalCase(o)}</option>)}
         </select>
       </label>

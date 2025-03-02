@@ -12,7 +12,6 @@ export default function MyRating({ anime }: MyRatingProps) {
     const ac = useAnimeContext();
 
     const onRating = (mal_id: number, myRating: number) => {
-        console.log("MyRating - onRating: " + myRating, mal_id);
         ac.updateAnime(mal_id, { myRating });
     }
 

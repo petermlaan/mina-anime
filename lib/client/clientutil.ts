@@ -9,16 +9,15 @@ const jikanAPI = new AnimeClient({ enableLogging: true });
 export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime> {
     let a = myAnimes.find(a => a.mal_id === id) ?? null;
     if (!a)
-        a = convertToMyAnime((await jikanAPI.getAnimeById(id)).data);
+        a = toMyAnime((await jikanAPI.getAnimeById(id)).data);
     return a;
 }
 
 export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
-    console.log("searchAnime", searchparams);
     const res = (await jikanAPI.getAnimeSearch(searchparams));
     const myres: JikanResponse<MyAnime[]> = {
         pagination: res.pagination, 
-        data: res.data.map(a => convertToMyAnime(a))
+        data: res.data.map(a => toMyAnime(a))
     };
     return myres;
 }
@@ -29,13 +28,6 @@ export async function getList(): Promise<MyAnime[]> {
 
 export function saveList(animes: MyAnime[]) {
     saveAnimesToDB(animes);
-}
-
-export function toPascalCase(str: string) {
-    // Replace underscores with spaces, then capitalize first letter of each word
-    let s = str.replace(/_/g, " ");
-    s = s.replace(/(\w)(\w*)/g, (_, g1, g2) => g1.toUpperCase() + g2.toLowerCase());
-    return s;
 }
 
 // ----- Debouncing DB writes -----
@@ -62,7 +54,6 @@ function saveAnimesToDB(animes: MyAnime[]) {
     debounceDBTimeout = window.setTimeout(() => {
         abortctrl.abort();
         debounceDBTimeout = -1;
-        console.count("saveAnimesToDB writing to DB");
         saveAnimesSA(animes);
     }, DEBOUNCE_DB_DELAY);
 }
@@ -84,7 +75,7 @@ export function debounce(delay: number, fn: () => void) {
     }, delay);
 }
 
-function convertToMyAnime(anime: Anime): MyAnime {
+function toMyAnime(anime: Anime): MyAnime {
     const myAnime: MyAnime = {
         // New properties
         myRating: 0,

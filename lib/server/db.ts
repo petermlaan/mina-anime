@@ -31,4 +31,3 @@ export async function dbSaveAnimes(passkey: string, animes: MyAnime[]) {
         throw error;
     };
 }
-

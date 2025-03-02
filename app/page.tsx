@@ -8,8 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  console.log("SavedAnimes Page");
-
   return (
     <main className={styles.main}>
       <Suspense fallback="Laddar listan...">
