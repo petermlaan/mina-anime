@@ -119,6 +119,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
             className={styles.text}
             onChange={(e) => onTextChange(e)}
             value={text}
+            maxLength={1000}
             placeholder="Skriv en kommentar eller recension..." />
         </>}
       </div>

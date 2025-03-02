@@ -28,7 +28,6 @@ export async function getList(): Promise<MyAnime[]> {
 }
 
 export function saveList(animes: MyAnime[]) {
-    animes.forEach(a => {a.text = a.text.slice(0, 1000).trim();});
     saveAnimesToDB(animes);
 }
 
@@ -115,7 +114,6 @@ function convertToMyAnime(anime: Anime): MyAnime {
             anime.images.webp?.image_url ||
             process.env.ANIME_POSTER_FALLBACK ||
             "/favicon.jpg",
-
     };
     return myAnime;
 }
