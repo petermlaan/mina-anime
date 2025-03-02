@@ -38,7 +38,8 @@ export function Card({ anime, search }: CardProps) {
             <div className={styles.cardToprow}>
                 <button
                     onClick={() => anime.saved ?
-                        ac.removeAnime(anime.mal_id) : ac.addAnime(anime)}
+                        ac.removeAnime(anime.mal_id) :
+                        ac.addAnime(anime)}
                     className={(search && anime.saved) ? "disabled btn" : "btn"}
                     disabled={search && anime.saved}>
                     {search ? "Spara" : "Ta bort"}
@@ -47,9 +48,9 @@ export function Card({ anime, search }: CardProps) {
                 <div>
                     {!search && (
                         <label className="checkbox">Sedd
-                            <input type='checkbox' 
-                            checked={anime.watched} 
-                            onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
+                            <input type='checkbox'
+                                checked={anime.watched}
+                                onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
                         </label>
                     )}
                 </div>
