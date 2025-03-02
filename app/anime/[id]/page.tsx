@@ -76,14 +76,15 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
             <input type="checkbox" checked={anime.watched} onChange={onToggleWatched} />
           </label>}
         </div>
+        <Link href={anime.poster}>
         <Image
           className={styles.poster}
           width={240}
           height={360}
           src={anime.poster}
           alt={`Bild på ${anime.title}`}
-          priority
-        />
+          priority/>
+        </Link>
         <Genres genres={anime.genres} />
       </div>
 

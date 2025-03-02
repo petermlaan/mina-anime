@@ -5,12 +5,13 @@ import Form from "next/form";
 import { useSearchParams } from 'next/navigation';
 import { AnimeType } from '@tutkli/jikan-ts';
 import styles from "./page.module.css";
+import { toPascalCase } from "@/lib/client/clientutil";
 
 export default function SearchForm() {
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as AnimeType | undefined;
-  const order_by = searchParams.get('order_by') || "";
+  const order_by = searchParams.get('order_by') || "popularity";
   const sort = searchParams.get('sort') || "";
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
@@ -27,7 +28,7 @@ export default function SearchForm() {
         <select id="selOrderBy" name="order_by" defaultValue={order_by}>
           {["mal_id", "title", "start_date", "end_date", "episodes",
             "score", "scored_by", "rank", "popularity", "favorites"]
-            .map((o, i) => <option value={o} key={i}>{o}</option>)}
+            .map((o, i) => <option value={o} key={i}>{toPascalCase(o)}</option>)}
         </select>
       </label>
       <label htmlFor="selAscDesc">Ordning:
