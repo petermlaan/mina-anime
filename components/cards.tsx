@@ -55,9 +55,11 @@ export function Card({ anime, search }: CardProps) {
                     )}
                 </div>
             </div>
-            <Link href={"anime/" + anime.mal_id} prefetch={false}>
-                <h2>{anime.title_english}</h2>
-            </Link>
+            <div className={styles.cardTitle}>
+                <Link href={"anime/" + anime.mal_id} prefetch={false}>
+                    <span>{anime.title_english}</span>
+                </Link>
+            </div>
             <Link href={"anime/" + anime.mal_id} prefetch={false}>
                 <Image
                     src={anime.poster}

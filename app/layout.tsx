@@ -39,10 +39,12 @@ export default function RootLayout({
     <html lang="en" className={`${styleScript.variable} ${geistSans.variable}`}>
       <body>
         <ClerkProvider>
-          <header><div className="logo">
-            <Link href="/">
-              <h1>Mina Anime</h1>
-            </Link></div>
+          <header>
+            <div className="logo">
+              <Link href="/">
+                <h1>Mina Anime</h1>
+              </Link>
+            </div>
             <nav>
               <ul>
                 <li><Link href="/search" prefetch={false}>SÖK</Link></li>

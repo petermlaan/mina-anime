@@ -1,4 +1,3 @@
-
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, 260px);
@@ -15,6 +14,10 @@
     border: 1px solid var(--clr-main3);
     border-radius: 1rem;
     padding: 9px;
+
+    &:hover {
+        outline: 2px solid var(--clr-main3);
+    }
 }
 
 .poster {
@@ -22,9 +25,6 @@
     height: 360px;
     object-fit: cover;
 
-    &:hover {
-        outline: 3px solid var(--clr-main3);
-    }
 }
 
 .cardToprow {
@@ -32,4 +32,9 @@
     grid-template-columns: auto 1fr auto;
     justify-items: center;
     align-items: center;
+}
+
+.cardTitle {
+    font-size: 1.4rem;
+    text-wrap-style: balance;
 }
