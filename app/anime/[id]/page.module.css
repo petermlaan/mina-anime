@@ -6,7 +6,7 @@
   margin: 1rem;
   padding: 0.4rem;
 
-  @media (width < 40rem) {
+  @media (width < 50rem) {
     flex-flow: column;
   }
 }

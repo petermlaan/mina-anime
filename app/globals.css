@@ -154,3 +154,27 @@ header {
   display: flex;
   align-items: center;
 }
+
+.tal {
+  text-align: left;
+}
+
+.tac {
+  text-align: center;
+}
+
+.border {
+  border: 1px solid white;
+}
+
+.px1 {
+  padding: 0 0.2rem;
+}
+
+.px2 {
+  padding: 0 0.4rem;
+}
+
+.px3 {
+  padding: 0 0.6rem;
+}

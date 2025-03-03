@@ -17,7 +17,7 @@ export default function SearchForm() {
 
   return (
     <Form action={"/search"} className={styles.searchform}>
-      <label htmlFor="selMinScore">Minsta poäng:
+      <label htmlFor="selMinScore">Poäng:
         <select id="selMinScore" name="min_score" defaultValue={min_score}>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(score => (
             <option key={score} value={score}>{score}</option>

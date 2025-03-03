@@ -71,13 +71,13 @@ export function AnimeList({ animes, search = false }: AnimeListProps) {
                 <thead>
                     <tr>
                         <th></th>
-                        {!search && <th><Link href={"#"}
+                        {!search && <th className="px2"><Link href={"#"}
                             onClick={() => onSort("watched")}>Sedd</Link></th>}
-                        <th><Link href={"#"}
+                        <th className="px2"><Link href={"#"}
                             onClick={() => onSort("score")}>Poäng</Link></th>
-                        {!search && <th><Link href={"#"}
+                        {!search && <th className="px2"><Link href={"#"}
                             onClick={() => onSort("myRating")}>Betyg</Link></th>}
-                        <th><Link href={"#"}
+                        <th className="px2 tal"><Link href={"#"}
                             onClick={() => onSort("title")}>Titel</Link></th>
                     </tr>
                 </thead>
@@ -107,15 +107,15 @@ export function AnimeRow({ anime, search }: AnimeRowProps) {
                 disabled={search && anime.saved}>
                 {search ? "Spara" : "Ta bort"}
             </button></td>
-            {!search && <td><div>
+            {!search && <td className="tac">
                 <input
                     type='checkbox'
                     checked={anime.watched}
                     onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
-            </div></td>}
-            <td><div>{anime.score.toFixed(1)}</div></td>
-            {!search && <td>{anime.saved && <MyRating anime={anime}></MyRating>}</td>}
-            <td><div><Link href={"anime/" + anime.mal_id} prefetch={false}>
+            </td>}
+            <td className="px2 tac"><div>{anime.score.toFixed(1)}</div></td>
+            {!search && <td className="px2">{anime.saved && <MyRating anime={anime}></MyRating>}</td>}
+            <td className="px2"><div><Link href={"anime/" + anime.mal_id} prefetch={false}>
                 {anime.title_english}
             </Link></div></td>
         </tr>

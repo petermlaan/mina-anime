@@ -47,6 +47,7 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeAnime = (id: number) => {
+    console.log("removeAnime", id);
     const list = myAnimes.filter(anime => anime.mal_id !== id);
     setMyAnimes(list);
     saveList(list);

@@ -62,12 +62,19 @@ function saveAnimesToDB(animes: MyAnime[]) {
 let debounceTimeout = -1;
 
 export function debounce(delay: number, fn: () => void) {
+    if (!window) {
+        console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.")
+        fn();
+        return;
+    }
+
     if (debounceTimeout > -1) {
         window.clearTimeout(debounceTimeout);
         window.removeEventListener("beforeunload", fn);
     }
 
     window.addEventListener("beforeunload", fn);
+
     debounceTimeout = window.setTimeout(() => {
         window.removeEventListener("beforeunload", fn);
         debounceTimeout = -1;
