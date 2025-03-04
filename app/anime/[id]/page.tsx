@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./page.module.css";
 import React, { useEffect, useState, use, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -64,10 +63,10 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   }
 
   return (
-    <main className={styles.main}>
+    <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
 
-      <div className={styles.singleLeft}>
-        <div className={styles.singleLeftToprow}>
+      <div className="flex flex-col gap-2 w-60">
+        <div className="flex gap-2 h-8 items-center justify-between">
           <button onClick={router.back}>Stäng</button>
           <button onClick={onAddRemove}>{anime.saved ? "Ta bort" : "Spara"}</button>
           {anime.saved && <label className="checkbox">Sedd:
@@ -76,9 +75,8 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         </div>
         <Link href={anime.poster}>
         <Image
-          className={styles.poster}
-          width={240}
-          height={360}
+          className="w-60 h-90 object-cover"
+          width={240} height={360}
           src={anime.poster}
           alt={`Bild på ${anime.title}`}
           priority/>
@@ -86,15 +84,15 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         <Genres genres={anime.genres} />
       </div>
 
-      <div className={styles.singleRight}>
-        <div className={styles.singleRightToprow}>
+      <div className="flex flex-col gap-2 pr-4">
+        <div className="flex justify-between items-center gap-2 h-8">
           <span>Poäng: {anime.score.toFixed(1)}</span>
           {anime.saved && <label>Betyg: <MyRating anime={anime}></MyRating></label>}
         </div>
         <h2>{anime.title_english}</h2>
         <h3>{anime.title}</h3>
-        <div className={styles.rightflex}>
-          <div className={styles.rightgrid}>
+        <div className="flex gap-8">
+          <div className="grid grid-cols-2 gap-y-1 gap-x-4">
             <div>År:</div><div>{anime.year > 0 && anime.year}</div>
             <div>Typ:</div><div>{anime.type}</div>
             <div>Trailer:</div><div>{anime.yturl && <Link href={anime.yturl}>youtube</Link>}</div>
@@ -102,7 +100,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
             <div>Scored by:</div><div>{anime.scored_by}</div>
             <div>Favorites:</div><div>{anime.favorites}</div>
           </div>
-          <div className={styles.rightgrid}>
+          <div className="grid grid-cols-2 gap-y-1 gap-x-4">
             <div>Status:</div><div>{anime.status}</div>
             <div>Källa:</div><div>{anime.source}</div>
             <div>Themes:</div><div>{anime.themes.join(", ")}</div>
@@ -115,7 +113,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
         <p>{anime.background}</p>
         {anime.saved && <>
           <textarea
-            className={styles.text}
+            className="h-40 bg-(--clr-main0) text-(--clr-main3)"
             onChange={(e) => onTextChange(e)}
             value={text}
             maxLength={1000}
