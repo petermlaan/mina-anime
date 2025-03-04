@@ -4,9 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnimeSearchOrder, AnimeSearchParams, AnimeType, JikanResponse, SortOptions } from '@tutkli/jikan-ts';
 import { Cards } from "@/components/cards";
-import styles from "./searchresults.module.css";
 import { MyAnime } from "@/lib/interfaces";
-import Clock from "@/components/clock";
 import { searchAnime } from "@/lib/client/clientutil";
 import { AnimeList } from "@/components/animelist";
 import { useAnimeContext } from "@/components/animecontext";
@@ -65,11 +63,11 @@ export default function AnimeResults() {
         throw error;
 
     if (!response?.data) {
-        return <div className={styles.fallback2}><Clock /></div>;
+        return <div className="grid justify-center mt-14 text-8xl">Söker...</div>;
     }
 
     return (<>
-        <div className={styles.searchresultsctrl}>
+        <div className="flex justify-center items-center gap-8">
             <button type="button"
                 className={page < 2 ? "disabled" : ""}
                 disabled={page < 2}

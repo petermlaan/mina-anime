@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
-import styles from "./page.module.css";
 import { SavedAnimes } from "@/app/savedanimes";
 
 export const metadata: Metadata = {
@@ -9,7 +8,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <main className={styles.main}>
+    <main className="grid gap-4">
       <Suspense fallback="Laddar listan...">
         <SavedAnimes />
       </Suspense>

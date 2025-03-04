@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
-import styles from "./page.module.css";
 import SearchForm from "./searchform";
 import AnimeResults from "./searchresults";
 
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function SearchPage() {
   return (
-    <main className={styles.main}>
+    <main className="grid gap-4">
       <Suspense fallback={<div>Laddar sökformuläret...</div>}>
         <SearchForm />
       </Suspense>

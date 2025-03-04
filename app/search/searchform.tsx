@@ -4,7 +4,6 @@ import React from "react";
 import Form from "next/form";
 import { useSearchParams } from 'next/navigation';
 import { AnimeType } from '@tutkli/jikan-ts';
-import styles from "./page.module.css";
 import { toPascalCase } from "@/lib/util";
 
 export default function SearchForm() {
@@ -16,7 +15,7 @@ export default function SearchForm() {
   const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
 
   return (
-    <Form action={"/search"} className={styles.searchform}>
+    <Form action={"/search"} className="flex flex-wrap justify-center gap-4">
       <label htmlFor="selMinScore">Poäng:
         <select id="selMinScore" name="min_score" defaultValue={min_score}>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(score => (
