@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./animelist.module.css";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { MyAnime } from "@/lib/interfaces";
@@ -66,7 +65,7 @@ export function AnimeList({ animes, search = false }: AnimeListProps) {
     };
 
     return (
-        <section className={styles.list}>
+        <section className="bg-(--clr-main1)">
             <table>
                 <thead>
                     <tr>

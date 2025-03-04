@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import styles from "./cards.module.css";
 import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
@@ -17,7 +16,7 @@ export function Cards({ animes, search = false }: CardsProps) {
     const ac = useAnimeContext();
 
     return (
-        <section className={styles.cards}>
+        <section className="grid grid-cols-[repeat(auto-fit,260px)] justify-center gap-4">
             {animes.map((a, i) => !(ac.hideWatched && a.watched) &&
                 <Card key={i} anime={a} search={search} />
             )}
@@ -34,8 +33,8 @@ export function Card({ anime, search }: CardProps) {
     const ac = useAnimeContext();
 
     return (
-        <article className={styles.cardSmall}>
-            <div className={styles.cardToprow}>
+        <article className="grid grid-rows-[subgrid] row-span-4 gap-2 bg-[--clr-main1] border border-[--clr-main3] rounded-2xl p-2 hover:outline hover:outline-[--clr-main3]">
+            <div className="flex justify-between">
                 <button
                     onClick={() => anime.saved ?
                         ac.removeAnime(anime.mal_id) :
@@ -55,7 +54,7 @@ export function Card({ anime, search }: CardProps) {
                     )}
                 </div>
             </div>
-            <div className={styles.cardTitle}>
+            <div className="text-2xl text-balance">
                 <Link href={"anime/" + anime.mal_id} prefetch={false}>
                     <span>{anime.title_english}</span>
                 </Link>
@@ -64,7 +63,7 @@ export function Card({ anime, search }: CardProps) {
                 <Image
                     src={anime.poster}
                     width={240} height={360}
-                    className={styles.poster}
+                    className="w-[240px] h-[360px] object-cover"
                     alt={"Poster för " + anime.title_english} />
             </Link>
             <Genres genres={anime.genres} />

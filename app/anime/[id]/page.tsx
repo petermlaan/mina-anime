@@ -65,7 +65,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
   return (
     <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
 
-      <div className="flex flex-col gap-2 w-60">
+      <div className="flex flex-col gap-2">
         <div className="flex gap-2 h-8 items-center justify-between">
           <button onClick={router.back}>Stäng</button>
           <button onClick={onAddRemove}>{anime.saved ? "Ta bort" : "Spara"}</button>
@@ -74,12 +74,12 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
           </label>}
         </div>
         <Link href={anime.poster}>
-        <Image
-          className="w-60 h-90 object-cover"
-          width={240} height={360}
-          src={anime.poster}
-          alt={`Bild på ${anime.title}`}
-          priority/>
+          <Image
+            className="w-60 h-90 object-cover"
+            width={240} height={360}
+            src={anime.poster}
+            alt={`Bild på ${anime.title}`}
+            priority />
         </Link>
         <Genres genres={anime.genres} />
       </div>

@@ -40,9 +40,9 @@ export default function RootLayout({
       <body>
         <ClerkProvider>
           <header>
-            <div className="logo">
+            <div className="sm:pl-4 w-fit">
               <Link href="/">
-                <h1>Mina Anime</h1>
+                <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Mina Anime</h1>
               </Link>
             </div>
             <nav>
