@@ -39,7 +39,7 @@ export default function RootLayout({
     <html lang="en" className={`${styleScript.variable} ${geistSans.variable}`}>
       <body>
         <ClerkProvider>
-          <header>
+          <header className="border-b-2 border-(--clr-main2)">
             <div className="sm:pl-4 w-fit">
               <Link href="/">
                 <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Mina Anime</h1>
