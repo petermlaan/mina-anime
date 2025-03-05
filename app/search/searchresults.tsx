@@ -63,7 +63,7 @@ export default function AnimeResults() {
         throw error;
 
     if (!response?.data) {
-        return <div className="grid justify-center mt-14 text-8xl">Söker...</div>;
+        return <div className="grid justify-center mt-14 text-4xl">Söker...</div>;
     }
 
     return (<>

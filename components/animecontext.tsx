@@ -1,6 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import SuperJSON from 'superjson';
 import { MyAnime } from '@/lib/interfaces';
 import { getList, saveList } from '@/lib/client/clientutil';
 
@@ -10,27 +11,69 @@ interface AnimeContextType {
   updateAnime: (id: number, updates: Partial<MyAnime>) => void;
   removeAnime: (id: number) => void;
   showSearchList: boolean;
-  setShowSearchList: Dispatch<SetStateAction<boolean>>;
+  setShowSearchList: (showList: boolean) => void;
   showSavedList: boolean;
-  setShowSavedList: Dispatch<SetStateAction<boolean>>;
+  setShowSavedList: (showList: boolean) => void;
   hideWatched: boolean;
-  setHideWatched: Dispatch<SetStateAction<boolean>>;
-}
+  setHideWatched: (hideWatched: boolean) => void;
+};
+
+interface LS { 
+  showSearchList: boolean, 
+  showSavedList: boolean, 
+  hideWatched: boolean 
+};
 
 const AnimeContext = createContext<AnimeContextType | undefined>(undefined);
 
 export function AnimeProvider({ children }: { children: React.ReactNode }) {
   const [myAnimes, setMyAnimes] = useState<MyAnime[]>([]);
-  const [showSearchList, setShowSearchList] = useState(false);
-  const [showSavedList, setShowSavedList] = useState(false);
-  const [hideWatched, setHideWatched] = useState(false);
+  const [showSearchList, setStateShowSearchList] = useState(false);
+  const [showSavedList, setStateShowSavedList] = useState(false);
+  const [hideWatched, setStateHideWatched] = useState(false);
 
   useEffect(() => {
-    getList().then((saved) =>
-      setMyAnimes(saved)
-    )
+    getList().then((saved) => setMyAnimes(saved));
+    const ls = localStorage.getItem("MyAnime");
+    if (ls) {
+      const lso: LS = SuperJSON.parse(ls);
+      setStateShowSearchList(lso.showSearchList);
+      setStateShowSavedList(lso.showSavedList);
+      setStateHideWatched(lso.hideWatched);
+    }
   }, []);
 
+  const setShowSearchList = (showSearchList: boolean) => {
+    setStateShowSearchList(showSearchList);
+    storeInLS({
+      showSearchList,
+      showSavedList,
+      hideWatched,
+    });
+  };
+
+  const setShowSavedList = (showSavedList: boolean) => {
+    setStateShowSavedList(showSavedList);
+    storeInLS({
+      showSearchList,
+      showSavedList,
+      hideWatched,
+    });
+  };
+
+  const setHideWatched = (hideWatched: boolean) => {
+    setStateHideWatched(hideWatched);
+    storeInLS({
+      showSearchList,
+      showSavedList,
+      hideWatched,
+    });
+  };
+
+  const storeInLS = (lso: LS) => {
+    localStorage.setItem("MyAnime", SuperJSON.stringify(lso));
+  }
+  
   const addAnime = (anime: MyAnime) => {
     if (myAnimes.find(a => a.mal_id === anime.mal_id))
       return;
