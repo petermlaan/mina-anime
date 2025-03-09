@@ -96,7 +96,7 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
             <div>År:</div><div>{anime.year > 0 && anime.year}</div>
             <div>Typ:</div><div>{anime.type}</div>
             <div>Trailer:</div><div>{anime.yturl && <Link href={anime.yturl}>youtube</Link>}</div>
-            <div>Score:</div><div>{anime.score}</div>
+            <div><Link href={"/anime/" + id + "/recs"} >Recs</Link></div><div>&nbsp;</div>
             <div>Scored by:</div><div>{anime.scored_by}</div>
             <div>Favorites:</div><div>{anime.favorites}</div>
           </div>

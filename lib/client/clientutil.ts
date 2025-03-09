@@ -1,8 +1,8 @@
 import SuperJSON from "superjson";
-import { Anime, AnimeClient, AnimeSearchParams, JikanResponse } from "@tutkli/jikan-ts";
+import { Anime, AnimeClient, AnimeSearchParams, JikanRelation, JikanResponse, Recommendation } from "@tutkli/jikan-ts";
 import { MyAnime } from "../interfaces";
-import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { DEBOUNCE_DB_DELAY } from "../constants";
+import { getAnimesSA, saveAnimesSA } from "../server/actions";
 
 const jikanAPI = new AnimeClient({ enableLogging: true });
 
@@ -11,6 +11,16 @@ export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime
     if (!a)
         a = toMyAnime((await jikanAPI.getAnimeById(id)).data);
     return a;
+}
+
+export async function getAnimeRecommendations(id: number): Promise<JikanResponse<Recommendation[]>> {
+    const res = await jikanAPI.getAnimeRecommendations(id);
+    return res;
+}
+
+export async function getAnimeRelations(id: number): Promise<JikanResponse<JikanRelation[]>> {
+    const res = await jikanAPI.getAnimeRelations(id);
+    return res;
 }
 
 export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
