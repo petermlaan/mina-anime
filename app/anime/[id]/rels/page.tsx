@@ -2,13 +2,12 @@
 
 import { use, useEffect, useState } from "react";
 import { JikanRelation } from "@tutkli/jikan-ts";
-import Link from "next/link";
 import { getAnimeRelations } from "@/lib/client/clientutil";
 import { toPascalCase } from "@/lib/util";
+import LinkNP from "@/components/linknp";
 
 export default function RelsPage({ params }: { params: Promise<{ id: number }> }) {
     const id = +use(params).id;
-
     const [rels, setRels] = useState<JikanRelation[] | null>(null);
     const [error, setError] = useState<unknown>(null);
 
@@ -16,7 +15,6 @@ export default function RelsPage({ params }: { params: Promise<{ id: number }> }
         setError(null);
         getAnimeRelations(id).then(res => {
             setRels(res.data);
-            console.log("RelsPage - useEffect: ", res);
             document.title = id + " - Mina Anime";
         }).catch((err) => setError(err));
     }, [id]);
@@ -27,7 +25,6 @@ export default function RelsPage({ params }: { params: Promise<{ id: number }> }
     if (!rels) {
         return <div>Laddar rekommendationer...</div>;
     }
-    console.log("RelsPage: ", rels);
 
     return (
         <main className="grid gap-4 m-4">
@@ -38,7 +35,7 @@ export default function RelsPage({ params }: { params: Promise<{ id: number }> }
                     {entry.map((r, i) =>
                         <article key={i}>
                             <span>{toPascalCase(r.type)}: </span>
-                            <Link href={"/anime/" + r.mal_id}>{r.name}</Link>
+                            <LinkNP href={"/anime/" + r.mal_id}>{r.name}</LinkNP>
                         </article>
                     )}
                 </div>

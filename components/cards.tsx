@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { Genres } from "./genres";
 import { MyAnime } from "@/lib/interfaces";
 import { useAnimeContext } from "./animecontext";
+import LinkNP from "./linknp";
 
 interface CardsProps {
     animes: MyAnime[];
@@ -55,17 +55,17 @@ export function Card({ anime, search }: CardProps) {
                 </div>
             </div>
             <div className="text-2xl text-balance">
-                <Link href={"anime/" + anime.mal_id} prefetch={false}>
+                <LinkNP href={"anime/" + anime.mal_id}>
                     <span>{anime.title_english}</span>
-                </Link>
+                </LinkNP>
             </div>
-            <Link href={"anime/" + anime.mal_id} prefetch={false}>
+            <LinkNP href={"anime/" + anime.mal_id}>
                 <Image
                     src={anime.poster}
                     width={240} height={360}
                     className="w-[240px] h-[360px] object-cover"
                     alt={"Poster för " + anime.title_english} />
-            </Link>
+            </LinkNP>
             <Genres genres={anime.genres} />
         </article>
     );

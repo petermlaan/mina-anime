@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { MyAnime } from "@/lib/interfaces";
 import { useAnimeContext } from "./animecontext";
 import MyRating from "./myrating";
+import LinkNP from "./linknp";
 
 interface AnimeListProps {
     animes: MyAnime[];
@@ -114,9 +115,9 @@ export function AnimeRow({ anime, search }: AnimeRowProps) {
             </td>}
             <td className="px2 tac"><div>{anime.score.toFixed(1)}</div></td>
             {!search && <td className="px2">{anime.saved && <MyRating anime={anime}></MyRating>}</td>}
-            <td className="px2"><div><Link href={"anime/" + anime.mal_id} prefetch={false}>
+            <td className="px2"><div><LinkNP href={"anime/" + anime.mal_id}>
                 {anime.title_english}
-            </Link></div></td>
+            </LinkNP></div></td>
         </tr>
     );
 }

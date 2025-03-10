@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Style_Script } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import {
   ClerkProvider,
   SignInButton,
@@ -11,6 +10,7 @@ import {
   UserButton,
 } from '@clerk/nextjs'
 import { AnimeProvider } from "@/components/animecontext";
+import LinkNP from "@/components/linknp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,14 +41,14 @@ export default function RootLayout({
         <ClerkProvider>
           <header className="border-b-2 border-(--clr-main2)">
             <div className="sm:pl-4 w-fit">
-              <Link href="/">
+              <LinkNP href="/">
                 <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Mina Anime</h1>
-              </Link>
+              </LinkNP>
             </div>
             <nav>
               <ul>
-                <li><Link href="/search" prefetch={false}>SÖK</Link></li>
-                <li><Link href="/" prefetch={false}>SPARADE</Link></li>
+                <li><LinkNP href="/search">SÖK</LinkNP></li>
+                <li><LinkNP href="/">SPARADE</LinkNP></li>
               </ul>
             </nav>
             <div className="user">
