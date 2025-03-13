@@ -2,44 +2,39 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import SuperJSON from 'superjson';
-import { MyAnime } from '@/lib/interfaces';
 import { getList, saveList } from '@/lib/client/clientutil';
+import { Product } from '@/lib/interfaces';
 
-interface AnimeContextType {
-  myAnimes: MyAnime[];
-  addAnime: (anime: MyAnime) => void;
-  updateAnime: (id: number, updates: Partial<MyAnime>) => void;
-  removeAnime: (id: number) => void;
+interface ProductContextType {
+  myProducts: Product[];
+  addProduct: (anime: Product) => void;
+  updateProduct: (id: number, updates: Partial<Product>) => void;
+  removeProduct: (id: number) => void;
   showSearchList: boolean;
   setShowSearchList: (showList: boolean) => void;
   showSavedList: boolean;
   setShowSavedList: (showList: boolean) => void;
-  hideWatched: boolean;
-  setHideWatched: (hideWatched: boolean) => void;
 };
 
 interface LS { 
   showSearchList: boolean, 
   showSavedList: boolean, 
-  hideWatched: boolean 
 };
 
-const AnimeContext = createContext<AnimeContextType | undefined>(undefined);
+const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-export function AnimeProvider({ children }: { children: React.ReactNode }) {
-  const [myAnimes, setMyAnimes] = useState<MyAnime[]>([]);
+export function ProductProvider({ children }: { children: React.ReactNode }) {
+  const [myProducts, setMyProducts] = useState<Product[]>([]);
   const [showSearchList, setStateShowSearchList] = useState(false);
   const [showSavedList, setStateShowSavedList] = useState(false);
-  const [hideWatched, setStateHideWatched] = useState(false);
 
   useEffect(() => {
-    getList().then((saved) => setMyAnimes(saved));
-    const ls = localStorage.getItem("MyAnime");
+    getList().then((saved) => setMyProducts(saved));
+    const ls = localStorage.getItem("Products");
     if (ls) {
       const lso: LS = SuperJSON.parse(ls);
       setStateShowSearchList(lso.showSearchList);
       setStateShowSavedList(lso.showSavedList);
-      setStateHideWatched(lso.hideWatched);
     }
   }, []);
 
@@ -48,7 +43,6 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
     storeInLS({
       showSearchList,
       showSavedList,
-      hideWatched,
     });
   };
 
@@ -57,60 +51,49 @@ export function AnimeProvider({ children }: { children: React.ReactNode }) {
     storeInLS({
       showSearchList,
       showSavedList,
-      hideWatched,
-    });
-  };
-
-  const setHideWatched = (hideWatched: boolean) => {
-    setStateHideWatched(hideWatched);
-    storeInLS({
-      showSearchList,
-      showSavedList,
-      hideWatched,
     });
   };
 
   const storeInLS = (lso: LS) => {
-    localStorage.setItem("MyAnime", SuperJSON.stringify(lso));
+    localStorage.setItem("Products", SuperJSON.stringify(lso));
   }
   
-  const addAnime = (anime: MyAnime) => {
-    if (myAnimes.find(a => a.mal_id === anime.mal_id))
+  const addProduct = (product: Product) => {
+    if (myProducts.find(p => p.id === product.id))
       return;
-    anime.saved = true;
-    const list = [anime, ...myAnimes];
-    setMyAnimes(list)
+    product.saved = true;
+    const list = [product, ...myProducts];
+    setMyProducts(list)
     saveList(list);
   };
 
-  const updateAnime = (id: number, updates: Partial<MyAnime>) => {
-    const list = myAnimes.map(anime => anime.mal_id === id ? { ...anime, ...updates } : anime);
-    setMyAnimes(list);
+  const updateProduct = (id: number, updates: Partial<Product>) => {
+    const list = myProducts.map(product => product.id === id ? { ...product, ...updates } : product);
+    setMyProducts(list);
     saveList(list);
   };
 
-  const removeAnime = (id: number) => {
+  const removeProduct = (id: number) => {
     console.log("removeAnime", id);
-    const list = myAnimes.filter(anime => anime.mal_id !== id);
-    setMyAnimes(list);
+    const list = myProducts.filter(product => product.id !== id);
+    setMyProducts(list);
     saveList(list);
   };
 
   return (
-    <AnimeContext.Provider value={{
-      myAnimes,
-      addAnime, updateAnime, removeAnime,
+    <ProductContext.Provider value={{
+      myProducts,
+      addProduct, updateProduct, removeProduct,
       showSearchList, setShowSearchList,
       showSavedList, setShowSavedList,
-      hideWatched, setHideWatched
     }}>
       {children}
-    </AnimeContext.Provider>
+    </ProductContext.Provider>
   );
 }
 
-export function useAnimeContext() {
-  const context = useContext(AnimeContext);
+export function useProductContext() {
+  const context = useContext(ProductContext);
   if (!context) {
     throw new Error('useAnimeContext must be used within an AnimeProvider');
   }

@@ -1,54 +1,36 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from 'next/navigation';
-import { AnimeSearchOrder, AnimeSearchParams, AnimeType, JikanResponse, SortOptions } from '@tutkli/jikan-ts';
+import { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation';
 import { Cards } from "@/components/cards";
-import { MyAnime } from "@/lib/interfaces";
+import { SearchResult } from "@/lib/interfaces";
 import { searchAnime } from "@/lib/client/clientutil";
 import { AnimeList } from "@/components/animelist";
-import { useAnimeContext } from "@/components/animecontext";
+import { useProductContext } from "@/components/animecontext";
 
 export default function AnimeResults() {
     const searchParams = useSearchParams();
-    const q = searchParams.get('q') || undefined;
-    const type = searchParams.get('type') as AnimeType | undefined;
+    const q = searchParams.get('q') || "";
+    //const type = searchParams.get('type') as string | undefined;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
-    const min_score = searchParams.get('min_score') ? parseInt(searchParams.get('min_score')!) : 0;
-    const order_by = searchParams.get('order_by') as AnimeSearchOrder | undefined;
-    const sort = searchParams.get('sort') as SortOptions | undefined;
 
-    const router = useRouter();
-    const ac = useAnimeContext();
+    const ac = useProductContext();
 
-    const [response, setResponse] = useState<JikanResponse<MyAnime[]> | null>(null);
-    const [error, setError] = useState<unknown>(null);
+    const [response, setResponse] = useState<SearchResult | null>(null);
 
     useEffect(() => {
-        setResponse(null);
-        setError(null);
-        const loadData = async () => {
-            try {
-                const sp: AnimeSearchParams = {
-                    q, type, page, sfw: true, min_score, limit: 24, order_by, sort
-                };
-                const response = await searchAnime(sp);
-                response.data.forEach(a => a.saved = ac.myAnimes.find(s => s.mal_id === a.mal_id)?.saved ?? false);
-                setResponse(response);
-            } catch (err) {
-                console.error("Ingen animedata!", err);
-                setError(err);
-            }
-        };
-        loadData();
-    }, [q, type, page, min_score, order_by, sort]);
+        searchAnime(q).then(res => {
+            res.products.forEach(a => a.saved = ac.myProducts.find(s => s.id === a.id)?.saved ?? false);
+            setResponse(res);
+        });
+    }, [q, page]);
 
     const onPrevPage = () => {
         if (page > 1) {
             const params = new URLSearchParams(searchParams);
             const nextPage = page - 1;
             params.set('page', nextPage.toString());
-            router.push(`/search?${params.toString()}`);
+            //router.push(`/search?${params.toString()}`);
         }
     };
 
@@ -56,13 +38,10 @@ export default function AnimeResults() {
         const params = new URLSearchParams(searchParams);
         const nextPage = page + 1;
         params.set('page', nextPage.toString());
-        router.push(`/search?${params.toString()}`);
+        //router.push(`/search?${params.toString()}`);
     };
 
-    if (error)
-        throw error;
-
-    if (!response?.data) {
+    if (!response?.products) {
         return <div className="grid justify-center mt-14 text-4xl">Söker...</div>;
     }
 
@@ -80,14 +59,14 @@ export default function AnimeResults() {
                     onChange={() => ac.setShowSearchList(!ac.showSearchList)} />
             </label>
             <button type="button"
-                className={response.pagination?.has_next_page ? "" : "disabled"}
-                disabled={!response.pagination?.has_next_page}
+                className={response.total > (response.skip + response.limit) ? "" : "disabled"}
+                disabled={!(response.total > (response.skip + response.limit))}
                 onClick={onNextPage} >
                 Nästa &gt;
             </button>
         </div>
         {ac.showSearchList ?
-            <AnimeList animes={response.data} search={true} /> :
-            <Cards animes={response.data} search={true} />}
+            <AnimeList products={response.products} search={true} /> :
+            <Cards products={response.products} search={true} />}
     </>);
 }

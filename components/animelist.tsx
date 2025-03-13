@@ -2,64 +2,35 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { MyAnime } from "@/lib/interfaces";
-import { useAnimeContext } from "./animecontext";
-import MyRating from "./myrating";
+import { useProductContext } from "./animecontext";
 import LinkNP from "./linknp";
+import { Product } from "@/lib/interfaces";
 
 interface AnimeListProps {
-    animes: MyAnime[];
+    products: Product[];
     search: boolean; // true for searchPage, false for Page (saved animes).
 }
-type TableColumn = "" | "title" | "score" | "myRating" | "watched";
+type TableColumn = "" | "title";
 
-export function AnimeList({ animes, search = false }: AnimeListProps) {
-    const ac = useAnimeContext();
+export function AnimeList({ products, search = false }: AnimeListProps) {
     const [lastSort, setLastSort] = useState<TableColumn>("");
-    const [sortedAnimes, setSortedAnimes] = useState(animes);
+    const [sortedAnimes, setSortedAnimes] = useState(products);
 
     useEffect(() => {
-        setSortedAnimes(animes);
-    }, [animes]);
+        setSortedAnimes(products);
+    }, [products]);
 
     const onSort = (column: TableColumn) => {
         switch (column) {
             case "title":
                 if (lastSort === "title") {
                     setSortedAnimes(sortedAnimes.sort((a, b) =>
-                        b.title_english.localeCompare(a.title_english)));
+                        b.title.localeCompare(a.title)));
                     setLastSort("");
                 } else {
                     setSortedAnimes(sortedAnimes.sort((a, b) =>
-                        a.title_english.localeCompare(b.title_english)));
+                        a.title.localeCompare(b.title)));
                     setLastSort("title");
-                }
-                break;
-            case "score":
-                if (lastSort === "score") {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => a.score - b.score));
-                    setLastSort("");
-                } else {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => b.score - a.score));
-                    setLastSort("score");
-                }
-                break;
-            case "myRating":
-                if (lastSort === "myRating") {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => a.myRating - b.myRating));
-                    setLastSort("");
-                } else {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => b.myRating - a.myRating));
-                    setLastSort("myRating");
-                }
-                break;
-            case "watched":
-                if (lastSort === "watched") {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => +a.watched - +b.watched));
-                    setLastSort("");
-                } else {
-                    setSortedAnimes(sortedAnimes.sort((a, b) => +b.watched - +a.watched));
-                    setLastSort("watched");
                 }
                 break;
         }
@@ -71,19 +42,13 @@ export function AnimeList({ animes, search = false }: AnimeListProps) {
                 <thead>
                     <tr>
                         <th></th>
-                        {!search && <th className="px2"><Link href={"#"}
-                            onClick={() => onSort("watched")}>Sedd</Link></th>}
-                        <th className="px2"><Link href={"#"}
-                            onClick={() => onSort("score")}>Poäng</Link></th>
-                        {!search && <th className="px2"><Link href={"#"}
-                            onClick={() => onSort("myRating")}>Betyg</Link></th>}
                         <th className="px2 tal"><Link href={"#"}
                             onClick={() => onSort("title")}>Titel</Link></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {animes.map((a, i) => !(ac.hideWatched && a.watched) &&
-                        <AnimeRow key={i} anime={a} search={search} />)}
+                    {products.map((a, i) =>
+                        <AnimeRow key={i} products={a} search={search} />)}
                 </tbody>
             </table>
         </section>
@@ -91,32 +56,24 @@ export function AnimeList({ animes, search = false }: AnimeListProps) {
 }
 
 interface AnimeRowProps {
-    anime: MyAnime;
+    products: Product;
     search: boolean;
 }
 
-export function AnimeRow({ anime, search }: AnimeRowProps) {
-    const ac = useAnimeContext();
+export function AnimeRow({ products, search }: AnimeRowProps) {
+    const ac = useProductContext();
 
     return (
         <tr>
             <td><button
-                onClick={() => anime.saved ?
-                    ac.removeAnime(anime.mal_id) : ac.addAnime(anime)}
-                className={(search && anime.saved) ? "disabled btn" : "btn"}
-                disabled={search && anime.saved}>
+                onClick={() => products.saved ?
+                    ac.removeProduct(products.id) : ac.addProduct(products)}
+                className={(search && products.saved) ? "disabled btn" : "btn"}
+                disabled={search && products.saved}>
                 {search ? "Spara" : "Ta bort"}
             </button></td>
-            {!search && <td className="tac">
-                <input
-                    type='checkbox'
-                    checked={anime.watched}
-                    onChange={() => ac.updateAnime(anime.mal_id, { watched: !anime.watched })} />
-            </td>}
-            <td className="px2 tac"><div>{anime.score.toFixed(1)}</div></td>
-            {!search && <td className="px2">{anime.saved && <MyRating anime={anime}></MyRating>}</td>}
-            <td className="px2"><div><LinkNP href={"anime/" + anime.mal_id}>
-                {anime.title_english}
+            <td className="px2"><div><LinkNP href={"anime/" + products.id}>
+                {products.title}
             </LinkNP></div></td>
         </tr>
     );

@@ -5,3 +5,8 @@ export function toPascalCase(str: string) {
     return s;
 }
 
+export async function fetchJSON(url: string) {
+    const res = await fetch(url);
+    const json = await res.json();
+    return json;
+}

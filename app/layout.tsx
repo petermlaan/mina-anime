@@ -9,7 +9,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import { AnimeProvider } from "@/components/animecontext";
+import { ProductProvider } from "@/components/animecontext";
 import LinkNP from "@/components/linknp";
 
 const geistSans = Geist({
@@ -42,7 +42,7 @@ export default function RootLayout({
           <header className="border-b-2 border-(--clr-main2)">
             <div className="sm:pl-4 w-fit">
               <LinkNP href="/">
-                <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Mina Anime</h1>
+                <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Acme Inc</h1>
               </LinkNP>
             </div>
             <nav>
@@ -61,9 +61,9 @@ export default function RootLayout({
               </SignedIn>
             </div>
           </header>
-          <AnimeProvider>
+          <ProductProvider>
             {children}
-          </AnimeProvider>
+          </ProductProvider>
         </ClerkProvider>
       </body>
     </html>

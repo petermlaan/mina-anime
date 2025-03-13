@@ -1,42 +1,26 @@
 import SuperJSON from "superjson";
-import { Anime, AnimeClient, AnimeSearchParams, JikanRelation, JikanResponse, Recommendation } from "@tutkli/jikan-ts";
-import { MyAnime } from "../interfaces";
+import { Product, SearchResult } from "../interfaces";
 import { DEBOUNCE_DB_DELAY } from "../constants";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
+import { fetchJSON } from "../util";
 
-const jikanAPI = new AnimeClient({ enableLogging: true });
-
-export async function getAnime(id: number, myAnimes: MyAnime[]): Promise<MyAnime> {
-    let a = myAnimes.find(a => a.mal_id === id) ?? null;
+export async function getProduct(id: number, myProducts: Product[]): Promise<Product> {
+    let a = myProducts.find(a => a.id === id) ?? null;
     if (!a)
-        a = toMyAnime((await jikanAPI.getAnimeById(id)).data);
+        a = await fetchJSON("https://dummyjson.com/products/" + id) as Product;
     return a;
 }
 
-export async function getAnimeRecommendations(id: number): Promise<JikanResponse<Recommendation[]>> {
-    const res = await jikanAPI.getAnimeRecommendations(id);
-    return res;
+export async function searchAnime(query: string): Promise<SearchResult> {
+    const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query) as SearchResult;
+    return json;
 }
 
-export async function getAnimeRelations(id: number): Promise<JikanResponse<JikanRelation[]>> {
-    const res = await jikanAPI.getAnimeRelations(id);
-    return res;
-}
-
-export async function searchAnime(searchparams: AnimeSearchParams): Promise<JikanResponse<MyAnime[]>> {
-    const res = (await jikanAPI.getAnimeSearch(searchparams));
-    const myres: JikanResponse<MyAnime[]> = {
-        pagination: res.pagination, 
-        data: res.data.map(a => toMyAnime(a))
-    };
-    return myres;
-}
-
-export async function getList(): Promise<MyAnime[]> {
+export async function getList(): Promise<Product[]> {
     return await getAnimesSA() ?? [];
 }
 
-export function saveList(animes: MyAnime[]) {
+export function saveList(animes: Product[]) {
     saveAnimesToDB(animes);
 }
 
@@ -44,7 +28,7 @@ export function saveList(animes: MyAnime[]) {
 let debounceDBTimeout = -1;
 const abortctrl = new AbortController();
 
-function saveAnimesToDB(animes: MyAnime[]) {
+function saveAnimesToDB(animes: Product[]) {
     if (!window) {
         console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.")
         saveAnimesSA(animes);
@@ -92,7 +76,7 @@ export function debounce(delay: number, fn: () => void) {
     }, delay);
 }
 
-function toMyAnime(anime: Anime): MyAnime {
+/* function toMyAnime(anime: Anime): MyAnime {
     const myAnime: MyAnime = {
         // New properties
         myRating: 0,
@@ -131,4 +115,4 @@ function toMyAnime(anime: Anime): MyAnime {
             "/favicon.jpg",
     };
     return myAnime;
-}
+} */
