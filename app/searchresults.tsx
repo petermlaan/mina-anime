@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { Cards } from "@/components/cards";
 import { SearchResult } from "@/lib/interfaces";
-import { getProductsByCategory, searchAnime } from "@/lib/client/clientutil";
+import { getProductsByCategory, searchAnime as searchProduct } from "@/lib/client/clientutil";
 import { AnimeList } from "@/components/animelist";
 import { useProductContext } from "@/components/acmecontext";
 
@@ -17,8 +17,9 @@ export default function SearchResults() {
     const ac = useProductContext();
 
     useEffect(() => {
+        console.log("SearchResults: ", q, category);
         if (!category || q) {
-            searchAnime(q).then(res => {
+            searchProduct(q).then(res => {
                 console.log("SearchResults - res: ", res);
                 console.log("SearchResults - myProducts: ", ac.myProducts);
                 res.products.forEach(a => a.amount = ac.myProducts.find(s => s.id === a.id)?.amount ?? 0);
@@ -28,6 +29,7 @@ export default function SearchResults() {
             })
         } else {
             getProductsByCategory(category).then(res => {
+                res.products.forEach(a => a.amount = ac.myProducts.find(s => s.id === a.id)?.amount ?? 0);
                 setResponse(res);
             })
         }

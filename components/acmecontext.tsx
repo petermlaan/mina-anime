@@ -63,14 +63,18 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const changeAmount = (product: Product, amount: number) => {
     console.log("changeAmount: ", product, amount);
     let list = [...myProducts];
-    let prod: Product | undefined = undefined;
-    if (prod = myProducts.find(p => p.id === product.id)) {
+    let cartprod: Product | undefined = undefined;
+    if (cartprod = myProducts.find(p => p.id === product.id)) {
+      console.log("cart prod found");
       if (amount > 0)
-        prod.amount = amount;
+        cartprod.amount = amount;
       else
-        list = myProducts.filter(p => p.id !== prod?.id);
-    } else if (amount > 0)
+        list = myProducts.filter(p => p.id !== cartprod?.id);
+    } else if (amount > 0) {
+      console.log("cart prod not found");
+      product.amount = amount;
       list = [product, ...myProducts];
+    }
     setMyProducts(list);
     saveList(list);
   };
