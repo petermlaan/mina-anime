@@ -17,5 +17,6 @@ export async function getAnimesSA(): Promise<Product[] | null> {
     const animes = await dbLoadAnimes(userId);
     if (!animes)
         return null;
+    console.log("getAnimesSA: ", animes.length);
     return animes;
 }

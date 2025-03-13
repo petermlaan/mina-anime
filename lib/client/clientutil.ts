@@ -6,13 +6,29 @@ import { fetchJSON } from "../util";
 
 export async function getProduct(id: number, myProducts: Product[]): Promise<Product> {
     let a = myProducts.find(a => a.id === id) ?? null;
-    if (!a)
+    if (!a) {
         a = await fetchJSON("https://dummyjson.com/products/" + id) as Product;
+        a.amount = 0;
+    }
+    console.log("getProduct: ", a);
+    
     return a;
+}
+
+export async function getProductsByCategory(category: string): Promise<SearchResult> {
+    const json = await fetchJSON("https://dummyjson.com/products/category/" + category) as SearchResult;
+    json.products.forEach(p => p.amount = 0);
+    return json;
 }
 
 export async function searchAnime(query: string): Promise<SearchResult> {
     const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query) as SearchResult;
+    json.products.forEach(p => p.amount = 0);
+    return json;
+}
+
+export async function getCategoryList(): Promise<string[]> {
+    const json = await fetchJSON("https://dummyjson.com/products/category-list") as string[];
     return json;
 }
 

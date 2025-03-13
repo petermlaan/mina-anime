@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useProductContext } from "./animecontext";
+import { useProductContext } from "./acmecontext";
 import LinkNP from "./linknp";
 import { Product } from "@/lib/interfaces";
 
@@ -48,32 +48,28 @@ export function AnimeList({ products, search = false }: AnimeListProps) {
                 </thead>
                 <tbody>
                     {products.map((a, i) =>
-                        <AnimeRow key={i} products={a} search={search} />)}
+                        <ProductRow key={i} product={a} search={search} />)}
                 </tbody>
             </table>
         </section>
     );
 }
 
-interface AnimeRowProps {
-    products: Product;
+interface ProductRowProps {
+    product: Product;
     search: boolean;
 }
 
-export function AnimeRow({ products, search }: AnimeRowProps) {
+export function ProductRow({ product, search }: ProductRowProps) {
     const ac = useProductContext();
-
+    
     return (
         <tr>
-            <td><button
-                onClick={() => products.saved ?
-                    ac.removeProduct(products.id) : ac.addProduct(products)}
-                className={(search && products.saved) ? "disabled btn" : "btn"}
-                disabled={search && products.saved}>
-                {search ? "Spara" : "Ta bort"}
-            </button></td>
-            <td className="px2"><div><LinkNP href={"anime/" + products.id}>
-                {products.title}
+            <td><input type="number" min="0" value={product.amount}
+                onChange={(e) => ac.changeAmount(product, +e.target.value)}/>
+            </td>
+            <td className="px2"><div><LinkNP href={"anime/" + product.id}>
+                {product.title + search}
             </LinkNP></div></td>
         </tr>
     );

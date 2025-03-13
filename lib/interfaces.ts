@@ -7,7 +7,7 @@ export interface SearchResult {
 
 export interface Product {
     // New properties
-    saved: boolean;
+    amount: number;
 
     id: number;
     title: string;

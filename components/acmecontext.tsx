@@ -7,18 +7,16 @@ import { Product } from '@/lib/interfaces';
 
 interface ProductContextType {
   myProducts: Product[];
-  addProduct: (anime: Product) => void;
-  updateProduct: (id: number, updates: Partial<Product>) => void;
-  removeProduct: (id: number) => void;
+  changeAmount: (product: Product, amount: number) => void;
   showSearchList: boolean;
   setShowSearchList: (showList: boolean) => void;
   showSavedList: boolean;
   setShowSavedList: (showList: boolean) => void;
 };
 
-interface LS { 
-  showSearchList: boolean, 
-  showSavedList: boolean, 
+interface LS {
+  showSearchList: boolean,
+  showSavedList: boolean,
 };
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -29,7 +27,11 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const [showSavedList, setStateShowSavedList] = useState(false);
 
   useEffect(() => {
-    getList().then((saved) => setMyProducts(saved));
+    console.count("ProductProvider");
+    getList().then(list => {
+      console.log("ProductProvider: ", list);
+      setMyProducts(list);
+    });
     const ls = localStorage.getItem("Products");
     if (ls) {
       const lso: LS = SuperJSON.parse(ls);
@@ -57,33 +59,38 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const storeInLS = (lso: LS) => {
     localStorage.setItem("Products", SuperJSON.stringify(lso));
   }
+
+  const changeAmount = (product: Product, amount: number) => {
+    console.log("changeAmount: ", product, amount);
+    let list = [...myProducts];
+    let prod: Product | undefined = undefined;
+    if (prod = myProducts.find(p => p.id === product.id)) {
+      if (amount > 0)
+        prod.amount = amount;
+      else
+        list = myProducts.filter(p => p.id !== prod?.id);
+    } else if (amount > 0)
+      list = [product, ...myProducts];
+    setMyProducts(list);
+    saveList(list);
+  };
+
+  /*  const updateProduct = (id: number, updates: Partial<Product>) => {
+      const list = myProducts.map(product => product.id === id ? { ...product, ...updates } : product);
+      setMyProducts(list);
+      saveList(list);
+    };
   
-  const addProduct = (product: Product) => {
-    if (myProducts.find(p => p.id === product.id))
-      return;
-    product.saved = true;
-    const list = [product, ...myProducts];
-    setMyProducts(list)
-    saveList(list);
-  };
-
-  const updateProduct = (id: number, updates: Partial<Product>) => {
-    const list = myProducts.map(product => product.id === id ? { ...product, ...updates } : product);
-    setMyProducts(list);
-    saveList(list);
-  };
-
-  const removeProduct = (id: number) => {
-    console.log("removeAnime", id);
-    const list = myProducts.filter(product => product.id !== id);
-    setMyProducts(list);
-    saveList(list);
-  };
+    const removeProduct = (id: number) => {
+      console.log("removeAnime", id);
+      const list = myProducts.filter(product => product.id !== id);
+      setMyProducts(list);
+      saveList(list);
+    };*/
 
   return (
     <ProductContext.Provider value={{
-      myProducts,
-      addProduct, updateProduct, removeProduct,
+      myProducts, changeAmount,
       showSearchList, setShowSearchList,
       showSavedList, setShowSavedList,
     }}>

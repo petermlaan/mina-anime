@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
-import { useProductContext } from "./animecontext";
+import { useProductContext } from "./acmecontext";
 import LinkNP from "./linknp";
 import { Product } from "@/lib/interfaces";
 
@@ -28,22 +28,17 @@ interface CardProps {
 
 export function Card({ product, search }: CardProps) {
     const ac = useProductContext();
-
+    
     return (
         <article className="grid grid-rows-[subgrid] row-span-4 gap-2 bg-[--clr-main1] border border-[--clr-main3] rounded-2xl p-2 hover:outline hover:outline-[--clr-main3]">
             <div className="flex justify-between">
-                <button
-                    onClick={() => product.saved ?
-                        ac.removeProduct(product.id) :
-                        ac.addProduct(product)}
-                    className={(search && product.saved) ? "disabled btn" : "btn"}
-                    disabled={search && product.saved}>
-                    {search ? "Spara" : "Ta bort"}
-                </button>
+                <input type="number" min="0" value={product.amount}
+                    onChange={(e) => ac.changeAmount(product, +e.target.value)}>
+                </input>
             </div>
             <div className="text-2xl text-balance">
                 <LinkNP href={"anime/" + product.id}>
-                    <span>{product.title}</span>
+                    <span>{product.title + search}</span>
                 </LinkNP>
             </div>
             <LinkNP href={"anime/" + product.id}>

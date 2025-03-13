@@ -4,26 +4,34 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { Cards } from "@/components/cards";
 import { SearchResult } from "@/lib/interfaces";
-import { searchAnime } from "@/lib/client/clientutil";
+import { getProductsByCategory, searchAnime } from "@/lib/client/clientutil";
 import { AnimeList } from "@/components/animelist";
-import { useProductContext } from "@/components/animecontext";
+import { useProductContext } from "@/components/acmecontext";
 
-export default function AnimeResults() {
+export default function SearchResults() {
     const searchParams = useSearchParams();
     const q = searchParams.get('q') || "";
-    //const type = searchParams.get('type') as string | undefined;
+    const category = searchParams.get('type') as string | undefined;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
-
+    const [response, setResponse] = useState<SearchResult | null>(null);
     const ac = useProductContext();
 
-    const [response, setResponse] = useState<SearchResult | null>(null);
-
     useEffect(() => {
-        searchAnime(q).then(res => {
-            res.products.forEach(a => a.saved = ac.myProducts.find(s => s.id === a.id)?.saved ?? false);
-            setResponse(res);
-        });
-    }, [q, page]);
+        if (!category || q) {
+            searchAnime(q).then(res => {
+                console.log("SearchResults - res: ", res);
+                console.log("SearchResults - myProducts: ", ac.myProducts);
+                res.products.forEach(a => a.amount = ac.myProducts.find(s => s.id === a.id)?.amount ?? 0);
+                if (category)
+                    res.products = res.products.filter(p => p.category === category);
+                setResponse(res);
+            })
+        } else {
+            getProductsByCategory(category).then(res => {
+                setResponse(res);
+            })
+        }
+    }, [q, category, ac.myProducts]);
 
     const onPrevPage = () => {
         if (page > 1) {

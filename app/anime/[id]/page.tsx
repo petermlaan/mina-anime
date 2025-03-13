@@ -4,7 +4,7 @@ import React, { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useProductContext } from "@/components/animecontext";
+import { useProductContext } from "@/components/acmecontext";
 import { getProduct } from "@/lib/client/clientutil";
 import { Product } from "@/lib/interfaces";
 
@@ -23,15 +23,6 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
     }).catch((err) => setError(err));
   }, [id, ac.myProducts]);
 
-  const onAddRemove = () => {
-    if (product) {
-      if (product.saved)
-        ac.removeProduct(id)
-      else
-        ac.addProduct(product);
-    }
-  }
-
   if (error)
     throw error;
 
@@ -45,7 +36,8 @@ export default function AnimePage({ params }: { params: Promise<{ id: number }> 
       <div className="flex flex-col gap-2">
         <div className="flex gap-2 h-8 items-center justify-between">
           <button onClick={router.back}>Stäng</button>
-          <button onClick={onAddRemove}>{product.saved ? "Ta bort" : "Spara"}</button>
+          <input type="number" min="0" value={product.amount} 
+            onChange={(e) => ac.changeAmount(product, +e.target.value)} />
         </div>
         <Link href={product.images[0]}>
           <Image

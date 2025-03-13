@@ -9,7 +9,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import { ProductProvider } from "@/components/animecontext";
+import { ProductProvider } from "@/components/acmecontext";
 import LinkNP from "@/components/linknp";
 
 const geistSans = Geist({
@@ -47,8 +47,8 @@ export default function RootLayout({
             </div>
             <nav>
               <ul>
-                <li><LinkNP href="/search">SÖK</LinkNP></li>
-                <li><LinkNP href="/">SPARADE</LinkNP></li>
+                <li><LinkNP href="/">PRODUCTS</LinkNP></li>
+                <li><LinkNP href="/cart">CART</LinkNP></li>
               </ul>
             </nav>
             <div className="user">

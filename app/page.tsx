@@ -1,16 +1,20 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
-import { SavedAnimes } from "@/app/savedanimes";
+import SearchForm from "./searchform";
+import SearchResults from "./searchresults";
 
 export const metadata: Metadata = {
-  title: "Mina Anime"
+  title: "Mina Anime - Sök"
 };
 
-export default async function Page() {
+export default function SearchPage() {
   return (
     <main className="grid gap-4">
-      <Suspense fallback="Laddar listan...">
-        <SavedAnimes />
+      <Suspense fallback={<div>Laddar sökformuläret...</div>}>
+        <SearchForm />
+      </Suspense>
+      <Suspense fallback={<div>Laddar sidan...</div>}>
+        <SearchResults />
       </Suspense>
     </main>
   );

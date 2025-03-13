@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { Cards } from '../components/cards';
-import { useProductContext } from "@/components/animecontext";
+import { Cards } from '@/components/cards';
+import { useProductContext } from "@/components/acmecontext";
 import { AnimeList } from "@/components/animelist";
 
-export function SavedAnimes() {
+export function CartProducts() {
     const ac = useProductContext();
 
     return (<>
