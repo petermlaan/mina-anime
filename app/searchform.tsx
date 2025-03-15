@@ -1,20 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import Form from "next/form";
 import { useSearchParams } from 'next/navigation';
-import { getCategoryList } from "@/lib/client/clientutil";
 import { toPascalCase } from "@/lib/util";
 
-export default function SearchForm() {
+export default function SearchForm({categories} : {categories: string[]}) {
   const searchParams = useSearchParams();
   const q = searchParams.get('q') || undefined;
   const type = searchParams.get('type') as string | undefined;
-  const [categories, setCategories] = useState<string[]>([]);
-
-  useEffect(() => {
-    getCategoryList().then(res => setCategories(res));
-  }, [])
 
   return (
     <Form action={"/"} className="flex flex-wrap justify-center gap-4">

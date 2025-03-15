@@ -5,8 +5,9 @@ export function toPascalCase(str: string) {
     return s;
 }
 
-export async function fetchJSON(url: string) {
-    const res = await fetch(url);
+export async function fetchJSON(url: string, cache: boolean = false) {
+    console.log("fetchJSON: ", url, cache);
+    const res = await fetch(url, { next: { revalidate: cache ? 3600 : 0 } });
     const json = await res.json();
     return json;
 }

@@ -6,29 +6,29 @@ import { useProductContext } from "./acmecontext";
 import LinkNP from "./linknp";
 import { Product } from "@/lib/interfaces";
 
-interface AnimeListProps {
+interface ProductListProps {
     products: Product[];
     search: boolean; // true for searchPage, false for Page (saved animes).
 }
 type TableColumn = "" | "title";
 
-export function AnimeList({ products, search = false }: AnimeListProps) {
+export function ProductList({ products, search = false }: ProductListProps) {
     const [lastSort, setLastSort] = useState<TableColumn>("");
-    const [sortedAnimes, setSortedAnimes] = useState(products);
+    const [sortedProducts, setSortedProducts] = useState(products);
 
     useEffect(() => {
-        setSortedAnimes(products);
+        setSortedProducts(products);
     }, [products]);
 
     const onSort = (column: TableColumn) => {
         switch (column) {
             case "title":
                 if (lastSort === "title") {
-                    setSortedAnimes(sortedAnimes.sort((a, b) =>
+                    setSortedProducts(sortedProducts.sort((a, b) =>
                         b.title.localeCompare(a.title)));
                     setLastSort("");
                 } else {
-                    setSortedAnimes(sortedAnimes.sort((a, b) =>
+                    setSortedProducts(sortedProducts.sort((a, b) =>
                         a.title.localeCompare(b.title)));
                     setLastSort("title");
                 }

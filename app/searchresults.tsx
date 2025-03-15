@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Cards } from "@/components/cards";
 import { SearchResult } from "@/lib/interfaces";
 import { getProductsByCategory, searchAnime as searchProduct } from "@/lib/client/clientutil";
-import { AnimeList } from "@/components/animelist";
+import { ProductList } from "@/components/productlist";
 import { useProductContext } from "@/components/acmecontext";
 
 export default function SearchResults() {
@@ -76,7 +76,7 @@ export default function SearchResults() {
             </button>
         </div>
         {ac.showSearchList ?
-            <AnimeList products={response.products} search={true} /> :
+            <ProductList products={response.products} search={true} /> :
             <Cards products={response.products} search={true} />}
     </>);
 }

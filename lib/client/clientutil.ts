@@ -28,7 +28,7 @@ export async function searchAnime(query: string): Promise<SearchResult> {
 }
 
 export async function getCategoryList(): Promise<string[]> {
-    const json = await fetchJSON("https://dummyjson.com/products/category-list") as string[];
+    const json = await fetchJSON("https://dummyjson.com/products/category-list", true) as string[];
     return json;
 }
 

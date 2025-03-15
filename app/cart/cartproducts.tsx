@@ -3,7 +3,7 @@
 import React from "react";
 import { Cards } from '@/components/cards';
 import { useProductContext } from "@/components/acmecontext";
-import { AnimeList } from "@/components/animelist";
+import { ProductList } from "@/components/productlist";
 
 export function CartProducts() {
     const ac = useProductContext();
@@ -17,7 +17,7 @@ export function CartProducts() {
             </label>
         </div>
         {ac.showSavedList ?
-            <AnimeList products={ac.myProducts} search={false} /> :
+            <ProductList products={ac.myProducts} search={false} /> :
             <Cards products={ac.myProducts} search={false} />}
     </>);
 }
