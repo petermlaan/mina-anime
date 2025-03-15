@@ -21,7 +21,7 @@ export async function getProductsByCategory(category: string): Promise<SearchRes
     return json;
 }
 
-export async function searchAnime(query: string): Promise<SearchResult> {
+export async function searchProducts(query: string): Promise<SearchResult> {
     const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query) as SearchResult;
     json.products.forEach(p => p.amount = 0);
     return json;

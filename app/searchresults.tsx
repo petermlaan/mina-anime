@@ -3,37 +3,20 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { Cards } from "@/components/cards";
-import { SearchResult } from "@/lib/interfaces";
-import { getProductsByCategory, searchAnime as searchProduct } from "@/lib/client/clientutil";
+import { Product, SearchResult } from "@/lib/interfaces";
 import { ProductList } from "@/components/productlist";
 import { useProductContext } from "@/components/acmecontext";
 
-export default function SearchResults() {
+export default function SearchResults({ searchResult }: { searchResult: SearchResult }) {
     const searchParams = useSearchParams();
-    const q = searchParams.get('q') || "";
-    const category = searchParams.get('type') as string | undefined;
     const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
-    const [response, setResponse] = useState<SearchResult | null>(null);
+    const [products, setProducts] = useState<Product[] | null>(null);
     const ac = useProductContext();
 
     useEffect(() => {
-        console.log("SearchResults: ", q, category);
-        if (!category || q) {
-            searchProduct(q).then(res => {
-                console.log("SearchResults - res: ", res);
-                console.log("SearchResults - myProducts: ", ac.myProducts);
-                res.products.forEach(a => a.amount = ac.myProducts.find(s => s.id === a.id)?.amount ?? 0);
-                if (category)
-                    res.products = res.products.filter(p => p.category === category);
-                setResponse(res);
-            })
-        } else {
-            getProductsByCategory(category).then(res => {
-                res.products.forEach(a => a.amount = ac.myProducts.find(s => s.id === a.id)?.amount ?? 0);
-                setResponse(res);
-            })
-        }
-    }, [q, category, ac.myProducts]);
+        // Set amounts for products in the cart
+        setProducts(searchResult.products.map(p => {return {...p, amount: ac.myProducts.find(s => s.id === p.id)?.amount ?? 0};}));
+    }, [searchResult, ac.myProducts]);
 
     const onPrevPage = () => {
         if (page > 1) {
@@ -51,9 +34,8 @@ export default function SearchResults() {
         //router.push(`/search?${params.toString()}`);
     };
 
-    if (!response?.products) {
-        return <div className="grid justify-center mt-14 text-4xl">Söker...</div>;
-    }
+    if (!products)
+        return <>Söker...</>;
 
     return (<>
         <div className="flex justify-center items-center gap-8">
@@ -69,14 +51,14 @@ export default function SearchResults() {
                     onChange={() => ac.setShowSearchList(!ac.showSearchList)} />
             </label>
             <button type="button"
-                className={response.total > (response.skip + response.limit) ? "" : "disabled"}
-                disabled={!(response.total > (response.skip + response.limit))}
+                className={searchResult.total > (searchResult.skip + searchResult.limit) ? "" : "disabled"}
+                disabled={!(searchResult.total > (searchResult.skip + searchResult.limit))}
                 onClick={onNextPage} >
                 Nästa &gt;
             </button>
         </div>
         {ac.showSearchList ?
-            <ProductList products={response.products} search={true} /> :
-            <Cards products={response.products} search={true} />}
+            <ProductList products={products} search={true} /> :
+            <Cards products={products} search={true} />}
     </>);
 }
