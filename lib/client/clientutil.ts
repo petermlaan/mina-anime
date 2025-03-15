@@ -1,5 +1,5 @@
 import SuperJSON from "superjson";
-import { Product, SearchResult } from "../interfaces";
+import { Product, APISearchResult } from "../interfaces";
 import { DEBOUNCE_DB_DELAY } from "../constants";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { fetchJSON } from "../util";
@@ -15,14 +15,14 @@ export async function getProduct(id: number, myProducts: Product[]): Promise<Pro
     return a;
 }
 
-export async function getProductsByCategory(category: string): Promise<SearchResult> {
-    const json = await fetchJSON("https://dummyjson.com/products/category/" + category) as SearchResult;
+export async function getProductsByCategory(category: string): Promise<APISearchResult> {
+    const json = await fetchJSON("https://dummyjson.com/products/category/" + category) as APISearchResult;
     json.products.forEach(p => p.amount = 0);
     return json;
 }
 
-export async function searchProducts(query: string): Promise<SearchResult> {
-    const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query) as SearchResult;
+export async function searchProducts(query: string, page: number = 1): Promise<APISearchResult> {
+    const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query + "&skip=" + (page-1)*30) as APISearchResult;
     json.products.forEach(p => p.amount = 0);
     return json;
 }

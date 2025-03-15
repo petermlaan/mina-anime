@@ -1,8 +1,13 @@
-export interface SearchResult {
+export interface APISearchResult {
     products: Product[];
     total: number;
     skip: number;
     limit: number;
+};
+
+export interface SearchResult {
+    products: Product[];
+    maxpage: number;
 };
 
 export interface Product {

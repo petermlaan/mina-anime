@@ -4,7 +4,7 @@ import Form from "next/form";
 import SearchResults from "./searchresults";
 import { getCategoryList, getProductsByCategory, searchProducts } from "@/lib/client/clientutil";
 import { toPascalCase } from "@/lib/util";
-import { SearchResult } from "@/lib/interfaces";
+import { APISearchResult, SearchResult } from "@/lib/interfaces";
 
 export const metadata: Metadata = {
   title: "Sök - Acme Inc"
@@ -15,20 +15,22 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const sp = await searchParams;
   const q = (sp.q ?? "") as string;
   const category = (sp.cat ?? "") as string;
+  const page = +(sp.page ?? "1");
 
-  let searchResult: SearchResult | undefined = undefined;
+  let searchResult: APISearchResult | undefined = undefined;
 
   if (!category || q) {
-    searchResult = await searchProducts(q);
-    console.log("SearchPage query: ", searchResult?.products?.length);
+    searchResult = await searchProducts(q, page);
     if (category) {
       searchResult!.products = searchResult.products.filter(p => p.category === category);
-      console.log("SearchPage filter: ", searchResult?.products?.length);
     }
   } else {
     searchResult = await getProductsByCategory(category);
-    console.log("SearchPage category: ", searchResult?.products?.length);
   }
+  const sr: SearchResult = {
+    products: searchResult.products,
+    maxpage: Math.floor(searchResult.total / 30) + 1
+  };
 
   return (
     <main className="grid gap-4">
@@ -46,7 +48,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       </Form>
 
       <Suspense fallback={<div>Laddar sidan...</div>}>
-        <SearchResults searchResult={searchResult} />
+        <SearchResults searchResult={sr} />
       </Suspense>
     </main>
   );
