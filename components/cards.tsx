@@ -1,5 +1,5 @@
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import Amount from "./amount";
 import LinkNP from "./linknp";
 import { Product } from "@/lib/interfaces";
@@ -24,7 +24,8 @@ interface CardProps {
 
 export function Card({ product }: CardProps) {
     return (
-        <article className="grid grid-rows-[subgrid] row-span-4 gap-2 bg-[--clr-main1] border border-[--clr-main3] rounded-2xl p-2 hover:outline hover:outline-[--clr-main3]">
+        <article className="grid grid-rows-[subgrid] row-span-4 gap-2 bg-[--clr-main1] border 
+            border-[--clr-main3] rounded-2xl p-2 hover:outline hover:outline-[--clr-main3]">
             <Amount product={product} />
             <div className="text-2xl text-balance">
                 <LinkNP href={"product/" + product.id}>

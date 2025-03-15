@@ -8,8 +8,8 @@ export default function Amount({ product }: {product: Product}) {
     const [prod, setProd] = useState(product);
 
     useEffect(() => {
-        product.amount = ac.myProducts.find(p => p.id === product.id)?.amount ?? 0;
-        setProd({...product});
+        const amount = ac.myProducts.find(p => p.id === product.id)?.amount ?? 0;
+        setProd({...product, amount: amount});
     }, [product, ac.myProducts])
 
     return (

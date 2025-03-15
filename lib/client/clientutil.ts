@@ -5,7 +5,7 @@ import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { fetchJSON } from "../util";
 
 export async function getProduct(id: number): Promise<Product> {
-    const a = await fetchJSON("https://dummyjson.com/products/" + id) as Product;
+    const a = await fetchJSON("https://dummyjson.com/products/" + id, true) as Product;
     a.amount = 0;
     return a;
 }

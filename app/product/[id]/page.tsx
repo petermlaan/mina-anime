@@ -1,14 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
 import { getProduct } from "@/lib/client/clientutil";
 import Amount from "@/components/amount";
 import BackBtn from "@/components/backbtn";
 
+export async function generateMetadata({ params }: {params: Promise<{id: number}> }): Promise<Metadata> {
+  const id = (await params).id;
+  const product = await getProduct(id);
+  return { title: product.title + " - Acme Inc"};
+}
+
 export default async function AnimePage( { params }: {params: Promise<{id: number}> } ) {
   const id = (await params).id;
   const product = await getProduct(id);
-
-  //document.title = product.title + " - Mina Anime";
 
   return (
     <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
