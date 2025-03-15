@@ -79,19 +79,6 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     saveList(list);
   };
 
-  /*  const updateProduct = (id: number, updates: Partial<Product>) => {
-      const list = myProducts.map(product => product.id === id ? { ...product, ...updates } : product);
-      setMyProducts(list);
-      saveList(list);
-    };
-  
-    const removeProduct = (id: number) => {
-      console.log("removeAnime", id);
-      const list = myProducts.filter(product => product.id !== id);
-      setMyProducts(list);
-      saveList(list);
-    };*/
-
   return (
     <ProductContext.Provider value={{
       myProducts, changeAmount,

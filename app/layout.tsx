@@ -24,7 +24,7 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Mina Anime",
+  title: "Acme Inc",
   icons: {
     icon: "/favicon.jpg",
   },

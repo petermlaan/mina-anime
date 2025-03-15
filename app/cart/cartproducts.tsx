@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { Cards } from '@/components/cards';
 import { useProductContext } from "@/components/acmecontext";
@@ -17,7 +16,7 @@ export function CartProducts() {
             </label>
         </div>
         {ac.showSavedList ?
-            <ProductList products={ac.myProducts} search={false} /> :
-            <Cards products={ac.myProducts} search={false} />}
+            <ProductList products={ac.myProducts} /> :
+            <Cards products={ac.myProducts} />}
     </>);
 }

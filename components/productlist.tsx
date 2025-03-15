@@ -1,18 +1,16 @@
 "use client";
-
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useProductContext } from "./acmecontext";
+import Amount from "./amount";
 import LinkNP from "./linknp";
 import { Product } from "@/lib/interfaces";
 
 interface ProductListProps {
     products: Product[];
-    search: boolean; // true for searchPage, false for Page (saved animes).
 }
 type TableColumn = "" | "title";
 
-export function ProductList({ products, search = false }: ProductListProps) {
+export function ProductList({ products }: ProductListProps) {
     const [lastSort, setLastSort] = useState<TableColumn>("");
     const [sortedProducts, setSortedProducts] = useState(products);
 
@@ -48,7 +46,7 @@ export function ProductList({ products, search = false }: ProductListProps) {
                 </thead>
                 <tbody>
                     {products.map((a, i) =>
-                        <ProductRow key={i} product={a} search={search} />)}
+                        <ProductRow key={i} product={a} />)}
                 </tbody>
             </table>
         </section>
@@ -57,19 +55,16 @@ export function ProductList({ products, search = false }: ProductListProps) {
 
 interface ProductRowProps {
     product: Product;
-    search: boolean;
 }
 
-export function ProductRow({ product, search }: ProductRowProps) {
-    const ac = useProductContext();
-    
+export function ProductRow({ product }: ProductRowProps) {
     return (
         <tr>
-            <td><input type="number" min="0" value={product.amount}
-                onChange={(e) => ac.changeAmount(product, +e.target.value)}/>
+            <td>
+                <Amount product={product} />
             </td>
             <td className="px2"><div><LinkNP href={"product/" + product.id}>
-                {product.title + search}
+                {product.title}
             </LinkNP></div></td>
         </tr>
     );

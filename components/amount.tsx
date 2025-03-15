@@ -10,7 +10,7 @@ export default function Amount({ product }: {product: Product}) {
     useEffect(() => {
         product.amount = ac.myProducts.find(p => p.id === product.id)?.amount ?? 0;
         setProd({...product});
-    }, [ac.myProducts])
+    }, [product, ac.myProducts])
 
     return (
         <input type="number" min="0" value={prod.amount}

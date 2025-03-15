@@ -59,7 +59,7 @@ export default function SearchResults({ searchResult }: { searchResult: SearchRe
             </button>
         </div>
         {ac.showSearchList ?
-            <ProductList products={products} search={true} /> :
-            <Cards products={products} search={true} />}
+            <ProductList products={products} /> :
+            <Cards products={products} />}
     </>);
 }
