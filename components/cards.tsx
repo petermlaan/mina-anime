@@ -39,6 +39,7 @@ export function Card({ product }: CardProps) {
                     className="w-[240px] h-[360px] object-cover"
                     alt={"Poster för " + product.title} />
             </LinkNP>
+            <div>Pris: {product.price} kr</div>
         </article>
     );
 }

@@ -3,12 +3,12 @@ import { Metadata } from "next";
 import { CartProducts } from "@/app/cart/cartproducts";
 
 export const metadata: Metadata = {
-  title: "Mina Anime"
+  title: "Acme Inc"
 };
 
 export default async function Page() {
   return (
-    <main className="grid gap-4">
+    <main className="grid gap-4 ml-4">
       <CartProducts />
     </main>
   );

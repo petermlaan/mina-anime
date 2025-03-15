@@ -42,7 +42,7 @@ export default function RootLayout({
           <header className="border-b-2 border-(--clr-main2)">
             <div className="sm:pl-4 w-fit">
               <LinkNP href="/">
-                <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Acme Inc</h1>
+                <h1 className="text-4xl/15">Acme Inc</h1>
               </LinkNP>
             </div>
             <nav>
