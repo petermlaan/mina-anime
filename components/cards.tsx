@@ -37,11 +37,11 @@ export function Card({ product, search }: CardProps) {
                 </input>
             </div>
             <div className="text-2xl text-balance">
-                <LinkNP href={"anime/" + product.id}>
+                <LinkNP href={"product/" + product.id}>
                     <span>{product.title + search}</span>
                 </LinkNP>
             </div>
-            <LinkNP href={"anime/" + product.id}>
+            <LinkNP href={"product/" + product.id}>
                 <Image
                     src={product.images[0] ?? "/favicon.jpg"}
                     width={240} height={360}

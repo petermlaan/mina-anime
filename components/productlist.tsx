@@ -68,7 +68,7 @@ export function ProductRow({ product, search }: ProductRowProps) {
             <td><input type="number" min="0" value={product.amount}
                 onChange={(e) => ac.changeAmount(product, +e.target.value)}/>
             </td>
-            <td className="px2"><div><LinkNP href={"anime/" + product.id}>
+            <td className="px2"><div><LinkNP href={"product/" + product.id}>
                 {product.title + search}
             </LinkNP></div></td>
         </tr>

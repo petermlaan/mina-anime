@@ -4,14 +4,9 @@ import { DEBOUNCE_DB_DELAY } from "../constants";
 import { getAnimesSA, saveAnimesSA } from "../server/actions";
 import { fetchJSON } from "../util";
 
-export async function getProduct(id: number, myProducts: Product[]): Promise<Product> {
-    let a = myProducts.find(a => a.id === id) ?? null;
-    if (!a) {
-        a = await fetchJSON("https://dummyjson.com/products/" + id) as Product;
-        a.amount = 0;
-    }
-    console.log("getProduct: ", a);
-    
+export async function getProduct(id: number): Promise<Product> {
+    const a = await fetchJSON("https://dummyjson.com/products/" + id) as Product;
+    a.amount = 0;
     return a;
 }
 
@@ -22,7 +17,7 @@ export async function getProductsByCategory(category: string): Promise<APISearch
 }
 
 export async function searchProducts(query: string, page: number = 1): Promise<APISearchResult> {
-    const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query + "&skip=" + (page-1)*30) as APISearchResult;
+    const json = await fetchJSON("https://dummyjson.com/products/search?q=" + query + "&skip=" + (page - 1) * 30) as APISearchResult;
     json.products.forEach(p => p.amount = 0);
     return json;
 }
@@ -69,7 +64,7 @@ function saveAnimesToDB(animes: Product[]) {
 }
 
 // ----- Generic debounce function -----
-let debounceTimeout = -1;
+/*let debounceTimeout = -1;
 
 export function debounce(delay: number, fn: () => void) {
     if (!window) {
@@ -90,7 +85,7 @@ export function debounce(delay: number, fn: () => void) {
         debounceTimeout = -1;
         fn();
     }, delay);
-}
+}*/
 
 /* function toMyAnime(anime: Anime): MyAnime {
     const myAnime: MyAnime = {
