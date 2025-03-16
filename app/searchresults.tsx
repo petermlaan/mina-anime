@@ -46,7 +46,7 @@ export default function SearchResults({ searchResult }: { searchResult: SearchRe
                 onClick={onPrevPage} >
                 &lt; Föreg
             </button>
-            <label htmlFor="chkShowList" className="checkbox">Visa lista:
+            <label htmlFor="chkShowList" className="flex gap-1">Visa lista:
                 <input type="checkbox" id="chkShowList"
                     checked={ac.showSearchList}
                     onChange={() => ac.setShowSearchList(!ac.showSearchList)} />

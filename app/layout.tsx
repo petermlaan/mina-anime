@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Style_Script } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import {
   ClerkProvider,
@@ -17,12 +17,6 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const styleScript = Style_Script({
-  variable: "--font-style-script",
-  weight: "400",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Acme Inc",
   icons: {
@@ -36,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${styleScript.variable} ${geistSans.variable}`}>
+    <html lang="en" className={`${geistSans.variable}`}>
       <body>
         <ClerkProvider>
           <header className="border-b-2 border-(--clr-main2)">
@@ -51,7 +45,7 @@ export default function RootLayout({
                 <li><LinkNP href="/cart">CART</LinkNP></li>
               </ul>
             </nav>
-            <div className="user">
+            <div className="justify-self-end align-self-center mr-4 height: fit-content flex gap4">
               <SignedOut>
                 <SignInButton />
                 <SignUpButton />

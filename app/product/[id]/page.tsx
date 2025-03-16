@@ -19,7 +19,7 @@ export default async function AnimePage( { params }: {params: Promise<{id: numbe
     <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
 
       <div className="flex flex-col gap-2">
-        <div className="flex gap-2 h-8 items-center justify-between">
+        <div className="grid grid-cols-[5rem_5rem] gap-12 h-8 items-center">
           <BackBtn />
           <Amount product={product} />
         </div>
@@ -34,7 +34,7 @@ export default async function AnimePage( { params }: {params: Promise<{id: numbe
       </div>
 
       <div className="flex flex-col gap-2 pr-4">
-        <h2>{product.title}</h2>
+        <h2 className="text-xl">{product.title}</h2>
         <p>{product.description}</p>
       </div>
 
