@@ -8,10 +8,10 @@ import { DEBOUNCE_DB_DELAY } from "../constants";
 let debounceDBTimeout = -1;
 const abortctrl = new AbortController();
 
-export function saveCart(animes: Product[]) {
+export function saveCart(products: Product[]) {
     if (!window) {
-        console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.")
-        saveCartSA(animes);
+        console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.");
+        saveCartSA(products);
         return;
     }
 
@@ -21,13 +21,14 @@ export function saveCart(animes: Product[]) {
     }
 
     const onBeforeUnload = () => {
-        navigator.sendBeacon("/api/save-animes", SuperJSON.stringify(animes));
+        console.count("onBeforeUnload");
+        navigator.sendBeacon("/api/savecart", SuperJSON.stringify(products));
     };
-    window.addEventListener("beforeunload", onBeforeUnload, { signal: abortctrl.signal })
+    window.addEventListener("beforeunload", onBeforeUnload, { signal: abortctrl.signal });
 
     debounceDBTimeout = window.setTimeout(() => {
         abortctrl.abort();
         debounceDBTimeout = -1;
-        saveCartSA(animes);
+        saveCartSA(products);
     }, DEBOUNCE_DB_DELAY);
 }
