@@ -1,9 +1,9 @@
 'use client';
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import SuperJSON from 'superjson';
-import { getList, saveList } from '@/lib/client/clientutil';
 import { Product } from '@/lib/interfaces';
+import { loadCartSA } from '@/lib/server/actions';
+import { saveCart } from '@/lib/client/clientutil';
 
 interface ProductContextType {
   myProducts: Product[];
@@ -27,10 +27,8 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   const [showSavedList, setStateShowSavedList] = useState(false);
 
   useEffect(() => {
-    console.count("ProductProvider");
-    getList().then(list => {
-      console.log("ProductProvider: ", list);
-      setMyProducts(list);
+    loadCartSA().then(list => {
+      setMyProducts(list ?? []);
     });
     const ls = localStorage.getItem("Products");
     if (ls) {
@@ -61,22 +59,19 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   }
 
   const changeAmount = (product: Product, amount: number) => {
-    console.log("changeAmount: ", product, amount);
     let list = [...myProducts];
     let cartprod: Product | undefined = undefined;
     if (cartprod = myProducts.find(p => p.id === product.id)) {
-      console.log("cart prod found");
       if (amount > 0)
-        cartprod.amount = amount;
+        cartprod.amount = amount; // Change amount
       else
-        list = myProducts.filter(p => p.id !== cartprod?.id);
+        list = myProducts.filter(p => p.id !== cartprod?.id); // Remove product from cart
     } else if (amount > 0) {
-      console.log("cart prod not found");
       product.amount = amount;
-      list = [product, ...myProducts];
+      list = [product, ...myProducts]; // Add product to cart
     }
     setMyProducts(list);
-    saveList(list);
+    saveCart(list);
   };
 
   return (

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
-import { getProduct } from "@/lib/client/clientutil";
+import { getProduct } from "@/lib/productapi";
 import Amount from "@/components/amount";
 import BackBtn from "@/components/backbtn";
 

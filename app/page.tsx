@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Metadata } from "next";
 import Form from "next/form";
 import SearchResults from "./searchresults";
-import { getCategoryList, getProductsByCategory, searchProducts } from "@/lib/client/clientutil";
+import { getCategoryList, getProductsByCategory, searchProducts } from "@/lib/productapi";
 import { toPascalCase } from "@/lib/util";
 import { APISearchResult, SearchResult } from "@/lib/interfaces";
 

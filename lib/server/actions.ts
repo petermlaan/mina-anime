@@ -1,22 +1,20 @@
 "use server";
-
 import { auth } from '@clerk/nextjs/server';
-import { dbLoadAnimes, dbSaveAnimes } from './db';
+import { dbLoadCart, dbSaveCart } from './db';
 import { Product } from '../interfaces';
 
-export async function saveAnimesSA(animes: Product[]) {
+export async function saveCartSA(animes: Product[]) {
     const { userId } = await auth();
     if (userId)
-        dbSaveAnimes(userId, animes);
+        dbSaveCart(userId, animes);
 }
 
-export async function getAnimesSA(): Promise<Product[] | null> {
+export async function loadCartSA(): Promise<Product[] | null> {
     const { userId } = await auth();
     if (!userId)
         return null;
-    const animes = await dbLoadAnimes(userId);
+    const animes = await dbLoadCart(userId);
     if (!animes)
         return null;
-    console.log("getAnimesSA: ", animes.length);
     return animes;
 }

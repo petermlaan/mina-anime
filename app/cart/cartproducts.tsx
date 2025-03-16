@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import { Cards } from '@/components/cards';
-import { useProductContext } from "@/components/acmecontext";
 import { ProductList } from "@/components/productlist";
+import { useProductContext } from "@/components/acmecontext";
 
 export function CartProducts() {
     const ac = useProductContext();
 
     return (<>
-        <div className="text-xl">Totalt: {ac.myProducts.reduce((a, p) => a += p.amount * p.price, 0)} kr</div>
+        <div className="text-xl">Totalt: {ac.myProducts.reduce((a, p) => a += p.amount * p.price, 0).toFixed(2)} kr</div>
         <div className="flex flex-wrap justify-center items-center gap-2">
             <label htmlFor="chkShowList" className="checkbox">Visa lista
                 <input
