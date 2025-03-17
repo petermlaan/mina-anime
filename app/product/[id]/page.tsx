@@ -5,13 +5,13 @@ import { getProduct } from "@/lib/productapi";
 import Amount from "@/components/amount";
 import BackBtn from "@/components/backbtn";
 
-export async function generateMetadata({ params }: {params: Promise<{id: number}> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: number }> }): Promise<Metadata> {
   const id = (await params).id;
   const product = await getProduct(id);
-  return { title: product.title + " - Acme Inc"};
+  return { title: product.title + " - Acme Inc" };
 }
 
-export default async function AnimePage( { params }: {params: Promise<{id: number}> } ) {
+export default async function AnimePage({ params }: { params: Promise<{ id: number }> }) {
   const id = (await params).id;
   const product = await getProduct(id);
 
@@ -19,7 +19,7 @@ export default async function AnimePage( { params }: {params: Promise<{id: numbe
     <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
 
       <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-[5rem_5rem] gap-12 h-8 items-center">
+        <div className="grid grid-cols-[5rem_10rem] gap-12 h-8 items-center">
           <BackBtn />
           <Amount product={product} />
         </div>
@@ -35,7 +35,15 @@ export default async function AnimePage( { params }: {params: Promise<{id: numbe
 
       <div className="flex flex-col gap-2 pr-4">
         <h2 className="text-xl">{product.title}</h2>
+        <h3 className="text-lg">{product.brand}</h3>
         <p>{product.description}</p>
+        <div>Pris: {product.price}</div>
+        <div className="bg-(--clr-main0)">
+          {product.reviews.map((r, i) => <div key={i}>
+            <p>{r.comment}</p>
+            <span className="ml-8 text-sm">- {r.reviewerName}</span>
+          </div>)}
+        </div>
       </div>
 
     </main>

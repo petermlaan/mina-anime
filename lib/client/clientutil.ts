@@ -3,8 +3,9 @@ import { Product } from "../interfaces";
 import { saveCartSA } from "../server/actions";
 import { DEBOUNCE_DB_DELAY } from "../constants";
 
+// Functions that should only be called from the client
+
 // ----- Debouncing DB writes -----
-// Should only be called from the client
 let debounceDBTimeout = -1;
 const abortctrl = new AbortController();
 

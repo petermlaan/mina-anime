@@ -10,7 +10,7 @@ export function CartProducts() {
     return (<>
         <div className="text-xl">Totalt: {ac.myProducts.reduce((a, p) => a += p.amount * p.price, 0).toFixed(2)} kr</div>
         <div className="flex flex-wrap justify-center items-center gap-2">
-            <label htmlFor="chkShowList" className="checkbox">Visa lista
+            <label htmlFor="chkShowList" className="flex gap-1">Visa lista:
                 <input
                     type="checkbox" id="chkShowList" checked={ac.showSavedList}
                     onChange={() => ac.setShowSavedList(!ac.showSavedList)} />
