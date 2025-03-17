@@ -12,12 +12,16 @@ export default function Amount({ product }: { product: Product }) {
         setProd({ ...product, amount: amount });
     }, [product, ac.myProducts])
 
-    return (<div className="flex gap-1">
-        <button className="w-4" onClick={() => ac.changeAmount(prod, prod.amount - 1)}>&lt;</button>
-        <input className="w-16"
-            type="text"
-            value={prod.amount}
-            onChange={e => ac.changeAmount(prod, +e.target.value)} />
-        <button className="w-4" onClick={() => ac.changeAmount(prod, prod.amount + 1)}>&gt;</button>
-    </div>);
+    return (<>
+        {prod.amount != 0 ? <>
+            <button className="w-4 rounded-none border" onClick={() => ac.changeAmount(prod, prod.amount - 1)}>-</button>
+            <input className="w-16 rounded-none border text-center"
+                type="text"
+                value={prod.amount}
+                onChange={e => ac.changeAmount(prod, +e.target.value)} />
+            <button className="w-4 rounded-none border" onClick={() => ac.changeAmount(prod, prod.amount + 1)}>+</button>
+        </> :
+            <button onClick={() => ac.changeAmount(prod, 1)}>Lägg till</button>
+        }
+    </>);
 }

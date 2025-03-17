@@ -26,7 +26,6 @@ export function Card({ product }: CardProps) {
     return (
         <article className="grid grid-rows-[subgrid] row-span-4 gap-2 bg-[--clr-main1] border 
             border-[--clr-main3] rounded-2xl p-2 hover:outline hover:outline-[--clr-main3]">
-            <Amount product={product} />
             <div className="text-2xl text-balance">
                 <LinkNP href={"product/" + product.id}>
                     <span>{product.title}</span>
@@ -40,6 +39,7 @@ export function Card({ product }: CardProps) {
                     alt={"Poster för " + product.title} />
             </LinkNP>
             <div>Pris: {product.price} kr</div>
+            <div className="justify-self-center"><Amount product={product} /></div>
         </article>
     );
 }

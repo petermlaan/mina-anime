@@ -24,7 +24,6 @@ select,
 button {
   background-color: var(--clr-main1);
   color: var(--clr-main3);
-  border-radius: 1rem / 1rem;
   height: 1.6rem;
   padding: 0 0.8rem;
 }

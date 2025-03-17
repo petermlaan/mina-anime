@@ -62,10 +62,12 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     let list = [...myProducts];
     let cartprod: Product | undefined = undefined;
     if (cartprod = myProducts.find(p => p.id === product.id)) {
-      if (amount > 0)
+      cartprod.amount = Math.max(0, amount);
+      /*if (amount > 0)
         cartprod.amount = amount; // Change amount
       else
         list = myProducts.filter(p => p.id !== cartprod?.id); // Remove product from cart
+      */
     } else if (amount > 0) {
       product.amount = amount;
       list = [product, ...myProducts]; // Add product to cart
