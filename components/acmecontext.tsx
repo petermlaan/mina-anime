@@ -8,6 +8,7 @@ import { saveCart } from '@/lib/client/clientutil';
 interface ProductContextType {
   myProducts: Product[];
   changeAmount: (product: Product, amount: number) => void;
+  filterCart: () => void;
   showSearchList: boolean;
   setShowSearchList: (showList: boolean) => void;
   showSavedList: boolean;
@@ -58,6 +59,12 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("Products", SuperJSON.stringify(lso));
   }
 
+  const filterCart = () => {
+    const list = myProducts.filter(p => p.amount !== 0);
+    setMyProducts(list);
+    saveCart(list);
+  }
+
   const changeAmount = (product: Product, amount: number) => {
     let list = [...myProducts];
     let cartprod: Product | undefined = undefined;
@@ -78,7 +85,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ProductContext.Provider value={{
-      myProducts, changeAmount,
+      myProducts, changeAmount, filterCart,
       showSearchList, setShowSearchList,
       showSavedList, setShowSavedList,
     }}>

@@ -18,6 +18,6 @@ export function CartProducts() {
         </div>
         {ac.showSavedList ?
             <ProductList products={ac.myProducts} /> :
-            <Cards products={ac.myProducts} />}
+            <Cards products={ac.myProducts} isCart={true} />}
     </>);
 }

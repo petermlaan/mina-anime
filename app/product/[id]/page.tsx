@@ -19,9 +19,8 @@ export default async function AnimePage({ params }: { params: Promise<{ id: numb
     <main className="flex flex-col gap-4 bg-(--clr-main1) border border-(--clr-main3) m-4 p-2 md:flex-row">
 
       <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-[5rem_10rem] gap-12 h-8 items-center">
+        <div className="h-8">
           <BackBtn />
-          <Amount product={product} />
         </div>
         <Link href={product.images[0]}>
           <Image
@@ -37,7 +36,8 @@ export default async function AnimePage({ params }: { params: Promise<{ id: numb
         <h2 className="text-xl">{product.title}</h2>
         <h3 className="text-lg">{product.brand}</h3>
         <p>{product.description}</p>
-        <div>Pris: {product.price}</div>
+        <div>{product.price} kr</div>
+        <div><Amount product={product} /></div>
         <div className="bg-(--clr-main0)">
           {product.reviews.map((r, i) => <div key={i}>
             <p>{r.comment}</p>

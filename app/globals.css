@@ -24,13 +24,10 @@ select,
 button {
   background-color: var(--clr-main1);
   color: var(--clr-main3);
-  height: 1.6rem;
   padding: 0 0.8rem;
 }
 
 button, select {
-  width: max-content;
-
   &:hover {
     cursor: pointer;
     background-color: var(--clr-main2);
