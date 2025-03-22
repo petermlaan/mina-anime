@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import SuperJSON from 'superjson';
 import { Product } from '@/lib/interfaces';
-import { loadCartSA } from '@/lib/server/actions';
 import { saveCart } from '@/lib/client/clientutil';
 
 interface ProductContextType {
@@ -22,20 +21,25 @@ interface LS {
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
-export function ProductProvider({ children }: { children: React.ReactNode }) {
-  const [myProducts, setMyProducts] = useState<Product[]>([]);
+export function ProductProvider({ 
+  products = [],
+  children 
+}: { 
+  products: Product[],
+  children: React.ReactNode 
+}) {
+  const [myProducts, setMyProducts] = useState<Product[]>(products);
   const [showSearchList, setStateShowSearchList] = useState(false);
   const [showSavedList, setStateShowSavedList] = useState(false);
 
   useEffect(() => {
-    loadCartSA().then(list => {
-      setMyProducts(list ?? []);
-    });
-    const ls = localStorage.getItem("Products");
-    if (ls) {
-      const lso: LS = SuperJSON.parse(ls);
-      setStateShowSearchList(lso.showSearchList);
-      setStateShowSavedList(lso.showSavedList);
+    const lsi = localStorage.getItem("Products");
+    if (lsi) {
+      const lso: LS = SuperJSON.parse(lsi);
+      if (lso) {
+        setStateShowSearchList(lso.showSearchList);
+        setStateShowSavedList(lso.showSavedList);
+      }
     }
   }, []);
 

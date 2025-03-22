@@ -11,7 +11,7 @@ const abortctrl = new AbortController();
 
 export function saveCart(products: Product[]) {
     if (!window) {
-        console.error("SHOULD NOT HAPPEN! SaveAnimesToDB called from server.");
+        console.error("SHOULD NOT HAPPEN! saveCart called from server.");
         saveCartSA(products);
         return;
     }

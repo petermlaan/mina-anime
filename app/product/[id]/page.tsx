@@ -6,13 +6,13 @@ import Amount from "@/components/amount";
 import BackBtn from "@/components/backbtn";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: number }> }): Promise<Metadata> {
-  const id = (await params).id;
+  const { id } = await params;
   const product = await getProduct(id);
   return { title: product.title + " - Acme Inc" };
 }
 
-export default async function AnimePage({ params }: { params: Promise<{ id: number }> }) {
-  const id = (await params).id;
+export default async function ProductPage({ params }: { params: Promise<{ id: number }> }) {
+  const { id } = await params;
   const product = await getProduct(id);
 
   return (

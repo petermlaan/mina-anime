@@ -11,6 +11,8 @@ import {
 } from '@clerk/nextjs'
 import { ProductProvider } from "@/components/acmecontext";
 import LinkNP from "@/components/linknp";
+import { loadCartSA } from "@/lib/server/actions";
+import { dbLoadCart } from "@/lib/server/db";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -55,7 +57,7 @@ export default function RootLayout({
               </SignedIn>
             </div>
           </header>
-          <ProductProvider>
+          <ProductProvider products={await dbLoadCart() ?? []}>
             {children}
           </ProductProvider>
         </ClerkProvider>
