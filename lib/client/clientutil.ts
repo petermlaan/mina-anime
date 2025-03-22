@@ -1,6 +1,6 @@
 import SuperJSON from "superjson";
 import { Product } from "../interfaces";
-import { saveCartSA } from "../server/actions";
+import { saveCartAction } from "../server/actions";
 import { DEBOUNCE_DB_DELAY } from "../constants";
 
 // Functions that should only be called from the client
@@ -12,7 +12,7 @@ const abortctrl = new AbortController();
 export function saveCart(products: Product[]) {
     if (!window) {
         console.error("SHOULD NOT HAPPEN! saveCart called from server.");
-        saveCartSA(products);
+        saveCartAction(products);
         return;
     }
 
@@ -30,6 +30,6 @@ export function saveCart(products: Product[]) {
     debounceDBTimeout = window.setTimeout(() => {
         abortctrl.abort();
         debounceDBTimeout = -1;
-        saveCartSA(products);
+        saveCartAction(products);
     }, DEBOUNCE_DB_DELAY);
 }

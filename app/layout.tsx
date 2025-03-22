@@ -11,7 +11,6 @@ import {
 } from '@clerk/nextjs'
 import { ProductProvider } from "@/components/acmecontext";
 import LinkNP from "@/components/linknp";
-import { loadCartSA } from "@/lib/server/actions";
 import { dbLoadCart } from "@/lib/server/db";
 
 const geistSans = Geist({
