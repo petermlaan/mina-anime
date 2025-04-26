@@ -10,5 +10,5 @@ export function Genres({ genres }: { genres: string[] }) {
                 </div>
             ))}
         </div>
-    );
+    )
 }

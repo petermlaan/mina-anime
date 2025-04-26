@@ -9,6 +9,7 @@
   --clr-disabled: #666;
 }
 
+
 h2, h3 {
   margin: 0;
   padding: 0;
@@ -24,10 +25,14 @@ select,
 button {
   background-color: var(--clr-main1);
   color: var(--clr-main3);
+  border-radius: 1rem / 1rem;
+  height: 1.6rem;
   padding: 0 0.8rem;
 }
 
 button, select {
+  width: max-content;
+
   &:hover {
     cursor: pointer;
     background-color: var(--clr-main2);
@@ -120,4 +125,63 @@ header {
       justify-content: center;
     }
   }
+}
+
+.logo {
+  width: fit-content;
+
+  h1 {
+    color: var(--clr-main4);
+    font-family: var(--font-style-script);
+    font-weight: 400;
+    margin: 0 0 0 20px;
+    line-height: 60px;
+    align-self: center;
+
+    @media (width < 40rem) {
+      margin: 0;
+    }
+  }
+}
+
+.user {
+  justify-self: flex-end;
+  align-self: center;
+  margin-right: 1rem;
+  height: fit-content;
+  display: flex;
+  gap: 1rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.tal {
+  text-align: left;
+}
+
+.tac {
+  text-align: center;
+}
+
+.border {
+  border: 1px solid white;
+}
+
+.px1 {
+  padding: 0 0.2rem;
+}
+
+.px2 {
+  padding: 0 0.4rem;
+}
+
+.px3 {
+  padding: 0 0.6rem;
+}
+
+.maxcont {
+  width: max-content;
 }

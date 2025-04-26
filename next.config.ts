@@ -15,7 +15,7 @@ module.exports = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.dummyjson.com',
+        hostname: 'cdn.myanimelist.net',
       },
     ],
   },

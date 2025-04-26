@@ -1,5 +1,4 @@
 "use client"
-
 import { useRouter } from "next/navigation";
 
 export default function Error({
@@ -9,11 +8,11 @@ export default function Error({
     error: Error & { digest?: string, response?: { status?: number } };
     reset: () => void;
 }) {
-    const router = useRouter();
+    const router = useRouter()
 
-    let errormsg = error?.message ?? "Någonting gick fel.";
+    let errormsg = error?.message ?? "Någonting gick fel."
     if (error?.name === "AxiosError" && error?.response?.status === 404)
-        errormsg = "Sidan kunde inte hittas.";
+        errormsg = "Sidan kunde inte hittas."
 
     return (
         <main className="grid justify-center justify-items-center gap-4 mt-8">

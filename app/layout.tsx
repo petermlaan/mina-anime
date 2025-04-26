@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Geist, Style_Script } from "next/font/google"
+import "./globals.css"
 import {
   ClerkProvider,
   SignInButton,
@@ -8,45 +8,50 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-} from '@clerk/nextjs'
-import { ProductProvider } from "@/components/acmecontext";
-import LinkNP from "@/components/linknp";
-import { dbLoadCart } from "@/lib/server/db";
+} from "@clerk/nextjs"
+import { AnimeProvider } from "@/components/animecontext"
+import LinkNP from "@/components/linknp"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
+})
+
+const styleScript = Style_Script({
+  variable: "--font-style-script",
+  weight: "400",
+  subsets: ["latin"],
+})
 
 export const metadata: Metadata = {
-  title: "Acme Inc",
+  title: "Mina Anime",
   icons: {
     icon: "/favicon.jpg",
   },
-};
+}
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable}`}>
+    <html lang="en" className={`${styleScript.variable} ${geistSans.variable}`}>
       <body>
         <ClerkProvider>
           <header className="border-b-2 border-(--clr-main2)">
             <div className="sm:pl-4 w-fit">
               <LinkNP href="/">
-                <h1 className="text-4xl/15">Acme Inc</h1>
+                <h1 className="text-4xl/15 font-(family-name:--font-style-script)">Mina Anime</h1>
               </LinkNP>
             </div>
             <nav>
               <ul>
-                <li><LinkNP href="/">PRODUCTS</LinkNP></li>
-                <li><LinkNP href="/cart">CART</LinkNP></li>
+                <li><LinkNP href="/search">SÖK</LinkNP></li>
+                <li><LinkNP href="/">SPARADE</LinkNP></li>
               </ul>
             </nav>
-            <div className="justify-self-end align-self-center mr-4 height: fit-content flex gap4">
+            <div className="user">
               <SignedOut>
                 <SignInButton />
                 <SignUpButton />
@@ -56,11 +61,11 @@ export default async function RootLayout({
               </SignedIn>
             </div>
           </header>
-          <ProductProvider products={await dbLoadCart() ?? []}>
+          <AnimeProvider>
             {children}
-          </ProductProvider>
+          </AnimeProvider>
         </ClerkProvider>
       </body>
     </html>
-  );
+  )
 }

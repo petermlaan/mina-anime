@@ -15,7 +15,6 @@
     "@tutkli/jikan-ts": "^2.2.0",
     "axios": "^1.7.9",
     "axios-cache-interceptor": "^1.6.2",
-    "effect": "^3.14.1",
     "next": "^15.2.0",
     "postcss": "^8.5.3",
     "react": "^19.0.0",

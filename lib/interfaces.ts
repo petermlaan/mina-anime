@@ -1,46 +1,30 @@
-export interface APISearchResult {
-    products: Product[];
-    total: number;
-    skip: number;
-    limit: number;
-};
 
-export interface SearchResult {
-    products: Product[];
-    maxpage: number;
-};
-
-export interface Product {
+export interface MyAnime {
     // New properties
-    amount: number;
+    saved: boolean;
+    watched: boolean;
+    myRating: number;
+    text: string;
 
-    id: number;
+    // Modified properties
+    poster: string;
+    yturl: string;
+
+    mal_id: number;
     title: string;
-    description: string;
-    category: string;
-    price: number;
-    discountPercentage: number;
-    rating: number;
-    stock: number;
-    tags: string[];
-    brand: string;
-    sku: string;
-    weight: number;
-    warrantyInformation: string;
-    shippingInformation: string;
-    availabilityStatus: string;
-    reviews: Review[];
-    returnPolicy: string;
-    minimumOrderQuantity: number;
-    thumbnail: string;
-    images: string[];
-};
-
-export interface Review {
-    rating: number,
-    comment: string;
-    date: Date;
-    reviewerName: string;
-    reviewerEmail: string;
-};
-
+    title_english: string;
+    type: string;
+    source: string;
+    episodes: number;
+    status: string;
+    score: number;
+    scored_by: number;
+    rank: number;
+    popularity: number;
+    favorites: number;
+    synopsis: string;
+    background: string;
+    year: number;
+    genres: string[];
+    themes: string[];
+}
